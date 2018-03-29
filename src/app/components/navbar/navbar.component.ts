@@ -7,6 +7,7 @@ import {Location} from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
   private sidebarVisible : boolean;
   private listTitles: any[];

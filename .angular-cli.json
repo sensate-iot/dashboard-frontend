@@ -20,8 +20,7 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "../node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
-        "./assets/sass/material-dashboard.scss",
+        "./assets/css/material-dashboard.css",
         "./assets/css/demo.css"
       ],
       "scripts": [

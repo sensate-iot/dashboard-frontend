@@ -1,6 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<div class="wrapper">
+<div *ngIf="isLoggedIn; else notLoggedIn" class="wrapper">
   <div class="sidebar" data-color='red' data-image="">
     <app-sidebar></app-sidebar>
     <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-4.jpg)"></div>
@@ -13,3 +13,7 @@
     </div>-->
   </div>
 </div>
+
+<ng-template #notLoggedIn>
+  <router-outlet></router-outlet>
+</ng-template>

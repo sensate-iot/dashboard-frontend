@@ -100,11 +100,11 @@ export class DashboardComponent implements OnInit {
 
     const optionsCompletedTasksChart: any = {
       lineSmooth: Chartist.Interpolation.cardinal({
-        tension: 0
+        tension: 1
       }),
       low: 0,
       high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-      chartPadding: { top: 0, right: 0, bottom: 0, left: 0}
+      chartPadding: { top: 0, right: 10, bottom: 0, left: 10}
     }
 
     var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
@@ -129,7 +129,7 @@ export class DashboardComponent implements OnInit {
       },
       low: 0,
       high: 1000,
-      chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
+      chartPadding: { top: 0, right: 5, bottom: 0, left: 10}
     };
     var responsiveOptions: any[] = [
       ['screen and (max-width: 640px)', {
