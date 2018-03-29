@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="background"></div>
+  <div class="container">
+    <div class="row">
+      <app-header></app-header>
+    </div>
+    <div class="row register-panel">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="card">
+          <h3>Register</h3>
+          <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+              <div class="feature">
+                <div class="icon">
+                  <i class="material-icons" style="color: #e91e63;">timeline</i>
+                </div>
+                <div class="desc">
+                  <h4>Data analysis</h4>
+                  <p>Sensate is not just an elaborate data store. It's also capable of analyzing your data.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="icon">
+                  <i class="material-icons" style="color: #9c27b0;">code</i>
+                </div>
+                <div class="desc">
+                  <h4>RESTful API</h4>
+                  <p>Sensate comes with a powerful Sensate API; allowing <i>you</i> to customize every element.</p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="icon">
+                  <i class="material-icons" style="color: #00bcd4;">group</i>
+                </div>
+                <div class="desc">
+                  <h4>Built Audience</h4>
+                  <p>There is also a fully customizable dashboard to manage Sensate users and sensors.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 register-element">
+              <div class="form-part">
+                <form [formGroup]="registerForm" class="register-form">
+                  <mat-form-field class="input-full-width">
+                    <input matInput formControlName="email" placeholder="Email"
+                           [errorStateMatcher]="matcher">
+                    <!--<mat-hint></mat-hint>-->
+                    <mat-error *ngIf="email.hasError('email') || email.hasError('required')">
+                      Enter a <strong>valid</strong> email address.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="input-full-width">
+                    <input matInput formControlName="password" type="password" placeholder="Password"
+                           [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="password.hasError('required')">
+                      Password is <strong>required</strong>!
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="input-full-width">
+                    <input matInput placeholder="First name" formControlName="firstName"
+                           [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="firstName.hasError('required')">
+                      First name is <strong>required</strong>!
+                    </mat-error>
+                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                  </mat-form-field>
+                  <mat-form-field class="input-full-width">
+                    <input matInput placeholder="Last name" formControlName="lastName"
+                           [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="lastName.hasError('required')">
+                      Last name is <strong>required</strong>!
+                    </mat-error>
+                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                  </mat-form-field>
+                  <mat-form-field class="input-full-width">
+                    <input matInput placeholder="Phone number" formControlName="phoneNumber"
+                           [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="phoneNumber.hasError('required')">
+                      Phone number is <strong>required</strong>!
+                    </mat-error>
+                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                  </mat-form-field>
+                    <div class="terms">
+                      <mat-checkbox [checked]="terms" (change)="terms = !terms">
+                        I agree to the terms and conditions
+                      </mat-checkbox>
+                      <button [disabled]="!isValidForm()" type="submit" mat-raised-button>REGISTER</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

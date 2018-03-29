@@ -3,27 +3,35 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import {AppRoutingModule} from './app.routing';
-import {RouterModule} from '@angular/router';
-import {ComponentsModule} from './components/components.module';
 import { LoginComponent } from './login/login.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule, MatCheckboxModule, MatInputModule, MatMenuModule, MatRadioModule} from '@angular/material';
+import {FormsModule, NgControl, ReactiveFormsModule} from '@angular/forms';
+import {routing} from './app.routes';
+import { HeaderComponent } from './shared/header/header.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { LockComponent } from './lock/lock.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
     LoginComponent,
+    HeaderComponent,
+    LockComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    ComponentsModule
+    routing,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatInputModule,
+    MatMenuModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

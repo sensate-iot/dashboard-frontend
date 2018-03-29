@@ -1,12 +1,22 @@
 /*
- * Material design login component.
+ * Login component logic.
  *
  * @author Michel Megens
  * @email  dev@bietje.net
  */
 
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {ErrorStateMatcher} from '@angular/material';
+import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+
+export class LoginErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const submitted = form && form.submitted;
+
+    return !!(control && control.invalid && (control.dirty || control.touched || submitted));
+  }
+
+}
 
 @Component({
   selector: 'app-login',
@@ -15,38 +25,42 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 
 export class LoginComponent implements OnInit {
-  loginForm : FormGroup;
-  email : FormControl;
-  password : FormControl;
-  used : string;
+  public loginForm : FormGroup;
+  public email : FormControl;
+  public password : FormControl;
+  public first : boolean = true;
 
-  constructor() {
-    this.used = '';
-  }
-
+  constructor() { }
 
   ngOnInit() {
     this.email = new FormControl('', [
       Validators.required,
       Validators.email
     ]);
-    this.password = new FormControl(
-      '',
+    this.password = new FormControl('', [
       Validators.required
-    );
+    ]);
 
     this.loginForm = new FormGroup({
       email: this.email,
       password: this.password
     });
-
-    this.email.valueChanges.subscribe(data => {
-      if(data.length > 0) {
-        this.used = 'used';
-      } else {
-        this.used = '';
-      }
-    });
   }
 
+  public loginInvalid() : boolean {
+    if(this.first)
+        return this.email.valid && this.password.valid;
+
+    return true;
+  }
+
+  loginClicked() {
+    this.email.setErrors({
+      invalid: true
+    });
+    this.password.setErrors({
+      invalid: true
+    });
+    this.first = false;
+  }
 }
