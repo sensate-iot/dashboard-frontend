@@ -8,6 +8,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ErrorStateMatcher} from '@angular/material';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {LoginService} from '../services/login.service';
+import {Router} from '@angular/router';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,8 +31,9 @@ export class LoginComponent implements OnInit {
   public email : FormControl;
   public password : FormControl;
   public first : boolean = true;
+  public matcher : LoginErrorStateMatcher = new LoginErrorStateMatcher();
 
-  constructor() { }
+  constructor(private auth : LoginService) { }
 
   ngOnInit() {
     this.email = new FormControl('', [
@@ -55,12 +58,20 @@ export class LoginComponent implements OnInit {
   }
 
   loginClicked() {
-    this.email.setErrors({
-      invalid: true
-    });
-    this.password.setErrors({
-      invalid: true
-    });
-    this.first = false;
+    if(!this.email.valid || !this.password.valid)
+      return;
+
+    const uname = this.email.value.toString();
+    const pass = this.password.value.toString();
+
+    console.log('Attempting to login:');
+    console.log('Username: ' + uname);
+    console.log('Password: ' + pass);
+
+    if(this.auth.test()) {
+      //this.router.navigate(['/dashboard']);
+      console.log('Logged in!');
+      console.log(this.auth.getJwt());
+    }
   }
 }

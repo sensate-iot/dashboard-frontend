@@ -15,7 +15,7 @@
               <div class="form-row">
                 <i class="material-icons">email</i>
                 <mat-input-container color="accent">
-                  <input type="text" formControlName="email" matInput placeholder="Email address"/>
+                  <input type="text" formControlName="email" [errorStateMatcher]="matcher" matInput placeholder="Email address"/>
                   <mat-error *ngIf="email.hasError('required')">
                     Email address is <strong>required</strong>!
                   </mat-error>
@@ -30,7 +30,7 @@
               <div class="form-row">
                 <i class="material-icons">lock_outline</i>
                 <mat-input-container color="accent">
-                  <input type="password" formControlName="password" matInput placeholder="Password"/>
+                  <input type="password" formControlName="password" [errorStateMatcher]="matcher" matInput placeholder="Password"/>
 
                   <mat-error *ngIf="password.hasError('required')">
                     Password is <strong>required</strong>!
