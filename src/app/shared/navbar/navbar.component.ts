@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {LoginService} from '../../services/login.service';
+import {Router} from '@angular/router';
+import {LockService} from '../../services/lock.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,13 +10,24 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   @Input() title: string;
+  profile : string;
 
-  constructor() {}
+  constructor(private auth : LoginService, private lock : LockService, private router : Router) {}
 
   ngOnInit() {
+    this.profile = '/dashboard/profile';
   }
 
   menuClick() {
-   // document.getElementById('main-panel').style.marginRight = '260px';
+  }
+
+  public logoutClicked() {
+    this.auth.logout();
+    this.router.navigate(['login']);
+  }
+
+  public lockClicked() {
+    this.lock.lock();
+    this.router.navigate(['lock']);
   }
 }

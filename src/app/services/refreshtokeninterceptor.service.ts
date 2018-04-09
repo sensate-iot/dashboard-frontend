@@ -23,6 +23,9 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   }
 
   public addToken(req : HttpRequest<any>, token : string) {
+    if(!this.auth.isLoggedIn())
+      return req;
+
     console.log('Adding JWT token to request!');
     return req.clone({
       setHeaders: {

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   public first : boolean = true;
   public matcher : LoginErrorStateMatcher = new LoginErrorStateMatcher();
 
-  constructor(private auth : LoginService) { }
+  constructor(private auth : LoginService, private router : Router) { }
 
   ngOnInit() {
     this.email = new FormControl('', [
@@ -68,10 +68,25 @@ export class LoginComponent implements OnInit {
     console.log('Username: ' + uname);
     console.log('Password: ' + pass);
 
-    if(this.auth.test()) {
-      //this.router.navigate(['/dashboard']);
-      console.log('Logged in!');
-      console.log(this.auth.getJwt());
+    if(!this.auth.isLoggedIn()) {
+      this.auth.login(uname, pass).subscribe(
+        data => {
+          LoginService.setSession(data.body);
+          this.router.navigate(['dashboard']);
+        },
+        error => {
+          LoginService.handleError(error);
+          this.email.setErrors({
+            "invalid": true
+          });
+          this.password.setErrors({
+            "invalid": true
+          });
+        }
+      );
     }
+
+    return;
   }
+
 }

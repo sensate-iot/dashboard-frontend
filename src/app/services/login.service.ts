@@ -12,38 +12,37 @@ import {Moment} from 'moment';
 import {Jwt} from '../models/jwt.model';
 import moment = require('moment');
 import {Observable} from 'rxjs/Observable';
+import {LockService} from './lock.service';
 
 @Injectable()
 export class LoginService {
   constructor(private http : HttpClient) { }
 
 
-  public login(user: string, password: string) : boolean {
+  public login(user: string, password: string) {
     const body = {
       "Email": user,
       "Password": password
     };
 
-    this.http.post<Jwt>(environment.apiHost + '/tokens/request', body, {
+    LockService.createLock(user, password);
+    return this.http.post<Jwt>(environment.apiHost + '/tokens/request', body, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
-    }).subscribe(
-      data => {
-        LoginService.setSession(data.body);
-        return true;
-      },
-      error => {
-        LoginService.handleError(error);
-        return false;
-      }
-    );
-
-    return true;
+    });
   }
 
+  public isLoggedIn() : boolean {
+    const jwt = this.getJwt();
+    return jwt != null;
+  }
+
+
   public logout() {
+    LockService.destroyLock();
     const jwt = this.getJwt();
 
+    localStorage.removeItem('jwt');
     if(jwt == null)
       return;
 
@@ -53,24 +52,6 @@ export class LoginService {
     return this.http.delete(environment.apiHost + '/tokens' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     });
-  }
-
-  public test() : boolean {
-    this.http.get<Jwt>(environment.apiHost + '/accounts/show',{
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
-    }).subscribe(
-      data => {
-        LoginService.setSession(data.body);
-        return true;
-      },
-      error => {
-        LoginService.handleError(error);
-        return false;
-      }
-    );
-
-    return true;
   }
 
   public refresh() : Observable<string> {
@@ -89,7 +70,7 @@ export class LoginService {
 
   public getJwt() : Jwt {
     const data = localStorage.getItem('jwt');
-    if(!data)
+    if(!data || data == null)
       return null;
 
     return JSON.parse(data, function (key, value) {
@@ -105,12 +86,11 @@ export class LoginService {
     });
   }
 
-  private static handleError(error : any) {
-    //console.log('Failed to login:');
-    //console.log(error);
+  public static handleError(error : any) {
+    LockService.destroyLock();
   }
 
-  private static setSession(data : Jwt) {
+  public static setSession(data : Jwt) {
     const expire = moment().add(data.expiresInMinutes, 'minutes');
     const jwtExpire = moment().add(data.jwtExpiresInMinutes, 'minutes');
 

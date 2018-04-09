@@ -23,6 +23,10 @@ import {ImagecardComponent} from './shared/imagecard/imagecard.component';
 import {FooterComponent} from './shared/footer/footer.component';
 import {FigurecardComponent} from './shared/figurecard/figurecard.component';
 import {SettingsService} from './services/settings.service';
+import {AuthGuard} from './guards/auth.guard';
+import { ProfileComponent } from './dashboard/profile/profile.component';
+import {LockGuard} from './guards/lock.guard';
+import {LockService} from './services/lock.service';
 
 
 @NgModule({
@@ -39,7 +43,8 @@ import {SettingsService} from './services/settings.service';
     FooterComponent,
     FigurecardComponent,
     DashboardComponent,
-    SidebarComponent
+    SidebarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +61,9 @@ import {SettingsService} from './services/settings.service';
   ],
   providers: [
     LoginService,
+    LockService,
+    AuthGuard,
+    LockGuard,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,

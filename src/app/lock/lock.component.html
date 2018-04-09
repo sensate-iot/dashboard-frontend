@@ -7,14 +7,28 @@
     <div class="row">
       <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3" style="padding: 80px">
         <div class="card lock-header">
-          <h4>Michel Megens</h4>
+          <h4>{{mail}}</h4>
           <div class="card-body">
-            <mat-input-container color="accent">
-              <input matInput type="text" placeholder="Enter Password">
-            </mat-input-container>
-          </div>
-          <div class="card-footer">
-            <button mat-raised-button class="btn btn-rose btn-round">UNLOCK</button>
+            <form [formGroup]="unlockForm">
+              <div class="form-row">
+                <mat-input-container color="accent">
+                  <input type="password" formControlName="password" [errorStateMatcher]="matcher" matInput placeholder="Password"/>
+
+                  <mat-error *ngIf="password.hasError('required')">
+                    Password is <strong>required</strong>!
+                  </mat-error>
+
+                  <mat-error *ngIf="password.hasError('invalid')">
+                    Password incorrect!
+                  </mat-error>
+                </mat-input-container>
+              </div>
+              <div class="card-footer">
+                <p class="button-para">
+                  <button (click)="unlockClicked()" mat-raised-button class="btn btn-rose btn-round">UNLOCK</button>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
       </div>
