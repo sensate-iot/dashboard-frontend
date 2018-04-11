@@ -77,6 +77,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   }
 
   private logout() {
+    this.auth.resetLogin();
     this.router.navigate(['login']);
     return Observable.of('logout');
   }

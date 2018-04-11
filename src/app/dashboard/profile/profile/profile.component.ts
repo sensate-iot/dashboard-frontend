@@ -66,10 +66,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.accounts.getUser().subscribe(data => {
-      console.log('Got response: ' + data.email);
-    });
-    //this.router.navigate(['/dashboard/confirm-update-email']);
+    this.router.navigate(['/dashboard/confirm-update-email']);
   }
 
   isValidUpdateForm() : boolean {

@@ -11,23 +11,22 @@ import {LockService} from '../../services/lock.service';
 export class NavbarComponent implements OnInit {
   @Input() title: string;
   profile : string;
+  menuOpen : boolean;
 
   constructor(private auth : LoginService, private lock : LockService, private router : Router) {}
 
   ngOnInit() {
     this.profile = '/dashboard/profile';
+    this.menuOpen = false;
   }
 
   menuClick() {
-  }
-
-  public logoutClicked() {
-    this.auth.logout();
-    this.router.navigate(['login']);
-  }
-
-  public lockClicked() {
-    this.lock.lock();
-    this.router.navigate(['lock']);
+    /*if(!this.menuOpen) {
+      this.menuOpen = true;
+      document.getElementById('main-panel').style.marginRight = '260px';
+    } else {
+      this.menuOpen = false;
+      document.getElementById('main-panel').style.marginRight = '0px';
+    }*/
   }
 }

@@ -1,9 +1,8 @@
 <header>
   <div class="left">
-    <h5>Sensate IoT</h5>
+    <h5 class="siteheader">Sensate IoT</h5>
   </div>
   <div class="right">
-    <a routerLink="/dashboard" routerLinkActive="router-active"><i class="material-icons">dashboard</i><p>DASHBOARD</p></a>
     <a routerLink="/login" routerLinkActive="router-active" [routerLinkActiveOptions]="{exact: true}" *ngIf="!loggedIn">
       <i class="material-icons">fingerprint</i><p>LOGIN</p>
     </a>

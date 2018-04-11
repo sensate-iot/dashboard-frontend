@@ -5,6 +5,43 @@
     <app-sidebar></app-sidebar>
   </div>
   <div class="main-panel" id="main-panel">
-    <router-outlet></router-outlet>
+    <div class="container">
+      <div class="nav-bar">
+        <div class="left-part">
+          <button mat-mini-fab id="nav-left-button"><i class="material-icons" style="font-size:18px;">more_vert</i></button>
+          <h4>Sensate IoT</h4>
+        </div>
+        <div class="right-part">
+          <div class="right-part" id="nav-right">
+            <button mat-icon-button><i class="material-icons icon-btn">dashboard</i></button>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><i class="material-icons icon-btn">person</i></button>
+            <mat-menu #menu="matMenu">
+              <button routerLink="/dashboard/profile" mat-menu-item>Profile</button>
+              <button mat-menu-item>Change password</button>
+              <button mat-menu-item>Change email</button>
+              <button mat-menu-item (click)="lockClicked()">Lock screen</button>
+              <button mat-menu-item (click)="logoutClicked()">Logout</button>
+            </mat-menu>
+          </div>
+        </div>
+        <div id="menu">
+          <button mat-icon-button (click)="snav.toggle()"><i class="material-icons">menu</i></button>
+        </div>
+      </div>
+    </div>
+
+    <mat-sidenav-container>
+      <mat-sidenav #snav [mode]="'over'">
+        <mat-nav-list>
+          <a mat-list-item routerLink=".">Dashboard</a>
+          <a mat-list-item routerLink="/dashboard/profile">Profile</a>
+          <a mat-list-item routerLink=".">Change password</a>
+          <a mat-list-item (click)="logoutClicked()">Logout</a>
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
   </div>
 </div>

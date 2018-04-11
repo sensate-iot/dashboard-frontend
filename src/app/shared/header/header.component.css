@@ -37,3 +37,9 @@ header{
   padding: 15px 18px 15px 15px;
   border-radius: 3px;
 }
+
+@media (max-width: 510px) {
+  .siteheader {
+    display: none;
+  }
+}

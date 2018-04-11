@@ -105,6 +105,11 @@ export class LoginService {
     });
   }
 
+  public resetLogin() {
+    LockService.destroyLock();
+    localStorage.removeItem('jwt');
+  }
+
   public static handleError(error : any) {
     LockService.destroyLock();
   }

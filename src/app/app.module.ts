@@ -1,10 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import {MatButtonModule, MatCheckboxModule, MatInputModule, MatMenuModule, MatRadioModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatInputModule, MatListModule,
+  MatMenuModule,
+  MatRadioModule,
+  MatSidenavModule, MatToolbarModule
+} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routing} from './app.routes';
 import { HeaderComponent } from './shared/header/header.component';
@@ -17,7 +22,6 @@ import {RefreshTokenInterceptorService} from './services/refreshtokeninterceptor
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {RootComponent} from './dashboard/root/root.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import {NavbarComponent} from './shared/navbar/navbar.component';
 import {MsgIconBtnComponent} from './shared/msgiconbtn/msgiconbtn.component';
 import {ImagecardComponent} from './shared/imagecard/imagecard.component';
 import {FooterComponent} from './shared/footer/footer.component';
@@ -30,7 +34,6 @@ import {LockService} from './services/lock.service';
 import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-email/confirm-update-email.component';
 import {AccountService} from './services/account.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +42,6 @@ import {AccountService} from './services/account.service';
     LockComponent,
     RegisterComponent,
     RootComponent,
-    NavbarComponent,
     MsgIconBtnComponent,
     ImagecardComponent,
     FooterComponent,
@@ -56,6 +58,9 @@ import {AccountService} from './services/account.service';
     HttpClientModule,
     Routing,
     BrowserAnimationsModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
     MatButtonModule,
     MatRadioModule,
     MatInputModule,
