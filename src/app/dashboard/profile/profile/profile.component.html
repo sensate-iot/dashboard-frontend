@@ -1,0 +1,106 @@
+<div (window:resize)="onResize()" class="container">
+  <app-navbar title="User Profile"></app-navbar>
+  <div class="row" style="margin-top: 30px">
+    <div class="col-md-11">
+      <div class="card">
+        <div class="card-header">
+          <i class="material-icons">perm_identity</i>
+        </div>
+        <div class="card-content">
+          <h4 class="card-title">Edit Profile -
+            <small class="category">Complete your profile</small>
+          </h4>
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="text" placeholder="First Name" [(ngModel)]="firstName" name="firstName">
+                </mat-input-container>
+              </div>
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="text" placeholder="Last Name" [(ngModel)]="lastName" name="lastName">
+                </mat-input-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="text" disabled="disabled" placeholder="Email" value="{{email}}">
+                </mat-input-container>
+              </div>
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="text" placeholder="Phone number" value="{{phoneNumber}}">
+                </mat-input-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="password" placeholder="New password">
+                </mat-input-container>
+              </div>
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="password" placeholder="New password confirmation">
+                </mat-input-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="password" placeholder="Current password">
+                </mat-input-container>
+              </div>
+              <div class="col-md-6 action-btn">
+                <p class="btn-center">
+                  <button md-raised-button type="submit" class="btn btn-rose">UPDATE PROFILE</button>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!isMobile" class="col-md-1">
+      <div class="profile">
+        <img src="../../../../assets/img/marc.jpg" alt="profile"/>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="material-icons">contact_mail</i>
+        </div>
+        <div class="card-content">
+          <h4 class="card-title">Edit Email -
+            <small class="category">Update your email address</small>
+          </h4>
+
+          <form [formGroup]="updateEmailForm">
+            <div class="row">
+              <div class="col-md-6">
+                <mat-input-container color="accent">
+                  <input matInput type="email" placeholder="New email address" formControlName="emailControl"
+                      [errorStateMatcher]="updateMatcher">
+                  <mat-error *ngIf="emailControl.hasError('email') || emailControl.hasError('required')">
+                    Enter a <strong>valid</strong> email address.
+                  </mat-error>
+                </mat-input-container>
+              </div>
+              <div class="col-md-6 action-btn">
+                <p class="btn-center">
+                  <button md-raised-button [disabled]="!isValidUpdateForm()"
+                          (click)="onNextClick()" type="submit" class="btn btn-rose">NEXT</button>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

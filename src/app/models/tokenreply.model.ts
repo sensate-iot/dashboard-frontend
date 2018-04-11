@@ -1,14 +1,13 @@
 /*
- * JWT auth reply model.
+ * Reply viewmodel to token refresh calls.
  *
  * @author Michel Megens
  * @email  dev@bietje.net
  */
 
-export class Jwt {
+export class TokenReply {
   refreshToken : string;
   jwtToken : string;
   expiresInMinutes : number;
   jwtExpiresInMinutes : number;
-  email : string;
 }

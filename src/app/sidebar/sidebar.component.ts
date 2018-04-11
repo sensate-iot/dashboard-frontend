@@ -12,7 +12,7 @@ import { ROUTES } from './sidebar-routes.config';
   styleUrls: ['./sidebar.component.css']
 })
 
-export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SidebarComponent implements OnInit {
   public color: string;
   public menuItems: object;
   public activeFontColor: string;
@@ -28,31 +28,5 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.color = this.settingsService.getSidebarFilter();
-    this.settingsService.sidebarFilterUpdate.subscribe((filter: string) => {
-      this.color = filter;
-      if (filter === '#fff') {
-        this.activeFontColor = 'rgba(0,0,0,.6)';
-      }else {
-        this.activeFontColor = 'rgba(255,255,255,.8)';
-      }
-    });
-
-    this.settingsService.sidebarColorUpdate.subscribe((color: string) => {
-      if (color === '#fff') {
-        this.normalFontColor = 'rgba(0,0,0,.6)';
-        this.dividerBgColor = 'rgba(0,0,0,.1)';
-      }else {
-        this.normalFontColor = 'rgba(255,255,255,.8)';
-        this.dividerBgColor = 'rgba(255, 255, 255, 0.5)';
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.settingsService.sidebarFilterUpdate.unsubscribe();
-    this.settingsService.sidebarColorUpdate.unsubscribe();
-  }
-
-  ngAfterViewInit() {
   }
 }

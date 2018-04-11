@@ -71,6 +71,7 @@ export class LoginComponent implements OnInit {
     if(!this.auth.isLoggedIn()) {
       this.auth.login(uname, pass).subscribe(
         data => {
+          data.body.email = this.email.value;
           LoginService.setSession(data.body);
           this.router.navigate(['dashboard']);
         },

@@ -24,9 +24,11 @@ import {FooterComponent} from './shared/footer/footer.component';
 import {FigurecardComponent} from './shared/figurecard/figurecard.component';
 import {SettingsService} from './services/settings.service';
 import {AuthGuard} from './guards/auth.guard';
-import { ProfileComponent } from './dashboard/profile/profile.component';
+import { ProfileComponent } from './dashboard/profile/profile/profile.component';
 import {LockGuard} from './guards/lock.guard';
 import {LockService} from './services/lock.service';
+import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-email/confirm-update-email.component';
+import {AccountService} from './services/account.service';
 
 
 @NgModule({
@@ -44,7 +46,8 @@ import {LockService} from './services/lock.service';
     FigurecardComponent,
     DashboardComponent,
     SidebarComponent,
-    ProfileComponent
+    ProfileComponent,
+    ConfirmUpdateEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import {LockService} from './services/lock.service';
   providers: [
     LoginService,
     LockService,
+    AccountService,
     AuthGuard,
     LockGuard,
     SettingsService,

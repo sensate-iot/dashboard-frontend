@@ -9,7 +9,7 @@
 
 .profile{
   position: absolute;
-  top: -40px;
+  margin-left: -60px;
 }
 
 .profile img{
@@ -97,7 +97,9 @@ form{
 }
 
 .action-btn{
-  display: flex;
-  justify-content: flex-end;
   padding-right: 15px;
+}
+
+p.btn-center {
+  text-align: center;
 }

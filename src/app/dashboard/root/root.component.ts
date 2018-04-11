@@ -19,22 +19,13 @@ export class RootComponent implements OnInit, OnDestroy {
   public backgroundColor : string;
 
   constructor(private settings : SettingsService) {
-    this.id = settings.getSidebarImageIndex() + 1;
+    this.id = settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
   }
 
   ngOnInit() {
-    this.settings.sidebarImageIndexUpdate.subscribe((id : number) => {
-      this.id = id + 1;
-    });
-
-    this.settings.sidebarColorUpdate.subscribe((color : string) => {
-      this.backgroundColor = color;
-    });
   }
 
   ngOnDestroy() {
-    this.settings.sidebarImageIndexUpdate.unsubscribe();
-    this.settings.sidebarColorUpdate.unsubscribe();
   }
 }

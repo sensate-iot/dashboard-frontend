@@ -6,27 +6,27 @@
  * @email  dev@bietje.net
  */
 
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent,
+        HttpHandler, HttpInterceptor,
+        HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs/Rx';
 import {LoginService} from './login.service';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Router} from '@angular/router';
+import {TokenReply} from '../models/tokenreply.model';
 
 @Injectable()
 export class RefreshTokenInterceptorService implements HttpInterceptor {
   private isRefreshingToken : boolean;
   private tokenSubject : BehaviorSubject<string>;
 
-  constructor(private auth : LoginService) {
+  constructor(private auth : LoginService, private router : Router) {
     this.isRefreshingToken = false;
     this.tokenSubject = new BehaviorSubject<string>(null);
   }
 
   public addToken(req : HttpRequest<any>, token : string) {
-    if(!this.auth.isLoggedIn())
-      return req;
-
-    console.log('Adding JWT token to request!');
     return req.clone({
       setHeaders: {
         Authorization: 'Bearer ' + token,
@@ -43,6 +43,9 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
           case 401:
             return this.handleUnauthorized(req, next);
 
+          case 403:
+            return this.logout();
+
           default:
             return Observable.throw(error);
         }
@@ -55,15 +58,13 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
       this.tokenSubject.next(null);
       this.isRefreshingToken = true;
 
-      return this.auth.refresh().switchMap((newToken : string) => {
-        if(newToken) {
-          this.tokenSubject.next(newToken);
-          return next.handle(this.addToken(req, newToken));
-        }
-
-        return this.logout();
+      return this.auth.refresh().flatMap((res : TokenReply, idx) => {
+        this.auth.updateJwt(res.refreshToken, res.jwtToken, res.jwtExpiresInMinutes);
+        this.tokenSubject.next(res.jwtToken);
+        return next.handle(this.addToken(req, res.jwtToken));
       }).catch(error => {
-        return this.logout();
+        this.isRefreshingToken =  false;
+        return next.handle(req);
       }).finally(() => {
         this.isRefreshingToken = false;
       });
@@ -76,6 +77,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   }
 
   private logout() {
-    return Observable.throw("");
+    this.router.navigate(['login']);
+    return Observable.of('logout');
   }
 }

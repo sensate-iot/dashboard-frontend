@@ -45,7 +45,7 @@ export class LockComponent implements OnInit {
 
     const pw = this.password.value.toString();
     if(this.lock.unlock(pw)) {
-      this.router.navigate(['dashboard']);
+      this.router.navigateByUrl('/dashboard');
       return;
     }
 

@@ -6,13 +6,14 @@
  */
 
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Moment} from 'moment';
 import {Jwt} from '../models/jwt.model';
 import moment = require('moment');
 import {Observable} from 'rxjs/Observable';
 import {LockService} from './lock.service';
+import {TokenReply} from '../models/tokenreply.model';
 
 @Injectable()
 export class LoginService {
@@ -49,13 +50,30 @@ export class LoginService {
     if(jwt.refreshToken == null)
       return;
 
-    return this.http.delete(environment.apiHost + '/tokens' + jwt.refreshToken, {
+    return this.http.delete(environment.apiHost + '/tokens/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     });
   }
 
-  public refresh() : Observable<string> {
-    return Observable.of('');
+  public refresh() : Observable<TokenReply> {
+    const jwt = this.getJwt();
+    const data = {
+      "Email" : jwt.email,
+      "RefreshToken": jwt.refreshToken
+    };
+
+    return this.http.post<TokenReply>(environment.apiHost + '/tokens/refresh', data, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'none')
+    });
+  }
+
+  public updateJwt(refresh : string, token : string, expiry : number) {
+    const jwt = this.getJwt();
+
+    jwt.refreshToken = refresh;
+    jwt.jwtToken = token;
+    jwt.expiresInMinutes = expiry;
+    LoginService.setSession(jwt);
   }
 
   public getJwtToken() : string {
@@ -82,6 +100,7 @@ export class LoginService {
       result.jwtExpiresInMinutes = value.jwtExpiresInMinutes;
       result.jwtToken = value.jwtToken;
       result.refreshToken = value.refreshToken;
+      result.email = value.email;
       return result;
     });
   }
