@@ -4,6 +4,7 @@ import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@a
 import {ErrorStateMatcher} from '@angular/material';
 import {Router} from '@angular/router';
 import {AccountService} from '../../../services/account.service';
+import {Md5} from 'ts-md5';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -28,6 +29,7 @@ export class ProfileComponent implements OnInit {
   lastNameControl : FormControl;
   newPasswordControl : FormControl;
   newPasswordConfirmControl : FormControl;
+  profileUrl : string;
 
   updateEmailForm : FormGroup;
   emailControl : FormControl;
@@ -97,7 +99,9 @@ export class ProfileComponent implements OnInit {
       this.phoneNumber = value.phoneNumber;
       this.firstNameControl.patchValue(value.firstName);
       this.lastNameControl.patchValue(value.lastName);
+      this.profileUrl = 'https://www.gravatar.com/avatar/' + Md5.hashStr(this.email).toString().toLowerCase() + '.jpg?s=400';
     });
+
   }
 
   onNextClick() {
