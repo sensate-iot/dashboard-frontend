@@ -1,4 +1,4 @@
-<div (window:resize)="onResize()" class="container confirm">
+<div (window:resize)="onResize()" class="container">
   <div class="row">
     <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
       <div class="card">
@@ -10,18 +10,21 @@
             <small class="category">Enter confirmation code</small>
           </h4>
 
-          <form>
+          <form [formGroup]="codeForm">
             <div class="row">
               <div class="col-md-12">
                 <mat-input-container color="accent">
-                  <input matInput type="input" placeholder="Confirmation code">
+                  <input matInput type="text" placeholder="Confirmation code" [(ngModel)]="code" name="code" formControlName="codeField">
+                  <mat-error *ngIf="codeField.hasError('required') || codeField.hasError('invalid')">
+                    Enter a valid confirmation code!
+                  </mat-error>
                 </mat-input-container>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12 action-btn">
                 <p class="btn-center">
-                  <button md-raised-button type="submit" class="btn btn-rose">NEXT</button>
+                  <button md-raised-button [disabled]="!isValid()" type="submit" (click)="onConfirm()" class="btn btn-rose">CONFIRM</button>
                 </p>
               </div>
             </div>

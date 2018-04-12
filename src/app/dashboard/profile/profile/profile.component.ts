@@ -66,7 +66,13 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/dashboard/confirm-update-email']);
+    this.accounts.updateEmail(this.emailControl.value).subscribe(data => {
+      this.router.navigate(['/dashboard/confirm-update-email']);
+    },error => {
+      this.emailControl.setErrors({
+        "unable": true
+      });
+    });
   }
 
   isValidUpdateForm() : boolean {

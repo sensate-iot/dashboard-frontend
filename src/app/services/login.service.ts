@@ -8,7 +8,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Moment} from 'moment';
 import {Jwt} from '../models/jwt.model';
 import moment = require('moment');
 import {Observable} from 'rxjs/Observable';
@@ -40,18 +39,20 @@ export class LoginService {
 
 
   public logout() {
-    LockService.destroyLock();
     const jwt = this.getJwt();
 
-    localStorage.removeItem('jwt');
-    if(jwt == null)
+    if(jwt == null || jwt.refreshToken == null)
       return;
 
-    if(jwt.refreshToken == null)
-      return;
-
-    return this.http.delete(environment.apiHost + '/tokens/' + jwt.refreshToken, {
+    this.http.delete(environment.apiHost + '/tokens/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
+    }).subscribe(value => {
+      LockService.destroyLock();
+      localStorage.removeItem('jwt');
+    }, error => {
+      console.log('Unable to logout on server!');
+      LockService.destroyLock();
+      localStorage.removeItem('jwt');
     });
   }
 
@@ -61,6 +62,8 @@ export class LoginService {
       "Email" : jwt.email,
       "RefreshToken": jwt.refreshToken
     };
+
+    console.log('Attempting to get new token..');
 
     return this.http.post<TokenReply>(environment.apiHost + '/tokens/refresh', data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'none')
