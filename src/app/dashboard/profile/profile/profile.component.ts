@@ -19,15 +19,18 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  firstName : string;
-  lastName : string;
   email : string;
   isMobile : boolean;
   phoneNumber : string;
+  profileMatcher : FormErrorStateMatcher;
+  profileForm : FormGroup;
+  firstNameControl : FormControl;
+  lastNameControl : FormControl;
+  newPasswordControl : FormControl;
+  newPasswordConfirmControl : FormControl;
 
   updateEmailForm : FormGroup;
   emailControl : FormControl;
-
   updateMatcher : FormErrorStateMatcher;
 
   constructor(private settings : SettingsService,
@@ -52,13 +55,49 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.firstName = "Michel";
-    this.lastName = "Megens";
-    this.email = 'michelsown+sensate1212@gmail.com';
-    this.phoneNumber = '06123412';
+  private createProfileForm() {
+    this.newPasswordControl = new FormControl('', [
+      Validators.minLength(8),
+    ]);
+    this.newPasswordConfirmControl = new FormControl('');
 
+    this.newPasswordConfirmControl.valueChanges.subscribe(value => {
+      if(this.newPasswordControl.value === this.newPasswordConfirmControl.value) {
+        this.newPasswordConfirmControl.setErrors(null);
+      } else {
+        this.newPasswordConfirmControl.setErrors({
+          "not-equal": true
+        });
+      }
+    });
+
+    this.firstNameControl = new FormControl('', [
+      Validators.required,
+      Validators.minLength(2)
+    ]);
+    this.lastNameControl = new FormControl('', [
+      Validators.required,
+      Validators.minLength(2)
+    ]);
+
+    this.profileForm = new FormGroup({
+      firstNameControl: this.firstNameControl,
+      lastNameControl: this.lastNameControl,
+      newPasswordControl : this.newPasswordControl,
+      newPasswordConfirmControl : this.newPasswordConfirmControl
+    });
+  }
+
+  ngOnInit() {
+    this.createProfileForm();
     this.createUpdateEmailForm();
+
+    this.accounts.getUser().subscribe(value => {
+      this.email = value.email;
+      this.phoneNumber = value.phoneNumber;
+      this.firstNameControl.patchValue(value.firstName);
+      this.lastNameControl.patchValue(value.lastName);
+    });
   }
 
   onNextClick() {
