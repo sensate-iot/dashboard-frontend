@@ -33,6 +33,30 @@ export class AccountService {
     });
   }
 
+  public resetPassword(email : string) {
+    const data = {
+      "Email" : email
+    };
+
+    return this.http.post(environment.apiHost + '/accounts/forgot-password', data, {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+  public confirmResetPassword(email : string, token : string, newpass : string) {
+    const data = {
+      "Email" : email,
+      "Password" : newpass,
+      "Token" : token
+    };
+
+    return this.http.post(environment.apiHost + '/accounts/reset-password', data, {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
   updateEmail(newMail : string) {
     const data = {
       "NewEmail" : newMail

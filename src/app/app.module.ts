@@ -34,6 +34,7 @@ import {LockService} from './services/lock.service';
 import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-email/confirm-update-email.component';
 import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {AlertService} from './services/alert.service';
     DashboardComponent,
     SidebarComponent,
     ProfileComponent,
-    ConfirmUpdateEmailComponent
+    ConfirmUpdateEmailComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

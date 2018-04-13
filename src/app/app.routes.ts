@@ -15,9 +15,12 @@ import {AuthGuard} from './guards/auth.guard';
 import {ProfileComponent} from './dashboard/profile/profile/profile.component';
 import {LockGuard} from './guards/lock.guard';
 import {ConfirmUpdateEmailComponent} from './dashboard/profile/confirm-update-email/confirm-update-email.component';
+import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'reset-password/:email', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ForgotPasswordComponent },
   { path: 'lock', component: LockComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: RootComponent, children: [

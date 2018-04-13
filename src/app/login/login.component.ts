@@ -10,6 +10,8 @@ import {ErrorStateMatcher} from '@angular/material';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
+import {AlertService} from '../services/alert.service';
+import {AccountService} from '../services/account.service';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -33,7 +35,7 @@ export class LoginComponent implements OnInit {
   public first : boolean = true;
   public matcher : LoginErrorStateMatcher = new LoginErrorStateMatcher();
 
-  constructor(private auth : LoginService, private router : Router) { }
+  constructor(private auth : LoginService, private accounts : AccountService, private router : Router, private alerts : AlertService) { }
 
   ngOnInit() {
     this.email = new FormControl('', [
@@ -88,4 +90,29 @@ export class LoginComponent implements OnInit {
     return;
   }
 
+  public onForgotPasswordClicked() {
+    if(!this.email.valid || this.email.value.toString().length <= 0) {
+      this.alerts.showNotification('Enter a valid email address!', 'top-center', 'warning');
+      return;
+    }
+
+    this.accounts.resetPassword(this.email.value.toString()).subscribe(value => {
+      this.alerts.showNotification('A security token has been sent to your mail address!', 'top-center', 'success');
+      this.router.navigate(['/reset-password'], { queryParams: {email: this.email.value.toString() }});
+    }, error => {
+      switch(error.status) {
+        default:
+        case 500:
+          this.alerts.showNotification('Unable to sent verification code!', 'top-center', 'danger');
+          break;
+
+        case 404:
+          this.alerts.showNotification('Unkown email address!', 'top-center', 'warning');
+          this.email.setErrors({
+            'email': true
+          });
+          break;
+      }
+    });
+  }
 }

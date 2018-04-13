@@ -9,7 +9,7 @@
     <a routerLink="/register" routerLinkActive="router-active" *ngIf="!loggedIn">
       <i class="material-icons">person_add</i><p>REGISTER</p>
     </a>
-    <a routerLink="/lock" routerLinkActive="router-active"><i class="material-icons">lock_open</i><p>LOCK</p></a>
+    <a routerLink="/lock" *ngIf="loggedIn" routerLinkActive="router-active"><i class="material-icons">lock_open</i><p>LOCK</p></a>
     <a (click)="logoutClicked()" routerLinkActive="router-active" *ngIf="loggedIn">
       <i class="material-icons">exit_to_app</i><p>LOGOUT</p>
     </a>
