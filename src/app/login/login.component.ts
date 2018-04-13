@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public loginInvalid() : boolean {
+  public loginValid() : boolean {
     if(this.first)
         return this.email.valid && this.password.valid;
 
@@ -58,15 +58,13 @@ export class LoginComponent implements OnInit {
   }
 
   loginClicked() {
-    if(!this.email.valid || !this.password.valid)
-      return;
-
     const uname = this.email.value.toString();
     const pass = this.password.value.toString();
 
     console.log('Attempting to login:');
     console.log('Username: ' + uname);
     console.log('Password: ' + pass);
+    this.first = false;
 
     if(!this.auth.isLoggedIn()) {
       this.auth.login(uname, pass).subscribe(

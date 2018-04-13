@@ -33,6 +33,7 @@ import {LockGuard} from './guards/lock.guard';
 import {LockService} from './services/lock.service';
 import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-email/confirm-update-email.component';
 import {AccountService} from './services/account.service';
+import {AlertService} from './services/alert.service';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import {AccountService} from './services/account.service';
     AccountService,
     AuthGuard,
     LockGuard,
+    AlertService,
     SettingsService,
     {
       provide: HTTP_INTERCEPTORS,

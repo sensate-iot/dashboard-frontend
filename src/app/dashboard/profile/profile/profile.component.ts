@@ -5,6 +5,8 @@ import {ErrorStateMatcher} from '@angular/material';
 import {Router} from '@angular/router';
 import {AccountService} from '../../../services/account.service';
 import {Md5} from 'ts-md5';
+import {AlertService} from '../../../services/alert.service';
+import {Profile} from '../../../models/user.model';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -22,14 +24,16 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
 export class ProfileComponent implements OnInit {
   email : string;
   isMobile : boolean;
-  phoneNumber : string;
+  profileUrl : string;
+
   profileMatcher : FormErrorStateMatcher;
   profileForm : FormGroup;
   firstNameControl : FormControl;
   lastNameControl : FormControl;
   newPasswordControl : FormControl;
   newPasswordConfirmControl : FormControl;
-  profileUrl : string;
+  currentPasswordControl : FormControl;
+  phoneNumberControl : FormControl;
 
   updateEmailForm : FormGroup;
   emailControl : FormControl;
@@ -37,7 +41,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(private settings : SettingsService,
               private accounts : AccountService,
-              private router : Router) {
+              private router : Router,
+              private notifications : AlertService) {
     this.isMobile = this.settings.isMobile();
   }
 
@@ -62,6 +67,15 @@ export class ProfileComponent implements OnInit {
       Validators.minLength(8),
     ]);
     this.newPasswordConfirmControl = new FormControl('');
+    this.currentPasswordControl = new FormControl('');
+
+    this.phoneNumberControl = new FormControl('', Validators.required);
+
+    this.currentPasswordControl.valueChanges.subscribe(value => {
+      if(this.currentPasswordControl.value.toString().length > 0) {
+        this.currentPasswordControl.setErrors(null);
+      }
+    });
 
     this.newPasswordConfirmControl.valueChanges.subscribe(value => {
       if(this.newPasswordControl.value === this.newPasswordConfirmControl.value) {
@@ -69,6 +83,12 @@ export class ProfileComponent implements OnInit {
       } else {
         this.newPasswordConfirmControl.setErrors({
           "not-equal": true
+        });
+      }
+
+      if(this.currentPasswordControl.value.toString().length <= 0) {
+        this.currentPasswordControl.setErrors({
+          "missing": true
         });
       }
     });
@@ -86,7 +106,9 @@ export class ProfileComponent implements OnInit {
       firstNameControl: this.firstNameControl,
       lastNameControl: this.lastNameControl,
       newPasswordControl : this.newPasswordControl,
-      newPasswordConfirmControl : this.newPasswordConfirmControl
+      newPasswordConfirmControl : this.newPasswordConfirmControl,
+      currentPasswordControl: this.currentPasswordControl,
+      phoneNumberControl : this.phoneNumberControl
     });
   }
 
@@ -96,7 +118,7 @@ export class ProfileComponent implements OnInit {
 
     this.accounts.getUser().subscribe(value => {
       this.email = value.email;
-      this.phoneNumber = value.phoneNumber;
+      this.phoneNumberControl.patchValue(value.phoneNumber);
       this.firstNameControl.patchValue(value.firstName);
       this.lastNameControl.patchValue(value.lastName);
       this.profileUrl = 'https://www.gravatar.com/avatar/' + Md5.hashStr(this.email).toString().toLowerCase() + '.jpg?s=400';
@@ -120,5 +142,33 @@ export class ProfileComponent implements OnInit {
 
   isValidUpdateForm() : boolean {
     return this.emailControl.valid;
+  }
+
+  /*
+   * Profile form submission
+   */
+  public onSubmitClicked() : void {
+    let profile = new Profile();
+
+    profile.lastName = this.lastNameControl.value;
+    profile.firstName = this.firstNameControl.value;
+    profile.phoneNumber = this.phoneNumberControl.value;
+
+    if(this.newPasswordControl.value.toString().length > 0) {
+      profile.newPassword = this.newPasswordControl.value;
+      profile.currentPassword = this.currentPasswordControl.value.toString();
+    }
+
+    this.accounts.updateUser(profile).subscribe(value => {
+      this.notifications.showNotification('User profile has been updated successfully!',
+        'top-center', 'success');
+    }, error => {
+      const msg = error.error.message;
+      this.notifications.showNotification('Unable to update profile: ' + msg, 'top-center', 'danger');
+    });
+  }
+
+  public isValidProfileForm() : boolean {
+    return this.profileForm.valid;
   }
 }

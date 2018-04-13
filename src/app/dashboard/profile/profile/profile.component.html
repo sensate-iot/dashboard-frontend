@@ -37,7 +37,10 @@
               </div>
               <div class="col-md-6">
                 <mat-input-container color="accent">
-                  <input matInput type="text" placeholder="Phone number" value="{{phoneNumber}}">
+                  <input matInput type="text" placeholder="Phone number" formControlName="phoneNumberControl">
+                  <mat-error *ngIf="phoneNumberControl.hasError('required')">
+                    Minimal password length is 8 characters!
+                  </mat-error>
                 </mat-input-container>
               </div>
             </div>
@@ -62,12 +65,16 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-input-container color="accent">
-                  <input matInput type="password" placeholder="Current password">
+                  <input matInput type="password" formControlName="currentPasswordControl" placeholder="Current password">
+                  <mat-error *ngIf="newPasswordConfirmControl.hasError('missing')">
+                    Passwords don't match!
+                  </mat-error>
                 </mat-input-container>
               </div>
               <div class="col-md-6 action-btn">
                 <p class="btn-center">
-                  <button md-raised-button type="submit" class="btn btn-rose">UPDATE PROFILE</button>
+                  <button md-raised-button (click)="onSubmitClicked()" type="submit"
+                          class="btn btn-rose" [disabled]="!isValidProfileForm()">UPDATE PROFILE</button>
                 </p>
               </div>
             </div>
