@@ -18,6 +18,7 @@ import {ConfirmUpdateEmailComponent} from './dashboard/profile/confirm-update-em
 import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
   { path: 'reset-password/:email', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ForgotPasswordComponent },

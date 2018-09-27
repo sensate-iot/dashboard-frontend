@@ -57,26 +57,43 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field class="input-full-width">
-                    <input matInput placeholder="First name" formControlName="firstName"
+                    <input matInput [formControl]="passwordConfirm" type="password" placeholder="Confirm password"
                            [errorStateMatcher]="matcher">
-                    <mat-error *ngIf="firstName.hasError('required')">
-                      First name is <strong>required</strong>!
+                    <mat-error *ngIf="passwordConfirm.hasError('required')">
+                      Password is <strong>required</strong>!
                     </mat-error>
-                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
-                  </mat-form-field>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Last name" formControlName="lastName"
-                           [errorStateMatcher]="matcher">
-                    <mat-error *ngIf="lastName.hasError('required')">
-                      Last name is <strong>required</strong>!
+                    <mat-error *ngIf="passwordConfirm.hasError('not-equal')">
+                      Passwords don't match!
                     </mat-error>
-                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
                   </mat-form-field>
+                  <div class="col-md-6 firstname">
+                    <mat-form-field class="input-full-width">
+                      <input matInput placeholder="First name" formControlName="firstName"
+                             [errorStateMatcher]="matcher">
+                      <mat-error *ngIf="firstName.hasError('required')">
+                        First name is <strong>required</strong>!
+                      </mat-error>
+                      <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 lastname">
+                    <mat-form-field class="input-full-width">
+                      <input matInput placeholder="Last name" formControlName="lastName"
+                             [errorStateMatcher]="matcher">
+                      <mat-error *ngIf="lastName.hasError('required')">
+                        Last name is <strong>required</strong>!
+                      </mat-error>
+                      <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                    </mat-form-field>
+                  </div>
                   <mat-form-field class="input-full-width">
                     <input matInput placeholder="Phone number" formControlName="phoneNumber"
-                           [errorStateMatcher]="matcher">
+                           [errorStateMatcher]="phoneMatcher">
                     <mat-error *ngIf="phoneNumber.hasError('required')">
                       Phone number is <strong>required</strong>!
+                    </mat-error>
+                    <mat-error *ngIf="!isValidPhoneNumber()">
+                      Please enter a <strong>valid</strong> phone number!
                     </mat-error>
                     <!--<mat-hint>Errors appear instantly!</mat-hint>-->
                   </mat-form-field>
@@ -84,7 +101,7 @@
                       <mat-checkbox [checked]="terms" (change)="terms = !terms">
                         I agree to the terms and conditions
                       </mat-checkbox>
-                      <button [disabled]="!isValidForm()" type="submit" mat-raised-button>REGISTER</button>
+                      <button [disabled]="!isValidForm()" (click)="onSubmitClicked()" type="submit" mat-raised-button>REGISTER</button>
                     </div>
                 </form>
               </div>

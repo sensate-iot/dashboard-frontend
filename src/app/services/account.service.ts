@@ -9,10 +9,18 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Profile, User} from '../models/user.model';
 import {environment} from '../../environments/environment';
+import {UserRegistration} from '../models/user-registration.model';
 
 @Injectable()
 export class AccountService {
-  constructor(private http : HttpClient) { }
+  private options : any;
+
+  constructor(private http : HttpClient) {
+    this.options = {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    };
+  }
 
   getUser() {
     return this.http.get<User>(environment.apiHost + '/accounts/show');
@@ -57,7 +65,19 @@ export class AccountService {
     });
   }
 
-  updateEmail(newMail : string) {
+  public register(user : UserRegistration) {
+    const data = {
+      "Email" : user.email,
+      "Password" : user.password,
+      "FirstName" : user.firstName,
+      "LastName": user.lastName,
+      "PhoneNumber" : user.phoneNumber
+    };
+
+    return this.http.post(environment.apiHost + '/accounts/register', data, this.options);
+  }
+
+  public updateEmail(newMail : string) {
     const data = {
       "NewEmail" : newMail
     };

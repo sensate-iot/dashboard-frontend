@@ -10,14 +10,16 @@ import {SettingsService} from '../../services/settings.service';
 })
 
 export class HeaderComponent implements OnInit {
-  loggedIn : boolean;
   mobile : boolean;
 
   constructor(private auth : LoginService, private router : Router, private settings : SettingsService) { }
 
   ngOnInit() {
-    this.loggedIn = this.auth.isLoggedIn();
     this.mobile = this.settings.isMobile();
+  }
+
+  public isLoggedIn() : boolean {
+    return this.auth.isLoggedIn();
   }
 
   logoutClicked() {

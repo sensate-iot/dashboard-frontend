@@ -49,6 +49,16 @@
   width: 100%;
 }
 
+.firstname {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.lastname {
+  padding-right: 0;
+  margin-left: 0;
+}
+
 .register-form {
   width: 100%;
 }

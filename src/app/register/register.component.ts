@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material';
+/*
+ * Register form component.
+ *
+ * @author Michel Megens
+ * @email  dev@bietje.net
+ */
 
-export class RegisterErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const submitted = form && form.submitted;
-
-    return !!(control && control.invalid && (control.dirty || control.touched || submitted));
-  }
-}
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs/Subscription';
+import {FormMatcher} from '../matchers/form.matcher';
+import {PhonenumberMatcher} from '../matchers/phonenumber.matcher';
+import {AccountService} from '../services/account.service';
+import {UserRegistration} from '../models/user-registration.model';
+import {AlertService} from '../services/alert.service';
+import {Status} from '../models/status.model';
 
 @Component({
   selector: 'app-register',
@@ -16,26 +21,39 @@ export class RegisterErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./register.component.css']
 })
 
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   registerForm : FormGroup;
   email : FormControl;
   firstName : FormControl;
   lastName : FormControl;
   phoneNumber : FormControl;
   password : FormControl;
+  passwordConfirm : FormControl;
   terms : boolean;
 
-  public matcher : RegisterErrorStateMatcher;
+  private first : boolean;
+  private confirmPasswordSubscription : Subscription;
 
-  constructor() {
-    this.matcher = new RegisterErrorStateMatcher();
+  public matcher : FormMatcher;
+  public phoneMatcher : PhonenumberMatcher;
+
+  constructor(private accounts : AccountService, private alerts : AlertService) {
+    this.matcher = new FormMatcher();
+    this.phoneMatcher = new PhonenumberMatcher();
+    this.first = true;
   }
 
-  ngOnInit() {
+  public ngOnDestroy() {
+    this.confirmPasswordSubscription.unsubscribe();
+  }
+
+  public ngOnInit() {
     this.email = new FormControl('', [
       Validators.email,
       Validators.required
     ]);
+
+    this.passwordConfirm = new FormControl('', Validators.required);
 
     this.firstName = new FormControl('', Validators.required);
     this.lastName = new FormControl('', Validators.required);
@@ -48,15 +66,59 @@ export class RegisterComponent implements OnInit {
     this.registerForm = new FormGroup({
       email: this.email,
       password: this.password,
+      passwordConfirm: this.passwordConfirm,
       firstName: this.firstName,
       lastName: this.lastName,
       phoneNumber: this.phoneNumber
     });
+
+    this.watchConfirmPassword();
+  }
+
+  private watchConfirmPassword() {
+    this.confirmPasswordSubscription = this.passwordConfirm.valueChanges.subscribe(() => {
+      if(this.password.value.toString().length <= 0 ||
+        this.password.value.toString() !== this.passwordConfirm.value.toString()) {
+        this.passwordConfirm.setErrors({
+          'not-equal': true
+        });
+      } else {
+        this.passwordConfirm.setErrors(null);
+      }
+    });
   }
 
   public isValidForm() : boolean {
-    return this.email.valid && this.phoneNumber.valid &&
-      this.firstName.valid && this.lastName.valid && this.password.valid &&
-      this.terms;
+      return this.email.valid && this.firstName.valid && this.lastName.valid &&
+        this.phoneNumber.valid && this.password.valid && this.passwordConfirm.valid && this.terms &&
+        this.isValidPhoneNumber();
+  }
+
+  public isValidPhoneNumber() {
+    return this.phoneNumber.value.toString().match(/[^0-9]+/) === null;
+  }
+
+  public onSubmitClicked() : void {
+    this.first = false;
+    const user = new UserRegistration();
+
+    user.email = this.email.value.toString();
+    user.firstName = this.firstName.value.toString();
+    user.lastName = this.lastName.value.toString();
+    user.password = this.password.value.toString();
+    user.phoneNumber = this.phoneNumber.value.toString();
+
+    console.log('Submit has been clicked!');
+    this.accounts.register(user).subscribe(data => {
+      this.alerts.showNotification("A verification token has been sent to your email", 'top-center', 'success');
+    }, error => {
+      console.log('Failed to register..');
+      console.log(error);
+      console.log(error.error);
+      const msg : Status = error.error;
+      const display = 'Unable to sign up: ' + msg.message + '!';
+
+      this.alerts.showNotification(display, 'top-center', 'danger');
+    });
   }
 }

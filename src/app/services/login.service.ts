@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Jwt} from '../models/jwt.model';
-import moment = require('moment');
+import * as moment from 'moment';
 import {Observable} from 'rxjs/Observable';
 import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
@@ -34,7 +34,12 @@ export class LoginService {
 
   public isLoggedIn() : boolean {
     const jwt = this.getJwt();
-    return jwt != null;
+
+    if(jwt != null) {
+      return jwt.refreshToken != null;
+    }
+
+    return false;
   }
 
 
@@ -44,6 +49,7 @@ export class LoginService {
     if(jwt == null || jwt.refreshToken == null)
       return;
 
+    jwt.refreshToken = null;
     this.http.delete(environment.apiHost + '/tokens/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     }).subscribe(value => {
