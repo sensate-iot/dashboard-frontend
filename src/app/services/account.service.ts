@@ -25,7 +25,7 @@ export class AccountService {
   }
 
   getUser() {
-    return this.http.get<User>(environment.apiHost + '/accounts/show');
+    return this.http.get<User>(environment.authApiHost + '/accounts/show');
   }
 
   public updateUser(user : Profile) {
@@ -37,7 +37,7 @@ export class AccountService {
       "CurrentPassword" : user.currentPassword
     };
 
-    return this.http.patch(environment.apiHost + '/accounts/update', profile, {
+    return this.http.patch(environment.authApiHost + '/accounts/update', profile, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -48,7 +48,7 @@ export class AccountService {
       "Email" : email
     };
 
-    return this.http.post(environment.apiHost + '/accounts/forgot-password', data, {
+    return this.http.post(environment.authApiHost + '/accounts/forgot-password', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -61,7 +61,7 @@ export class AccountService {
       "Token" : token
     };
 
-    return this.http.post(environment.apiHost + '/accounts/reset-password', data, {
+    return this.http.post(environment.authApiHost + '/accounts/reset-password', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -76,7 +76,7 @@ export class AccountService {
       "PhoneNumber" : user.phoneNumber
     };
 
-    return this.http.post(environment.apiHost + '/accounts/register', data, this.options);
+    return this.http.post(environment.authApiHost + '/accounts/register', data, this.options);
   }
 
   public updateEmail(newMail : string) {
@@ -84,7 +84,7 @@ export class AccountService {
       "NewEmail" : newMail
     };
 
-    return this.http.post(environment.apiHost + '/accounts/update-email', data, {
+    return this.http.post(environment.authApiHost + '/accounts/update-email', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -95,7 +95,7 @@ export class AccountService {
       "Token" : token
     };
 
-    return this.http.post(environment.apiHost + '/accounts/confirm-update-email', data, {
+    return this.http.post(environment.authApiHost + '/accounts/confirm-update-email', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -106,7 +106,7 @@ export class AccountService {
       "Token" : token
     };
 
-    return this.http.post(environment.apiHost + '/accounts/confirm-phone-number', data, {
+    return this.http.post(environment.authApiHost + '/accounts/confirm-phone-number', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -122,7 +122,7 @@ export class AccountService {
   }
 
   public checkPhoneConfirmed() : void {
-    this.http.get<Status>(environment.apiHost + '/accounts/phone-confirmed', {
+    this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     }).map(res => {

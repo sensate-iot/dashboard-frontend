@@ -26,7 +26,7 @@ export class LoginService {
     };
 
     LockService.createLock(user, password);
-    return this.http.post<Jwt>(environment.apiHost + '/tokens/request', body, {
+    return this.http.post<Jwt>(environment.authApiHost + '/tokens/request', body, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     });
@@ -50,7 +50,7 @@ export class LoginService {
       return;
 
     jwt.refreshToken = null;
-    this.http.delete(environment.apiHost + '/tokens/' + jwt.refreshToken, {
+    this.http.delete(environment.authApiHost + '/tokens/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     }).subscribe(value => {
       LockService.destroyLock();
@@ -71,7 +71,7 @@ export class LoginService {
 
     console.log('Attempting to get new token..');
 
-    return this.http.post<TokenReply>(environment.apiHost + '/tokens/refresh', data, {
+    return this.http.post<TokenReply>(environment.authApiHost + '/tokens/refresh', data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'none')
     });
   }
