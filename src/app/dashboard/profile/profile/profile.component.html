@@ -37,10 +37,7 @@
               </div>
               <div class="col-md-6">
                 <mat-input-container color="accent">
-                  <input matInput type="text" placeholder="Phone number" formControlName="phoneNumberControl">
-                  <mat-error *ngIf="phoneNumberControl.hasError('required')">
-                    Minimal password length is 8 characters!
-                  </mat-error>
+                  <input matInput type="text" placeholder="Phone number" disabled="disabled" value="{{phoneNumber}}">
                 </mat-input-container>
               </div>
             </div>
@@ -88,38 +85,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <i class="material-icons">contact_mail</i>
-        </div>
-        <div class="card-content">
-          <h4 class="card-title">Edit Email -
-            <small class="category">Update your email address</small>
-          </h4>
 
-          <form [formGroup]="updateEmailForm">
-            <div class="row">
-              <div class="col-md-6">
-                <mat-input-container color="accent">
-                  <input matInput type="email" placeholder="New email address" formControlName="emailControl"
-                      [errorStateMatcher]="updateMatcher">
-                  <mat-error *ngIf="emailControl.hasError('email') || emailControl.hasError('required')">
-                    Enter a <strong>valid</strong> email address.
-                  </mat-error>
-                </mat-input-container>
-              </div>
-              <div class="col-md-6 action-btn">
-                <p class="btn-center">
-                  <button md-raised-button [disabled]="!isValidUpdateForm()"
-                          (click)="onNextClick()" type="submit" class="btn btn-rose">NEXT</button>
-                </p>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-update-email></app-update-email>
+  <app-update-phone-number></app-update-phone-number>
 </div>

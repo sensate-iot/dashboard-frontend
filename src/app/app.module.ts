@@ -37,6 +37,8 @@ import {AlertService} from './services/alert.service';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { ConfirmPhoneNumberComponent } from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
 import {Ng2TelInputModule} from 'ng2-tel-input';
+import { UpdatePhoneNumberComponent } from './dashboard/profile/profile/update-phone-number/update-phone-number.component';
+import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/update-email.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import {Ng2TelInputModule} from 'ng2-tel-input';
     ProfileComponent,
     ConfirmUpdateEmailComponent,
     ForgotPasswordComponent,
-    ConfirmPhoneNumberComponent
+    ConfirmPhoneNumberComponent,
+    UpdatePhoneNumberComponent,
+    UpdateEmailComponent
   ],
   imports: [
     Ng2TelInputModule,

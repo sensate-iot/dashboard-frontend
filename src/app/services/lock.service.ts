@@ -6,7 +6,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import bcrypt  = require('bcryptjs');
+import * as bcrypt from "bcryptjs";
+//import bcrypt  = require('bcryptjs');
 
 @Injectable()
 export class LockService {

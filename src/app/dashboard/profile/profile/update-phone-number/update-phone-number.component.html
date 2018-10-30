@@ -1,0 +1,268 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="material-icons">local_phone</i>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Edit Email -
+          <small class="category">Update your email address</small>
+        </h4>
+
+        <form [formGroup]="updatePhoneNumberForm">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field>
+                    <mat-select placeholder="Country" [formControl]="countryCode">
+                      <mat-option value="1" >USA (+1)</mat-option>
+                      <mat-option value="44">UK (+44)</mat-option>
+                      <mat-option value="31">Netherlands (+31)</mat-option>
+
+                      <mat-option disabled="disabled">Other Countries</mat-option>
+                      <mat-option value="213">Algeria (+213)</mat-option>
+                      <mat-option value="376">Andorra (+376)</mat-option>
+                      <mat-option value="244">Angola (+244)</mat-option>
+                      <mat-option value="1264">Anguilla (+1264)</mat-option>
+                      <mat-option value="1268">Antigua &amp; Barbuda (+1268)</mat-option>
+                      <mat-option value="54">Argentina (+54)</mat-option>
+                      <mat-option value="374">Armenia (+374)</mat-option>
+                      <mat-option value="297">Aruba (+297)</mat-option>
+                      <mat-option value="61">Australia (+61)</mat-option>
+                      <mat-option value="43">Austria (+43)</mat-option>
+                      <mat-option value="994">Azerbaijan (+994)</mat-option>
+                      <mat-option value="1242">Bahamas (+1242)</mat-option>
+                      <mat-option value="973">Bahrain (+973)</mat-option>
+                      <mat-option value="880">Bangladesh (+880)</mat-option>
+                      <mat-option value="1246">Barbados (+1246)</mat-option>
+                      <mat-option value="375">Belarus (+375)</mat-option>
+                      <mat-option value="32">Belgium (+32)</mat-option>
+                      <mat-option value="501">Belize (+501)</mat-option>
+                      <mat-option value="229">Benin (+229)</mat-option>
+                      <mat-option value="1441">Bermuda (+1441)</mat-option>
+                      <mat-option value="975">Bhutan (+975)</mat-option>
+                      <mat-option value="591">Bolivia (+591)</mat-option>
+                      <mat-option value="387">Bosnia Herzegovina (+387)</mat-option>
+                      <mat-option value="267">Botswana (+267)</mat-option>
+                      <mat-option value="55">Brazil (+55)</mat-option>
+                      <mat-option value="673">Brunei (+673)</mat-option>
+                      <mat-option value="359">Bulgaria (+359)</mat-option>
+                      <mat-option value="226">Burkina Faso (+226)</mat-option>
+                      <mat-option value="257">Burundi (+257)</mat-option>
+                      <mat-option value="855">Cambodia (+855)</mat-option>
+                      <mat-option value="237">Cameroon (+237)</mat-option>
+                      <mat-option value="1">Canada (+1)</mat-option>
+                      <mat-option value="238">Cape Verde Islands (+238)</mat-option>
+                      <mat-option value="1345">Cayman Islands (+1345)</mat-option>
+                      <mat-option value="236">Central African Republic (+236)</mat-option>
+                      <mat-option value="56">Chile (+56)</mat-option>
+                      <mat-option value="86">China (+86)</mat-option>
+                      <mat-option value="57">Colombia (+57)</mat-option>
+                      <mat-option value="269">Comoros (+269)</mat-option>
+                      <mat-option value="242">Congo (+242)</mat-option>
+                      <mat-option value="682">Cook Islands (+682)</mat-option>
+                      <mat-option value="506">Costa Rica (+506)</mat-option>
+                      <mat-option value="385">Croatia (+385)</mat-option>
+                      <mat-option value="53">Cuba (+53)</mat-option>
+                      <mat-option value="90">Cyprus - North (+90)</mat-option>
+                      <mat-option value="357">Cyprus - South (+357)</mat-option>
+                      <mat-option value="420">Czech Republic (+420)</mat-option>
+                      <mat-option value="45">Denmark (+45)</mat-option>
+                      <mat-option value="253">Djibouti (+253)</mat-option>
+                      <mat-option value="1809">Dominica (+1809)</mat-option>
+                      <mat-option value="1809">Dominican Republic (+1809)</mat-option>
+                      <mat-option value="593">Ecuador (+593)</mat-option>
+                      <mat-option value="20">Egypt (+20)</mat-option>
+                      <mat-option value="503">El Salvador (+503)</mat-option>
+                      <mat-option value="240">Equatorial Guinea (+240)</mat-option>
+                      <mat-option value="291">Eritrea (+291)</mat-option>
+                      <mat-option value="372">Estonia (+372)</mat-option>
+                      <mat-option value="251">Ethiopia (+251)</mat-option>
+                      <mat-option value="500">Falkland Islands (+500)</mat-option>
+                      <mat-option value="298">Faroe Islands (+298)</mat-option>
+                      <mat-option value="679">Fiji (+679)</mat-option>
+                      <mat-option value="358">Finland (+358)</mat-option>
+                      <mat-option value="33">France (+33)</mat-option>
+                      <mat-option value="594">French Guiana (+594)</mat-option>
+                      <mat-option value="689">French Polynesia (+689)</mat-option>
+                      <mat-option value="241">Gabon (+241)</mat-option>
+                      <mat-option value="220">Gambia (+220)</mat-option>
+                      <mat-option value="7880">Georgia (+7880)</mat-option>
+                      <mat-option value="49">Germany (+49)</mat-option>
+                      <mat-option value="233">Ghana (+233)</mat-option>
+                      <mat-option value="350">Gibraltar (+350)</mat-option>
+                      <mat-option value="30">Greece (+30)</mat-option>
+                      <mat-option value="299">Greenland (+299)</mat-option>
+                      <mat-option value="1473">Grenada (+1473)</mat-option>
+                      <mat-option value="590">Guadeloupe (+590)</mat-option>
+                      <mat-option value="671">Guam (+671)</mat-option>
+                      <mat-option value="502">Guatemala (+502)</mat-option>
+                      <mat-option value="224">Guinea (+224)</mat-option>
+                      <mat-option value="245">Guinea - Bissau (+245)</mat-option>
+                      <mat-option value="592">Guyana (+592)</mat-option>
+                      <mat-option value="509">Haiti (+509)</mat-option>
+                      <mat-option value="504">Honduras (+504)</mat-option>
+                      <mat-option value="852">Hong Kong (+852)</mat-option>
+                      <mat-option value="36">Hungary (+36)</mat-option>
+                      <mat-option value="354">Iceland (+354)</mat-option>
+                      <mat-option value="91">India (+91)</mat-option>
+                      <mat-option value="62">Indonesia (+62)</mat-option>
+                      <mat-option value="964">Iraq (+964)</mat-option>
+                      <mat-option value="98">Iran (+98)</mat-option>
+                      <mat-option value="353">Ireland (+353)</mat-option>
+                      <mat-option value="972">Israel (+972)</mat-option>
+                      <mat-option value="39">Italy (+39)</mat-option>
+                      <mat-option value="1876">Jamaica (+1876)</mat-option>
+                      <mat-option value="81">Japan (+81)</mat-option>
+                      <mat-option value="962">Jordan (+962)</mat-option>
+                      <mat-option value="7">Kazakhstan (+7)</mat-option>
+                      <mat-option value="254">Kenya (+254)</mat-option>
+                      <mat-option value="686">Kiribati (+686)</mat-option>
+                      <mat-option value="850">Korea - North (+850)</mat-option>
+                      <mat-option value="82">Korea - South (+82)</mat-option>
+                      <mat-option value="965">Kuwait (+965)</mat-option>
+                      <mat-option value="996">Kyrgyzstan (+996)</mat-option>
+                      <mat-option value="856">Laos (+856)</mat-option>
+                      <mat-option value="371">Latvia (+371)</mat-option>
+                      <mat-option value="961">Lebanon (+961)</mat-option>
+                      <mat-option value="266">Lesotho (+266)</mat-option>
+                      <mat-option value="231">Liberia (+231)</mat-option>
+                      <mat-option value="218">Libya (+218)</mat-option>
+                      <mat-option value="417">Liechtenstein (+417)</mat-option>
+                      <mat-option value="370">Lithuania (+370)</mat-option>
+                      <mat-option value="352">Luxembourg (+352)</mat-option>
+                      <mat-option value="853">Macao (+853)</mat-option>
+                      <mat-option value="389">Macedonia (+389)</mat-option>
+                      <mat-option value="261">Madagascar (+261)</mat-option>
+                      <mat-option value="265">Malawi (+265)</mat-option>
+                      <mat-option value="60">Malaysia (+60)</mat-option>
+                      <mat-option value="960">Maldives (+960)</mat-option>
+                      <mat-option value="223">Mali (+223)</mat-option>
+                      <mat-option value="356">Malta (+356)</mat-option>
+                      <mat-option value="692">Marshall Islands (+692)</mat-option>
+                      <mat-option value="596">Martinique (+596)</mat-option>
+                      <mat-option value="222">Mauritania (+222)</mat-option>
+                      <mat-option value="269">Mayotte (+269)</mat-option>
+                      <mat-option value="52">Mexico (+52)</mat-option>
+                      <mat-option value="691">Micronesia (+691)</mat-option>
+                      <mat-option value="373">Moldova (+373)</mat-option>
+                      <mat-option value="377">Monaco (+377)</mat-option>
+                      <mat-option value="976">Mongolia (+976)</mat-option>
+                      <mat-option value="1664">Montserrat (+1664)</mat-option>
+                      <mat-option value="212">Morocco (+212)</mat-option>
+                      <mat-option value="258">Mozambique (+258)</mat-option>
+                      <mat-option value="95">Myanmar (+95)</mat-option>
+                      <mat-option value="264">Namibia (+264)</mat-option>
+                      <mat-option value="674">Nauru (+674)</mat-option>
+                      <mat-option value="977">Nepal (+977)</mat-option>
+                      <mat-option value="687">New Caledonia (+687)</mat-option>
+                      <mat-option value="64">New Zealand (+64)</mat-option>
+                      <mat-option value="505">Nicaragua (+505)</mat-option>
+                      <mat-option value="227">Niger (+227)</mat-option>
+                      <mat-option value="234">Nigeria (+234)</mat-option>
+                      <mat-option value="683">Niue (+683)</mat-option>
+                      <mat-option value="672">Norfolk Islands (+672)</mat-option>
+                      <mat-option value="670">Northern Marianas (+670)</mat-option>
+                      <mat-option value="47">Norway (+47)</mat-option>
+                      <mat-option value="968">Oman (+968)</mat-option>
+                      <mat-option value="92">Pakistan (+92)</mat-option>
+                      <mat-option value="680">Palau (+680)</mat-option>
+                      <mat-option value="507">Panama (+507)</mat-option>
+                      <mat-option value="675">Papua New Guinea (+675)</mat-option>
+                      <mat-option value="595">Paraguay (+595)</mat-option>
+                      <mat-option value="51">Peru (+51)</mat-option>
+                      <mat-option value="63">Philippines (+63)</mat-option>
+                      <mat-option value="48">Poland (+48)</mat-option>
+                      <mat-option value="351">Portugal (+351)</mat-option>
+                      <mat-option value="1787">Puerto Rico (+1787)</mat-option>
+                      <mat-option value="974">Qatar (+974)</mat-option>
+                      <mat-option value="262">Reunion (+262)</mat-option>
+                      <mat-option value="40">Romania (+40)</mat-option>
+                      <mat-option value="7">Russia (+7)</mat-option>
+                      <mat-option value="250">Rwanda (+250)</mat-option>
+                      <mat-option value="378">San Marino (+378)</mat-option>
+                      <mat-option value="239">Sao Tome &amp; Principe (+239)</mat-option>
+                      <mat-option value="966">Saudi Arabia (+966)</mat-option>
+                      <mat-option value="221">Senegal (+221)</mat-option>
+                      <mat-option value="381">Serbia (+381)</mat-option>
+                      <mat-option value="248">Seychelles (+248)</mat-option>
+                      <mat-option value="232">Sierra Leone (+232)</mat-option>
+                      <mat-option value="65">Singapore (+65)</mat-option>
+                      <mat-option value="421">Slovak Republic (+421)</mat-option>
+                      <mat-option value="386">Slovenia (+386)</mat-option>
+                      <mat-option value="677">Solomon Islands (+677)</mat-option>
+                      <mat-option value="252">Somalia (+252)</mat-option>
+                      <mat-option value="27">South Africa (+27)</mat-option>
+                      <mat-option value="34">Spain (+34)</mat-option>
+                      <mat-option value="94">Sri Lanka (+94)</mat-option>
+                      <mat-option value="290">St. Helena (+290)</mat-option>
+                      <mat-option value="1869">St. Kitts (+1869)</mat-option>
+                      <mat-option value="1758">St. Lucia (+1758)</mat-option>
+                      <mat-option value="597">Suriname (+597)</mat-option>
+                      <mat-option value="249">Sudan (+249)</mat-option>
+                      <mat-option value="268">Swaziland (+268)</mat-option>
+                      <mat-option value="46">Sweden (+46)</mat-option>
+                      <mat-option value="41">Switzerland (+41)</mat-option>
+                      <mat-option value="963">Syria (+963)</mat-option>
+                      <mat-option value="886">Taiwan (+886)</mat-option>
+                      <mat-option value="992">Tajikistan (+992)</mat-option>
+                      <mat-option value="66">Thailand (+66)</mat-option>
+                      <mat-option value="228">Togo (+228)</mat-option>
+                      <mat-option value="676">Tonga (+676)</mat-option>
+                      <mat-option value="1868">Trinidad &amp; Tobago (+1868)</mat-option>
+                      <mat-option value="216">Tunisia (+216)</mat-option>
+                      <mat-option value="90">Turkey (+90)</mat-option>
+                      <mat-option value="993">Turkmenistan (+993)</mat-option>
+                      <mat-option value="1649">Turks &amp; Caicos Islands (+1649)</mat-option>
+                      <mat-option value="688">Tuvalu (+688)</mat-option>
+                      <mat-option value="256">Uganda (+256)</mat-option>
+                      <mat-option value="380">Ukraine (+380)</mat-option>
+                      <mat-option value="971">United Arab Emirates (+971)</mat-option>
+                      <mat-option value="598">Uruguay (+598)</mat-option>
+                      <mat-option value="998">Uzbekistan (+998)</mat-option>
+                      <mat-option value="678">Vanuatu (+678)</mat-option>
+                      <mat-option value="379">Vatican City (+379)</mat-option>
+                      <mat-option value="58">Venezuela (+58)</mat-option>
+                      <mat-option value="84">Vietnam (+84)</mat-option>
+                      <mat-option value="1">Virgin Islands - British (+1)</mat-option>
+                      <mat-option value="1">Virgin Islands - US (+1)</mat-option>
+                      <mat-option value="681">Wallis &amp; Futuna (+681)</mat-option>
+                      <mat-option value="969">Yemen (North)(+969)</mat-option>
+                      <mat-option value="967">Yemen (South)(+967)</mat-option>
+                      <mat-option value="260">Zambia (+260)</mat-option>
+                      <mat-option value="263">Zimbabwe (+263)</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-8">
+                  <mat-form-field class="input-full-width">
+                    <input matInput placeholder="Phone number" [formControl]="phoneNumberControl">
+                    <mat-error *ngIf="phoneNumberControl.hasError('required')">
+                      Phone number is <strong>required</strong>!
+                    </mat-error>
+                    <mat-error *ngIf="phoneNumberControl.hasError('minlength')">
+                      Minimum length is 5 digits!
+                    </mat-error>
+                    <mat-error *ngIf="phoneNumberControl.hasError('maxlength')">
+                      Maximum length is 12 digits!
+                    </mat-error>
+                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-2 action-btn">
+              <p class="btn-center">
+                <button [disabled]="!isValidUpdateForm()"
+                        (click)="onNextClick()" type="submit" class="btn btn-rose">NEXT</button>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

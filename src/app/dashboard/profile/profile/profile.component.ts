@@ -24,6 +24,7 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
 export class ProfileComponent implements OnInit {
   email : string;
   isMobile : boolean;
+  phoneNumber : string;
   profileUrl : string;
 
   profileMatcher : FormErrorStateMatcher;
@@ -33,11 +34,6 @@ export class ProfileComponent implements OnInit {
   newPasswordControl : FormControl;
   newPasswordConfirmControl : FormControl;
   currentPasswordControl : FormControl;
-  phoneNumberControl : FormControl;
-
-  updateEmailForm : FormGroup;
-  emailControl : FormControl;
-  updateMatcher : FormErrorStateMatcher;
 
   constructor(private settings : SettingsService,
               private accounts : AccountService,
@@ -50,26 +46,12 @@ export class ProfileComponent implements OnInit {
     this.isMobile = this.settings.isMobile();
   }
 
-  private createUpdateEmailForm() {
-    this.updateMatcher = new FormErrorStateMatcher();
-    this.emailControl = new FormControl('', [
-      Validators.required,
-      Validators.email
-    ]);
-
-    this.updateEmailForm = new FormGroup({
-      emailControl: this.emailControl
-    });
-  }
-
   private createProfileForm() {
     this.newPasswordControl = new FormControl('', [
       Validators.minLength(8),
     ]);
     this.newPasswordConfirmControl = new FormControl('');
     this.currentPasswordControl = new FormControl('');
-
-    this.phoneNumberControl = new FormControl('', Validators.required);
 
     this.currentPasswordControl.valueChanges.subscribe(value => {
       if(this.currentPasswordControl.value.toString().length > 0) {
@@ -107,41 +89,20 @@ export class ProfileComponent implements OnInit {
       lastNameControl: this.lastNameControl,
       newPasswordControl : this.newPasswordControl,
       newPasswordConfirmControl : this.newPasswordConfirmControl,
-      currentPasswordControl: this.currentPasswordControl,
-      phoneNumberControl : this.phoneNumberControl
+      currentPasswordControl: this.currentPasswordControl
     });
   }
 
   ngOnInit() {
     this.createProfileForm();
-    this.createUpdateEmailForm();
 
     this.accounts.getUser().subscribe(value => {
       this.email = value.email;
-      this.phoneNumberControl.patchValue(value.phoneNumber);
+      this.phoneNumber = value.phoneNumber;
       this.firstNameControl.patchValue(value.firstName);
       this.lastNameControl.patchValue(value.lastName);
       this.profileUrl = 'https://www.gravatar.com/avatar/' + Md5.hashStr(this.email).toString().toLowerCase() + '.jpg?s=400';
     });
-
-  }
-
-  onNextClick() {
-    if(!this.emailControl.valid) {
-      return;
-    }
-
-    this.accounts.updateEmail(this.emailControl.value).subscribe(data => {
-      this.router.navigate(['/dashboard/confirm-update-email']);
-    },error => {
-      this.emailControl.setErrors({
-        "unable": true
-      });
-    });
-  }
-
-  isValidUpdateForm() : boolean {
-    return this.emailControl.valid;
   }
 
   /*
@@ -152,7 +113,7 @@ export class ProfileComponent implements OnInit {
 
     profile.lastName = this.lastNameControl.value;
     profile.firstName = this.firstNameControl.value;
-    profile.phoneNumber = this.phoneNumberControl.value;
+    profile.phoneNumber = this.phoneNumber;
 
     if(this.newPasswordControl.value.toString().length > 0) {
       profile.newPassword = this.newPasswordControl.value;
