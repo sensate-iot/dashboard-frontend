@@ -16,6 +16,7 @@ import {ProfileComponent} from './dashboard/profile/profile/profile.component';
 import {LockGuard} from './guards/lock.guard';
 import {ConfirmUpdateEmailComponent} from './dashboard/profile/confirm-update-email/confirm-update-email.component';
 import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.component';
+import {ConfirmPhoneNumberComponent} from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -27,7 +28,8 @@ const routes: Routes = [
   { path: 'dashboard', component: RootComponent, children: [
       {path: '', component: DashboardComponent, canActivate: [AuthGuard, LockGuard]},
       {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'confirm-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]}
+      {path: 'confirm-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]},
+      {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
   ]}
 ];
 

@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   phoneNumber : FormControl;
   password : FormControl;
   passwordConfirm : FormControl;
+  countryCode : FormControl;
   terms : boolean;
 
   private first : boolean;
@@ -60,8 +61,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.password = new FormControl('', Validators.required);
     this.phoneNumber = new FormControl('', [
       Validators.required,
-      Validators.minLength(8)
+      Validators.minLength(5),
+      Validators.maxLength(12)
     ]);
+
+    this.countryCode = new FormControl('', [
+      Validators.required
+    ]);
+
+
 
     this.registerForm = new FormGroup({
       email: this.email,
@@ -94,21 +102,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.isValidPhoneNumber();
   }
 
-  public isValidPhoneNumber() {
-    return this.phoneNumber.value.toString().match(/[^0-9]+/) === null;
+  public isValidPhoneNumber() : boolean {
+    const regex = /^[0-9]\d{5,15}$/;
+    return regex.test(this.phoneNumber.value.toString());
   }
 
   public onSubmitClicked() : void {
     this.first = false;
     const user = new UserRegistration();
 
+    const phone = '+' + this.countryCode.value.toString() + this.phoneNumber.value.toString();
     user.email = this.email.value.toString();
     user.firstName = this.firstName.value.toString();
     user.lastName = this.lastName.value.toString();
     user.password = this.password.value.toString();
-    user.phoneNumber = this.phoneNumber.value.toString();
+    user.phoneNumber = phone;
 
     console.log('Submit has been clicked!');
+    console.log(user);
     this.accounts.register(user).subscribe(data => {
       this.alerts.showNotification("A verification token has been sent to your email", 'top-center', 'success');
     }, error => {

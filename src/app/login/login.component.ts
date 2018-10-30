@@ -76,6 +76,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard']);
         },
         error => {
+          console.log(error);
           LoginService.handleError(error);
           this.email.setErrors({
             "invalid": true

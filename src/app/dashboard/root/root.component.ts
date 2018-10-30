@@ -10,6 +10,7 @@ import {SettingsService} from '../../services/settings.service';
 import {Router} from '@angular/router';
 import {LockService} from '../../services/lock.service';
 import {LoginService} from '../../services/login.service';
+import {AccountService} from '../../services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -20,17 +21,25 @@ import {LoginService} from '../../services/login.service';
 export class RootComponent implements OnInit, OnDestroy {
   public id : number;
   public backgroundColor : string;
+  public phoneConfirmed : boolean;
 
-  constructor(private lock : LockService, private auth : LoginService,
+  constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
               private settings : SettingsService, private router : Router) {
     this.id = settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
+    this.accounts.checkPhoneConfirmed();
+
+    console.log('Root created..');
   }
 
   ngOnInit() {
   }
 
   ngOnDestroy() {
+  }
+
+  public phoneIsConfirmed() : boolean {
+    return AccountService.phoneIsConfirmed();
   }
 
   public logoutClicked() {

@@ -13,7 +13,7 @@ export class PhonenumberMatcher implements ErrorStateMatcher {
     if(control.value.toString().length <= 0)
       return true;
 
-    return control.value.toString().match(/[^0-9]+/) === null;
+    return control.value.toString().match(/^[0-9]\d{1,15}$/) === null;
   }
 
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

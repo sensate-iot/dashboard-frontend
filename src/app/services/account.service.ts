@@ -10,6 +10,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Profile, User} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
+import {Observable} from 'rxjs/Observable';
+import {Status} from '../models/status.model';
 
 @Injectable()
 export class AccountService {
@@ -88,7 +90,7 @@ export class AccountService {
     });
   }
 
-  confirmUpdateEmail(token : string) {
+  public confirmUpdateEmail(token : string) {
     const data = {
       "Token" : token
     };
@@ -96,6 +98,40 @@ export class AccountService {
     return this.http.post(environment.apiHost + '/accounts/confirm-update-email', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+  public confirmPhoneNumber(token: string) {
+    const data = {
+      "Token" : token
+    };
+
+    return this.http.post(environment.apiHost + '/accounts/confirm-phone-number', data, {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
+  }
+
+  public static phoneIsConfirmed() : boolean {
+    const confirmed = localStorage.getItem('phone-confirmed');
+
+    if(confirmed == null)
+      return false;
+
+    return confirmed == 'true';
+  }
+
+  public checkPhoneConfirmed() : void {
+    this.http.get<Status>(environment.apiHost + '/accounts/phone-confirmed', {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).map(res => {
+      if(res.body.errorCode != 200)
+        return 'false';
+
+      return res.body.message;
+    }).subscribe(res => {
+      localStorage.setItem('phone-confirmed', res.toString());
     });
   }
 }

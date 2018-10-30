@@ -7,7 +7,7 @@ import {
   MatCheckboxModule,
   MatInputModule, MatListModule,
   MatMenuModule,
-  MatRadioModule,
+  MatRadioModule, MatSelectModule,
   MatSidenavModule, MatToolbarModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -35,6 +35,8 @@ import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-
 import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
+import { ConfirmPhoneNumberComponent } from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
+import {Ng2TelInputModule} from 'ng2-tel-input';
 
 @NgModule({
   declarations: [
@@ -52,9 +54,11 @@ import { ForgotPasswordComponent } from './login/forgot-password/forgot-password
     SidebarComponent,
     ProfileComponent,
     ConfirmUpdateEmailComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ConfirmPhoneNumberComponent
   ],
   imports: [
+    Ng2TelInputModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -66,6 +70,7 @@ import { ForgotPasswordComponent } from './login/forgot-password/forgot-password
     MatToolbarModule,
     MatButtonModule,
     MatRadioModule,
+    MatSelectModule,
     MatInputModule,
     MatMenuModule,
     MatCheckboxModule
