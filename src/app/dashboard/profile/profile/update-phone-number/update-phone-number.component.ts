@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../../../services/alert.service';
+import {AccountService} from '../../../../services/account.service';
+import {Router} from '@angular/router';
+import {Status} from '../../../../models/status.model';
 
 @Component({
   selector: 'app-update-phone-number',
@@ -7,12 +11,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./update-phone-number.component.css']
 })
 export class UpdatePhoneNumberComponent implements OnInit {
-  countryCode : FormControl;
+  countryCodeControl : FormControl;
   phoneNumberControl : FormControl;
   updatePhoneNumberForm : FormGroup;
 
-
-  constructor() { }
+  constructor(private notifications : AlertService, private accounts : AccountService, private router: Router) { }
 
   public ngOnInit() : void {
     this.createUpdatePhoneNumberForm();
@@ -25,7 +28,7 @@ export class UpdatePhoneNumberComponent implements OnInit {
       Validators.maxLength(12)
     ]);
 
-    this.countryCode = new FormControl('', [
+    this.countryCodeControl = new FormControl('', [
       Validators.required
     ]);
 
@@ -35,10 +38,17 @@ export class UpdatePhoneNumberComponent implements OnInit {
   }
 
   public isValidUpdateForm() : boolean {
-    return this.countryCode.valid && this.phoneNumberControl.valid;
+    return this.countryCodeControl.valid && this.phoneNumberControl.valid;
   }
 
   public onNextClick() : void {
-
+    const phone = '+' + this.countryCodeControl.value.toString() + this.phoneNumberControl.value.toString();
+    this.accounts.updatePhoneNumber(phone).subscribe(() => {
+      this.notifications.showNotification('A verification code has been sent to your phone!', 'top-center', 'success');
+      this.router.navigate(['/dashboard/confirm-phone-number']);
+    }, (error) => {
+      const status : Status = error.error;
+      this.notifications.showNotification('Unable to update phone number: ' + status.message, 'top-center', 'warning');
+    })
   }
 }

@@ -10,12 +10,12 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Profile, User} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
-import {Observable} from 'rxjs/Observable';
 import {Status} from '../models/status.model';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AccountService {
-  private options : any;
+  private readonly options : any;
 
   constructor(private http : HttpClient) {
     this.options = {
@@ -32,7 +32,6 @@ export class AccountService {
     const profile = {
       "FirstName" : user.firstName,
       "LastName" : user.lastName,
-      "PhoneNumber" : user.phoneNumber,
       "Password" : user.newPassword,
       "CurrentPassword" : user.currentPassword
     };
@@ -102,11 +101,25 @@ export class AccountService {
   }
 
   public confirmPhoneNumber(token: string) {
+    let promise = new Promise((resolve, reject) => {
+      this.http.get<Status>(environment.authApiHost + '/accounts/confirm-phone-number/' + token, this.options)
+        .toPromise().then(() => {
+          localStorage.setItem('phone-confirmed', 'true');
+          resolve();
+      }, msg => {
+          reject(msg);
+      })
+    });
+
+    return promise;
+  }
+
+  public updatePhoneNumber(phonenumber: string) {
     const data = {
-      "Token" : token
+      "PhoneNumber": phonenumber
     };
 
-    return this.http.post(environment.authApiHost + '/accounts/confirm-phone-number', data, {
+    return this.http.patch(environment.authApiHost + '/accounts/update-phone-number', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });

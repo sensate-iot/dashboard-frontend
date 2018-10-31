@@ -113,7 +113,6 @@ export class ProfileComponent implements OnInit {
 
     profile.lastName = this.lastNameControl.value;
     profile.firstName = this.firstNameControl.value;
-    profile.phoneNumber = this.phoneNumber;
 
     if(this.newPasswordControl.value.toString().length > 0) {
       profile.newPassword = this.newPasswordControl.value;

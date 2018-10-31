@@ -11,7 +11,7 @@
 
         <form [formGroup]="updateEmailForm">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-10">
               <mat-input-container color="accent">
                 <input matInput type="email" placeholder="New email address" formControlName="emailControl"
                        [errorStateMatcher]="updateMatcher">
@@ -20,7 +20,7 @@
                 </mat-error>
               </mat-input-container>
             </div>
-            <div class="col-md-6 action-btn">
+            <div class="col-md-2 action-btn">
               <p class="btn-center">
                 <button [disabled]="!isValidUpdateForm()"
                         (click)="onNextClick()" type="submit" class="btn btn-rose">NEXT</button>

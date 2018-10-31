@@ -122,6 +122,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     console.log(user);
     this.accounts.register(user).subscribe(data => {
       this.alerts.showNotification("A verification token has been sent to your email", 'top-center', 'success');
+      /* TODO: navigate to login screen */
     }, error => {
       console.log('Failed to register..');
       console.log(error);

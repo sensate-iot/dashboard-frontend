@@ -5,8 +5,8 @@
         <i class="material-icons">local_phone</i>
       </div>
       <div class="card-content">
-        <h4 class="card-title">Edit Email -
-          <small class="category">Update your email address</small>
+        <h4 class="card-title">Edit Phone number -
+          <small class="category">Update your phone number</small>
         </h4>
 
         <form [formGroup]="updatePhoneNumberForm">
@@ -15,7 +15,7 @@
               <div class="row">
                 <div class="col-md-4">
                   <mat-form-field>
-                    <mat-select placeholder="Country" [formControl]="countryCode">
+                    <mat-select placeholder="Country" [formControl]="countryCodeControl">
                       <mat-option value="1" >USA (+1)</mat-option>
                       <mat-option value="44">UK (+44)</mat-option>
                       <mat-option value="31">Netherlands (+31)</mat-option>
@@ -248,10 +248,8 @@
                     <mat-error *ngIf="phoneNumberControl.hasError('maxlength')">
                       Maximum length is 12 digits!
                     </mat-error>
-                    <!--<mat-hint>Errors appear instantly!</mat-hint>-->
                   </mat-form-field>
                 </div>
-
               </div>
             </div>
             <div class="col-md-2 action-btn">

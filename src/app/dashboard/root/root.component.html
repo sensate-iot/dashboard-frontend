@@ -8,7 +8,9 @@
     <div class="container">
       <div class="nav-bar">
         <div class="left-part">
-          <button mat-mini-fab id="nav-left-button"><i class="material-icons" style="font-size:18px;">more_vert</i></button>
+          <button mat-mini-fab id="nav-left-button">
+            <i class="material-icons" style="font-size:18px;">more_vert</i>
+          </button>
           <h4>Sensate IoT</h4>
         </div>
         <div class="right-part">
@@ -17,7 +19,7 @@
             <mat-menu #menu="matMenu">
               <button routerLink="/dashboard/profile" mat-menu-item>Profile</button>
               <button mat-menu-item routerLink="/dashboard/profile">Change email</button>
-              <button *ngIf="!phoneIsConfirmed()" mat-menu-item routerLink="/dashboard/confirm-phone">Confirm phone number</button>
+              <button *ngIf="!phoneIsConfirmed()" mat-menu-item routerLink="/dashboard/confirm-phone-number">Confirm phone number</button>
               <button mat-menu-item (click)="lockClicked()">Lock screen</button>
               <button mat-menu-item (click)="logoutClicked()">Logout</button>
             </mat-menu>
