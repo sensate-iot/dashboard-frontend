@@ -11,7 +11,6 @@ import {Profile, User} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
 import {Status} from '../models/status.model';
-import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AccountService {
@@ -66,13 +65,14 @@ export class AccountService {
     });
   }
 
-  public register(user : UserRegistration) {
+  public register(user : UserRegistration, forward : string) {
     const data = {
       "Email" : user.email,
       "Password" : user.password,
       "FirstName" : user.firstName,
       "LastName": user.lastName,
-      "PhoneNumber" : user.phoneNumber
+      "PhoneNumber" : user.phoneNumber,
+      "ForwardTo": forward
     };
 
     return this.http.post(environment.authApiHost + '/accounts/register', data, this.options);
@@ -135,16 +135,20 @@ export class AccountService {
   }
 
   public checkPhoneConfirmed() : void {
-    this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    }).map(res => {
+    this.rawCheckPhoneConfirmed().map(res => {
       if(res.body.errorCode != 200)
         return 'false';
 
       return res.body.message;
     }).subscribe(res => {
       localStorage.setItem('phone-confirmed', res.toString());
+    });
+  }
+
+  public rawCheckPhoneConfirmed() {
+    return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
   }
 }

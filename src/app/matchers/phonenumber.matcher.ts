@@ -9,17 +9,17 @@ import {ErrorStateMatcher} from '@angular/material';
 import {FormControl, FormGroupDirective, NgForm} from '@angular/forms';
 
 export class PhonenumberMatcher implements ErrorStateMatcher {
-  private isValidPhoneNumber(control : FormControl) : boolean {
-    if(control.value.toString().length <= 0)
-      return true;
+  private static isValidPhoneNumber(control : FormControl) : boolean {
+    if(control.value.toString().length <= 5)
+      return false;
 
-    return control.value.toString().match(/^[0-9]\d{1,15}$/) === null;
+    return true;
   }
 
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const submitted = form && form.submitted;
 
-    if(!this.isValidPhoneNumber(control))
+    if(!PhonenumberMatcher.isValidPhoneNumber(control))
       return true;
 
     return control && control.invalid && (control.dirty || control.touched || submitted);

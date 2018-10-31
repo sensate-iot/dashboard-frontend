@@ -49,16 +49,17 @@ export class LoginService {
     if(jwt == null || jwt.refreshToken == null)
       return;
 
-    jwt.refreshToken = null;
-    this.http.delete(environment.authApiHost + '/tokens/' + jwt.refreshToken, {
+    this.http.delete(environment.authApiHost + '/tokens/revoke/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
-    }).subscribe(value => {
+    }).subscribe(() => {
       LockService.destroyLock();
       localStorage.removeItem('jwt');
-    }, error => {
+      localStorage.removeItem('phone-confirmed');
+    }, () => {
       console.log('Unable to logout on server!');
       LockService.destroyLock();
       localStorage.removeItem('jwt');
+      localStorage.removeItem('phone-confirmed');
     });
   }
 

@@ -108,7 +108,7 @@
                   <div class="row">
                     <div class="col-md-4 firstname">
                       <mat-form-field>
-                        <mat-select placeholder="Country" [formControl]="countryCode">
+                        <mat-select placeholder="Country" [formControl]="countryCodeControl">
                           <mat-option value="1" >USA (+1)</mat-option>
                           <mat-option value="44">UK (+44)</mat-option>
                           <mat-option value="31">Netherlands (+31)</mat-option>
@@ -330,15 +330,15 @@
                     </div>
                     <div class="col-md-8 lastname">
                       <mat-form-field class="input-full-width">
-                        <input matInput placeholder="Phone number" formControlName="phoneNumber"
+                        <input matInput placeholder="Phone number" [formControl]="phoneNumberControl"
                                [errorStateMatcher]="phoneMatcher">
-                        <mat-error *ngIf="phoneNumber.hasError('required')">
+                        <mat-error *ngIf="phoneNumberControl.hasError('required')">
                           Phone number is <strong>required</strong>!
                         </mat-error>
-                        <mat-error *ngIf="phoneNumber.hasError('minlength')">
+                        <mat-error *ngIf="phoneNumberControl.hasError('minlength')">
                           Minimum length is 5 digits!
                         </mat-error>
-                        <mat-error *ngIf="phoneNumber.hasError('maxlength')">
+                        <mat-error *ngIf="phoneNumberControl.hasError('maxlength')">
                           Maximum length is 12 digits!
                         </mat-error>
                         <!--<mat-hint>Errors appear instantly!</mat-hint>-->

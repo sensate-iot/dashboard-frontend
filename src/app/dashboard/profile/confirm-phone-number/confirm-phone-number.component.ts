@@ -1,9 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {AccountService} from '../../../services/account.service';
-import {DOCUMENT} from '@angular/common';
 import {Router} from '@angular/router';
-import {LoginService} from '../../../services/login.service';
 import {ErrorStateMatcher} from '@angular/material';
 import {AlertService} from '../../../services/alert.service';
 
@@ -26,9 +24,7 @@ export class ConfirmPhoneNumberComponent implements OnInit {
   codeForm : FormGroup;
   matcher : FormErrorStateMatcher;
 
-  constructor(private accounts : AccountService,
-              @Inject(DOCUMENT) private document : Window,
-              private router : Router, private notifications : AlertService) { }
+  constructor(private accounts : AccountService, private router : Router, private notifications : AlertService) { }
 
   ngOnInit() {
     this.matcher = new FormErrorStateMatcher();
@@ -41,8 +37,6 @@ export class ConfirmPhoneNumberComponent implements OnInit {
     this.codeForm = new FormGroup({
       codeField: this.codeField
     });
-
-    console.log(encodeURI(this.document.location.origin + '/login'));
   }
 
   public onConfirm() {
