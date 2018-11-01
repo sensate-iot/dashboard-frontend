@@ -12,13 +12,13 @@
         <form [formGroup]="updateEmailForm">
           <div class="row">
             <div class="col-md-10">
-              <mat-input-container color="accent">
+              <mat-form-field color="accent">
                 <input matInput type="email" placeholder="New email address" formControlName="emailControl"
                        [errorStateMatcher]="updateMatcher">
                 <mat-error *ngIf="emailControl.hasError('email') || emailControl.hasError('required')">
                   Enter a <strong>valid</strong> email address.
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div class="col-md-2 action-btn">
               <p class="btn-center">

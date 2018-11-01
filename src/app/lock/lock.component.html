@@ -11,7 +11,7 @@
           <div class="card-body">
             <form [formGroup]="unlockForm">
               <div class="form-row">
-                <mat-input-container color="accent">
+                <mat-form-field color="accent">
                   <input type="password" formControlName="password" [errorStateMatcher]="matcher" matInput placeholder="Password"/>
 
                   <mat-error *ngIf="password.hasError('required')">
@@ -21,7 +21,7 @@
                   <mat-error *ngIf="password.hasError('invalid')">
                     Password incorrect!
                   </mat-error>
-                </mat-input-container>
+                </mat-form-field>
               </div>
               <div class="card-footer">
                 <p class="button-para">

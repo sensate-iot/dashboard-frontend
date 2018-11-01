@@ -57,7 +57,7 @@ p.button-para {
   margin-bottom: 20px;
 }
 
-.card-body, .card-body .mat-input-container{
+.card-body, .card-body .mat-form-field{
   width: 100%;
 }
 

@@ -12,7 +12,7 @@ import {HttpErrorResponse, HttpEvent,
 import {Observable} from 'rxjs/Rx';
 import {LoginService} from './login.service';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {Router} from '@angular/router';
 import {TokenReply} from '../models/tokenreply.model';
 
@@ -36,7 +36,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(this.addToken(req, this.auth.getJwtToken())).catch(error => {
+    return next.handle(this.addToken(req, this.auth.getJwtToken())).catch(error  => {
       if (error instanceof HttpErrorResponse) {
         const err = <HttpErrorResponse>error;
         switch(err.status) {
@@ -44,10 +44,11 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
             return this.handleUnauthorized(req, next);
 
           case 403:
-            return this.logout();
+            this.logout();
+            break;
 
           default:
-            return Observable.throw(error);
+            return Observable.throwError(error);
         }
       }
     });
@@ -79,6 +80,5 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   private logout() {
     this.auth.resetLogin();
     this.router.navigate(['login']);
-    return Observable.of('logout');
   }
 }

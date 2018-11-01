@@ -7,7 +7,7 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {FormMatcher} from '../matchers/form.matcher';
 import {PhonenumberMatcher} from '../matchers/phonenumber.matcher';
 import {AccountService} from '../services/account.service';

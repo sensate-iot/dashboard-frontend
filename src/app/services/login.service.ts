@@ -10,7 +10,7 @@ import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Jwt} from '../models/jwt.model';
 import * as moment from 'moment';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
 

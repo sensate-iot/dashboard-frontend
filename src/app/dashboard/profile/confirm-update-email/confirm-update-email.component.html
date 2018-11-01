@@ -13,12 +13,12 @@
           <form [formGroup]="codeForm">
             <div class="row">
               <div class="col-md-12">
-                <mat-input-container color="accent">
+                <mat-form-field color="accent">
                   <input matInput type="text" placeholder="Confirmation code" [(ngModel)]="code" name="code" formControlName="codeField">
                   <mat-error *ngIf="codeField.hasError('required') || codeField.hasError('invalid')">
                     Enter a valid confirmation code!
                   </mat-error>
-                </mat-input-container>
+                </mat-form-field>
               </div>
             </div>
             <div class="row">

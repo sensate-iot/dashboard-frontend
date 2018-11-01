@@ -71,7 +71,7 @@
   padding-left: 80px;
 }
 
-.mat-input-container{
+.mat-form-field{
   width: 100%;
 }
 
@@ -87,7 +87,7 @@ form{
   margin-top: 15px;
 }
 
-.mat-input-container textarea{
+.mat-form-field textarea{
   height: 90px;
 }
 
