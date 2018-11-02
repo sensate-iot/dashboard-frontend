@@ -6,11 +6,12 @@
  */
 
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Profile, User} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
 import {Status} from '../models/status.model';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AccountService {
@@ -101,7 +102,7 @@ export class AccountService {
   }
 
   public confirmPhoneNumber(token: string) {
-    let promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.http.get<Status>(environment.authApiHost + '/accounts/confirm-phone-number/' + token, this.options)
         .toPromise().then(() => {
           localStorage.setItem('phone-confirmed', 'true');
@@ -110,8 +111,6 @@ export class AccountService {
           reject(msg);
       })
     });
-
-    return promise;
   }
 
   public updatePhoneNumber(phonenumber: string) {
@@ -135,12 +134,12 @@ export class AccountService {
   }
 
   public checkPhoneConfirmed() : void {
-    this.rawCheckPhoneConfirmed().map(res => {
+    this.rawCheckPhoneConfirmed().pipe(map(res => {
       if(res.body.errorCode != 200)
         return 'false';
 
       return res.body.message;
-    }).subscribe(res => {
+    })).subscribe(res => {
       localStorage.setItem('phone-confirmed', res.toString());
     });
   }

@@ -10,6 +10,7 @@ import {
   MatRadioModule, MatSelectModule,
   MatSidenavModule, MatToolbarModule
 } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routing} from './app.routes';
 import { HeaderComponent } from './shared/header/header.component';
@@ -63,6 +64,7 @@ import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/u
   ],
   imports: [
     Ng2TelInputModule,
+    RouterModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

@@ -9,12 +9,14 @@
 import {HttpErrorResponse, HttpEvent,
         HttpHandler, HttpInterceptor,
         HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs';
 import {LoginService} from './login.service';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+import {throwError} from 'rxjs';
 import {Router} from '@angular/router';
 import {TokenReply} from '../models/tokenreply.model';
+import {catchError, filter, finalize, flatMap, switchMap, take} from 'rxjs/operators';
 
 @Injectable()
 export class RefreshTokenInterceptorService implements HttpInterceptor {
@@ -35,8 +37,8 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     });
   }
 
-  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(this.addToken(req, this.auth.getJwtToken())).catch(error  => {
+  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
+    return next.handle(this.addToken(req, this.auth.getJwtToken())).pipe(catchError(error  => {
       if (error instanceof HttpErrorResponse) {
         const err = <HttpErrorResponse>error;
         switch(err.status) {
@@ -45,13 +47,16 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
 
           case 403:
             this.logout();
-            break;
+            console.log('Logged out..!');
+            location.reload(true);
+            return throwError(error);
 
           default:
-            return Observable.throwError(error);
+            console.log('Error..!');
+            return throwError(error);
         }
       }
-    });
+    }));
   }
 
   public handleUnauthorized(req : HttpRequest<any>, next : HttpHandler) {
@@ -59,26 +64,26 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
       this.tokenSubject.next(null);
       this.isRefreshingToken = true;
 
-      return this.auth.refresh().flatMap((res : TokenReply, idx) => {
+      return this.auth.refresh().pipe(flatMap((res : TokenReply, idx) => {
         this.auth.updateJwt(res.refreshToken, res.jwtToken, res.jwtExpiresInMinutes);
         this.tokenSubject.next(res.jwtToken);
         return next.handle(this.addToken(req, res.jwtToken));
-      }).catch(error => {
+      }), catchError(error => {
         this.isRefreshingToken =  false;
         return next.handle(req);
-      }).finally(() => {
+      }), finalize(() => {
         this.isRefreshingToken = false;
-      });
+      }));
     } else {
-      return this.tokenSubject.filter(token => token != null)
-        .take(1).switchMap(token => {
+      return this.tokenSubject.pipe(filter(token => token != null),
+        take(1),switchMap(token => {
           return next.handle(this.addToken(req, token));
-        });
+        }));
     }
   }
 
   private logout() {
     this.auth.resetLogin();
-    this.router.navigate(['login']);
+    //this.router.navigate(['login']);
   }
 }

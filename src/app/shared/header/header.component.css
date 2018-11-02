@@ -33,9 +33,10 @@ header{
 }
 
 .router-active{
-  background-color: rgba(255,255,255,.1);
+
   padding: 15px 18px 15px 15px;
   border-radius: 3px;
+  background-color: rgba(255,255,255,.1);
 }
 
 @media (max-width: 510px) {
