@@ -32,7 +32,8 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     return req.clone({
       setHeaders: {
         Authorization: 'Bearer ' + token,
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json'
       }
     });
   }

@@ -2,32 +2,32 @@
   <div class="row" style="margin-top: 30px">
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <app-figurecard
-        title="184"
-        headerIcon="weekend"
-        category="Bookings"
-        footContent="Get More Space..."
-        footerIcon="warning"
+        title="{{dashboard.numberOfUsers}}"
+        headerIcon="person_outline"
+        category="User count"
+        footContent="In total"
+        footerIcon="history"
         linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
         boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)">
       </app-figurecard>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <app-figurecard
-        title="75.521"
-        headerIcon="equalizer"
-        category="Views"
-        footContent="Google Analytics"
-        footerIcon="local_offer"
+        title="{{verifiedUsers.toFixed(2)}}%"
+        headerIcon="verified_user"
+        category="Verified users"
+        footContent="In total"
+        footerIcon="thumb_up"
         linearColor="linear-gradient(60deg, #ef5350, #e53935)"
         boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4)">
       </app-figurecard>
     </div>
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <app-figurecard
-        title="$3,245"
-        headerIcon="store"
-        category="Revenue"
-        footContent="Last 24 Hours"
+        title="{{dashboard.numberOfSensors}}"
+        headerIcon="equalizer"
+        category="Sensors"
+        footContent="Registered"
         footerIcon="date_range"
         linearColor="linear-gradient(60deg, #66bb6a, #43a047)"
         boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4)">
@@ -35,10 +35,10 @@
     </div>
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
       <app-figurecard
-        title="+245"
-        headerIcon="mic"
-        category="Followers"
-        footContent="Just Updated"
+        title="{{dashboard.measurementStatsLastHour}}"
+        headerIcon="timeline"
+        category="Measurements"
+        footContent="In the last hour"
         footerIcon="update"
         linearColor="linear-gradient(60deg, #26c6da, #00acc1)"
         boxShadow="0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4)">

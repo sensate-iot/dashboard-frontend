@@ -42,6 +42,7 @@ import { UpdatePhoneNumberComponent } from './dashboard/profile/profile/update-p
 import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/update-email.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import {UserManagerComponent} from './admin/user-manager/user-manager.component';
+import {AdminService} from './services/admin.service';
 
 @NgModule({
   declarations: [
@@ -84,11 +85,13 @@ import {UserManagerComponent} from './admin/user-manager/user-manager.component'
     MatInputModule,
     MatMenuModule,
     MatCheckboxModule
+
   ],
   providers: [
     LoginService,
     LockService,
     AccountService,
+    AdminService,
     AuthGuard,
     LockGuard,
     AlertService,
