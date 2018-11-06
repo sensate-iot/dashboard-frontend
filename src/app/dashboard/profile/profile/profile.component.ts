@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   isMobile : boolean;
   phoneNumber : string;
   profileUrl : string;
+  registrationDate : Date;
 
   profileMatcher : FormErrorStateMatcher;
   profileForm : FormGroup;
@@ -95,12 +96,14 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.createProfileForm();
+    this.registrationDate = new Date(0);
 
     this.accounts.getUser().subscribe(value => {
       this.email = value.email;
       this.phoneNumber = value.phoneNumber;
       this.firstNameControl.patchValue(value.firstName);
       this.lastNameControl.patchValue(value.lastName);
+      this.registrationDate = new Date(Date.parse(value.registeredAt));
       this.profileUrl = 'https://www.gravatar.com/avatar/' + Md5.hashStr(this.email).toString().toLowerCase() + '.jpg?s=400';
     });
   }
