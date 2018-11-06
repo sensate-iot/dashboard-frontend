@@ -21,7 +21,7 @@ import {LoginService} from './services/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RefreshTokenInterceptorService} from './services/refreshtokeninterceptor.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {RootComponent} from './dashboard/root/root.component';
+import {RootComponent} from './shared/root/root.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {MsgIconBtnComponent} from './shared/msgiconbtn/msgiconbtn.component';
 import {ImagecardComponent} from './shared/imagecard/imagecard.component';
@@ -40,6 +40,8 @@ import { ConfirmPhoneNumberComponent } from './dashboard/profile/confirm-phone-n
 import {Ng2TelInputModule} from 'ng2-tel-input';
 import { UpdatePhoneNumberComponent } from './dashboard/profile/profile/update-phone-number/update-phone-number.component';
 import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/update-email.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import {UserManagerComponent} from './admin/user-manager/user-manager.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/u
     ForgotPasswordComponent,
     ConfirmPhoneNumberComponent,
     UpdatePhoneNumberComponent,
-    UpdateEmailComponent
+    UpdateEmailComponent,
+    UserManagerComponent,
+    AdminDashboardComponent
   ],
   imports: [
     Ng2TelInputModule,
