@@ -27,3 +27,8 @@ export class Profile {
     this.firstName = null;
   }
 }
+
+export class UserRoles {
+  public roles : string[];
+  public email : string;
+}

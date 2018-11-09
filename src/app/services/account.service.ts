@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Profile, User} from '../models/user.model';
+import {Profile, User, UserRoles} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
 import {Status} from '../models/status.model';
@@ -24,7 +24,7 @@ export class AccountService {
     };
   }
 
-  getUser() {
+  public getUser() {
     return this.http.get<User>(environment.authApiHost + '/accounts/show');
   }
 
@@ -131,6 +131,24 @@ export class AccountService {
       return false;
 
     return confirmed == 'true';
+  }
+
+  public checkAndStoreRoles() : void {
+    this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles').subscribe(value => {
+      localStorage.setItem('roles', JSON.stringify(value));
+
+      if(value.roles.indexOf('Administrators') >= 0)
+        localStorage.setItem('admin', 'true');
+    });
+  }
+
+  public static isAdmin() : boolean {
+    const value = localStorage.getItem('admin');
+
+    if(!value)
+      return false;
+
+    return value === 'true';
   }
 
   public checkPhoneConfirmed() : void {

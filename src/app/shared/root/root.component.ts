@@ -21,15 +21,13 @@ import {AccountService} from '../../services/account.service';
 export class RootComponent implements OnInit, OnDestroy {
   public id : number;
   public backgroundColor : string;
-  public phoneConfirmed : boolean;
 
   constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
               private settings : SettingsService, private router : Router) {
     this.id = settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
     this.accounts.checkPhoneConfirmed();
-
-    console.log('Root created..');
+    this.accounts.checkAndStoreRoles();
   }
 
   ngOnInit() {
@@ -40,6 +38,11 @@ export class RootComponent implements OnInit, OnDestroy {
 
   public phoneIsConfirmed() : boolean {
     return AccountService.phoneIsConfirmed();
+  }
+
+  public isAdministrator() : boolean {
+    console.log(AccountService.isAdmin());
+    return AccountService.isAdmin();
   }
 
   public logoutClicked() {
