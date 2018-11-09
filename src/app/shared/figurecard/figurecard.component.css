@@ -7,7 +7,7 @@
 
 .card-content{
   text-align: right;
-  padding: 15px 20px 13px 20px;
+  padding: 15px 10px 13px 20px;
 }
 
 .card-header {
@@ -23,9 +23,9 @@
 
 .card-header i {
   font-size: 36px;
-  line-height: 56px;
-  width: 56px;
-  height: 56px;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
   color: #fff;
 }
 

@@ -43,6 +43,7 @@ import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/u
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import {UserManagerComponent} from './admin/user-manager/user-manager.component';
 import {AdminService} from './services/admin.service';
+import { ChartCardComponent } from './shared/chart-card/chart-card.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import {AdminService} from './services/admin.service';
     UpdatePhoneNumberComponent,
     UpdateEmailComponent,
     UserManagerComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    ChartCardComponent
   ],
   imports: [
     Ng2TelInputModule,
