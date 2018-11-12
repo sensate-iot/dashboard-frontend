@@ -54,13 +54,13 @@ export class ProfileComponent implements OnInit {
     this.newPasswordConfirmControl = new FormControl('');
     this.currentPasswordControl = new FormControl('');
 
-    this.currentPasswordControl.valueChanges.subscribe(value => {
+    this.currentPasswordControl.valueChanges.subscribe(() => {
       if(this.currentPasswordControl.value.toString().length > 0) {
         this.currentPasswordControl.setErrors(null);
       }
     });
 
-    this.newPasswordConfirmControl.valueChanges.subscribe(value => {
+    this.newPasswordConfirmControl.valueChanges.subscribe(() => {
       if(this.newPasswordControl.value === this.newPasswordConfirmControl.value) {
         this.newPasswordConfirmControl.setErrors(null);
       } else {
@@ -103,7 +103,7 @@ export class ProfileComponent implements OnInit {
       this.phoneNumber = value.phoneNumber;
       this.firstNameControl.patchValue(value.firstName);
       this.lastNameControl.patchValue(value.lastName);
-      this.registrationDate = new Date(Date.parse(value.registeredAt));
+      this.registrationDate = value.registeredAt as Date;
       this.profileUrl = 'https://www.gravatar.com/avatar/' + Md5.hashStr(this.email).toString().toLowerCase() + '.jpg?s=400';
     });
   }
@@ -122,7 +122,7 @@ export class ProfileComponent implements OnInit {
       profile.currentPassword = this.currentPasswordControl.value.toString();
     }
 
-    this.accounts.updateUser(profile).subscribe(value => {
+    this.accounts.updateUser(profile).subscribe(() => {
       this.notifications.showNotification('User profile has been updated successfully!',
         'top-center', 'success');
     }, error => {

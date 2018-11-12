@@ -55,10 +55,14 @@ export class LoginService {
       LockService.destroyLock();
       localStorage.removeItem('jwt');
       localStorage.removeItem('phone-confirmed');
+      localStorage.removeItem('roles');
+      localStorage.removeItem('admin');
     }, () => {
       console.log('Unable to logout on server!');
       LockService.destroyLock();
       localStorage.removeItem('jwt');
+      localStorage.removeItem('roles');
+      localStorage.removeItem('admin');
       localStorage.removeItem('phone-confirmed');
     });
   }

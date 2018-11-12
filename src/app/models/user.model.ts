@@ -11,7 +11,7 @@ export class User {
   lastName  : string;
   email : string;
   phoneNumber : string;
-  registeredAt : string;
+  registeredAt : Date | string;
 }
 
 export class Profile {

@@ -19,6 +19,7 @@ import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.c
 import {ConfirmPhoneNumberComponent} from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
 import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
 import {UserManagerComponent} from './admin/user-manager/user-manager.component';
+import {AdminGuard} from './guards/admin.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -34,8 +35,8 @@ const routes: Routes = [
       {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
   ]},
   { path: 'admin', component: RootComponent, children: [
-      {path: '', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'users', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard]}
+      {path: '', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
+      {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
   ]}
 ];
 

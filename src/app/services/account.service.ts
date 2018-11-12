@@ -5,8 +5,8 @@
  * @email  dev@bietje.net
  */
 
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Profile, User, UserRoles} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
@@ -25,7 +25,11 @@ export class AccountService {
   }
 
   public getUser() {
-    return this.http.get<User>(environment.authApiHost + '/accounts/show');
+    return this.http.get<User>(environment.authApiHost + '/accounts/show').pipe(map(value => {
+      const raw = value.registeredAt as any;
+      value.registeredAt = new Date(Date.parse(raw as string));
+      return value;
+    }));
   }
 
   public updateUser(user : Profile) {

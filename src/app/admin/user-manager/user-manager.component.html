@@ -1,3 +1,73 @@
-<p>
-  user-manager works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="material-icons">assignment</i>
+        </div>
+        <div class="card-content">
+          <div class="row">
+            <div class="col-sm-4">
+              <h4 class="card-title">Striped Table</h4>
+            </div>
+            <div class="col-sm-8 search">
+              <div class="right-part">
+                <form>
+                  <mat-form-field color="#ff0000">
+                    <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
+                  </mat-form-field>
+                  <button mat-mini-fab class="search-btn" (click)="onSearchClicked()">
+                    <i class="material-icons" style="font-size:18px;">search</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <form [formGroup]="form">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th></th>
+                  <th>Email</th>
+                  <th>Full name</th>
+                  <th>Phone number</th>
+                  <th class="text-right">Registration date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr formArrayName="users" *ngFor="let user of users; let i = index">
+                  <td>{{i+1}}</td>
+                  <td><mat-checkbox [formControlName]="i"></mat-checkbox></td>
+                  <td>{{user.email}}</td>
+                  <td>{{user.firstName}} {{user.lastName}}</td>
+                  <td>{{user.phoneNumber}}</td>
+                  <td class="text-right">{{user.registeredAt.toUTCString()}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2"></td>
+                  <td>
+                    <mat-form-field>
+                      <mat-select placeholder="Action">
+                        <mat-option value="delete" >Delete user</mat-option>
+                        <mat-option value="ban">Banish users</mat-option>
+                        <mat-option value="normal">Set to normal user</mat-option>
+                        <mat-option value="admin">Promote to administrator</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+
+                  <td><button (click)="onSubmitClicked()" mat-raised-button>SUBMIT</button></td>
+
+                </tr>
+                </tbody>
+              </table>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

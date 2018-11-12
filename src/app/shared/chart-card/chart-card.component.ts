@@ -18,6 +18,8 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() footerTitle: string;
   @Input() position: string;
   @Input() data: IChartistData;
+  @Input() showPoint : boolean = false;
+  @Input() interpolation : boolean = false;
 
   private options : ILineChartOptions;
   private chart : IChartistLineChart;
@@ -35,7 +37,7 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
 
   public ngOnChanges(changes : SimpleChanges) {
     if(this.data)
-      this.options = ChartCardComponent.buildChartOptions(this.data.labels);
+      this.options = this.buildChartOptions(this.data.labels);
 
     if(this.viewDidLoad) {
       this.chart.update(this.data, this.options);
@@ -44,21 +46,28 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
 
   public ngAfterViewInit() {
     if(this.data)
-      this.options = ChartCardComponent.buildChartOptions(this.data.labels);
+      this.options = this.buildChartOptions(this.data.labels);
 
     this.viewDidLoad = true;
     this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
     this.startAnimationForLineChart();
   }
 
-  private static buildChartOptions(labels : any[]) {
+  private buildChartOptions(labels : any[]) {
     const num = labels.length;
     const max = 10;
     const modulo = Math.round(num / max);
+    let interpolation = undefined;
+
+    if(this.interpolation)
+      interpolation = Chartist.Interpolation.cardinal({tension: 0});
+    else
+      interpolation = Chartist.Interpolation.simple();
 
     return {
-      lineSmooth: Chartist.Interpolation.cardinal({ tension: 0 }),
+      lineSmooth: interpolation,
       chartPadding: { top: 25, right: 25, bottom: 0, left: 0},
+      showPoint: this.showPoint,
       axisX: {
         labelInterpolationFnc: function(value, index) {
           if (index % modulo === 0 && num > max)

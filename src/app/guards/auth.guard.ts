@@ -14,8 +14,7 @@ import {LoginService} from '../services/login.service';
 export class AuthGuard implements CanActivate {
   constructor(public auth : LoginService, public router : Router) { }
 
-  public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot)
-    : Observable<boolean> | Promise<boolean> | boolean {
+  public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
     if(this.auth.isLoggedIn()) {
       return true;
     }
