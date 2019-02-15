@@ -6,13 +6,16 @@
  */
 
 import { Injectable } from '@angular/core';
-import * as bcrypt from "bcryptjs";
-//import bcrypt  = require('bcryptjs');
 
 @Injectable()
 export class LockService {
 
   constructor() { }
+
+  private static sha256(data : string) {
+    const msg = new TextEncoder().encode(data);
+    return crypto.subtle.digest('SHA-256', msg);
+  }
 
   public static createLock(user : string, pw : string) {
     const lock = new Lock();
@@ -20,8 +23,10 @@ export class LockService {
     lock.isLocked = false;
     lock.email = user;
 
-    bcrypt.hash(pw, 10, (err, hash) => {
-      lock.password = hash;
+    this.sha256(pw).then((value) => {
+      const ary = Array.from(new Uint8Array(value));
+      lock.password = ary.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+
       localStorage.setItem('lock', JSON.stringify(lock));
     });
   }
@@ -67,11 +72,11 @@ export class LockService {
     if(!lock.isLocked)
       return true;
 
-    if(bcrypt.compareSync(pw, lock.password)) {
+    /*if(bcrypt.compareSync(pw, lock.password)) {
       lock.isLocked = false;
       localStorage.setItem('lock', JSON.stringify(lock));
       return true;
-    }
+    }*/
 
     return false;
   }
@@ -79,7 +84,7 @@ export class LockService {
   private getLock() : Lock {
     const data = localStorage.getItem('lock');
 
-    if(data == null || data == undefined)
+    if(data == null)
       return null;
 
     return JSON.parse(data, function (key, value) {

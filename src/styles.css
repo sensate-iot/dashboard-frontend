@@ -1,6 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~intl-tel-input/build/css/intlTelInput.css';
 @import '~chartist/dist/chartist.min.css';
 
 html, body {

@@ -49,8 +49,7 @@
                   <td colspan="2"></td>
                   <td>
                     <mat-form-field>
-                      <mat-select placeholder="Action">
-                        <mat-option value="delete" >Delete user</mat-option>
+                      <mat-select placeholder="Action" [formControl]="actionControl">
                         <mat-option value="ban">Banish users</mat-option>
                         <mat-option value="normal">Set to normal user</mat-option>
                         <mat-option value="admin">Promote to administrator</mat-option>

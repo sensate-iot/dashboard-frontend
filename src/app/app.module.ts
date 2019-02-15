@@ -37,7 +37,6 @@ import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { ConfirmPhoneNumberComponent } from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
-import {Ng2TelInputModule} from 'ng2-tel-input';
 import { UpdatePhoneNumberComponent } from './dashboard/profile/profile/update-phone-number/update-phone-number.component';
 import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/update-email.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
@@ -70,7 +69,6 @@ import { ChartCardComponent } from './shared/chart-card/chart-card.component';
     ChartCardComponent
   ],
   imports: [
-    Ng2TelInputModule,
     RouterModule,
     BrowserModule,
     FormsModule,

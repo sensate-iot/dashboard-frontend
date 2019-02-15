@@ -35,7 +35,7 @@ const routes: Routes = [
       {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
   ]},
   { path: 'admin', component: RootComponent, children: [
-      {path: '', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
+      {path: 'home', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
       {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
   ]}
 ];

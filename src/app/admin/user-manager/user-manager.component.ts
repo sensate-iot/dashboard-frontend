@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from '../../models/user.model';
+import {RoleUpdate, User} from '../../models/user.model';
 import {AdminService} from '../../services/admin.service';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-user-manager',
@@ -12,6 +12,7 @@ export class UserManagerComponent implements OnInit {
   public users : User[];
   public form : FormGroup;
   public controls : FormControl[];
+  public actionControl : FormControl;
 
   public searchFieldValue : string;
 
@@ -24,6 +25,11 @@ export class UserManagerComponent implements OnInit {
     this.admin.getRecentUsers().subscribe(value => {
       this.setUserData(value);
     });
+
+    this.actionControl = new FormControl('', [
+      Validators.required
+    ]);
+    this.form.addControl('action', this.actionControl);
   }
 
   private setUserData(users : User[]) {
@@ -49,9 +55,33 @@ export class UserManagerComponent implements OnInit {
     const selectedIds = this.form.value.users.map((v, i) => v ? i : null)
       .filter(v => v !== null);
 
+    console.log('Action: ' + this.actionControl.value.toString());
+
+    let objs : RoleUpdate[] = [];
+
     selectedIds.forEach(value => {
       const user = this.users[value];
-      console.log(user.id);
+      let update = new RoleUpdate();
+
+      update.UserId = user.id;
+
+      switch(this.actionControl.value.toString()) {
+        case "admin":
+          update.Role = "Users,Administrators";
+          break;
+
+        case "normal":
+          update.Role = "Users";
+          break;
+
+        case "ban":
+          update.Role = "Banned";
+          break;
+      }
+
+      objs.push(update);
     });
+
+    console.log(JSON.stringify(objs));
   }
 }

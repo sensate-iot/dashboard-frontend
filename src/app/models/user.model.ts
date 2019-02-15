@@ -28,6 +28,11 @@ export class Profile {
   }
 }
 
+export class RoleUpdate {
+  Role : string;
+  UserId : string;
+}
+
 export class UserRoles {
   public roles : string[];
   public email : string;
