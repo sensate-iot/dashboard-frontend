@@ -12,6 +12,7 @@ import {LoginService} from '../services/login.service';
 import {Router} from '@angular/router';
 import {AlertService} from '../services/alert.service';
 import {AccountService} from '../services/account.service';
+import {StatusCode} from '../models/status.model';
 
 export class LoginErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -86,14 +87,27 @@ export class LoginComponent implements OnInit {
           });
         },
         error => {
-          console.log(error);
+          const result = error.error;
+
+          if(result.errorCode == StatusCode.Banned) {
+            console.log('Showing notification!');
+            this.alerts.showNotification('This account has been suspended!', 'top-center', 'warning');
+
+            this.email.setErrors({
+              "banned": true
+            });
+
+          } else {
+            this.email.setErrors({
+              "invalid": true
+            });
+            this.password.setErrors({
+              "invalid": true
+            });
+          }
+
           LoginService.handleError(error);
-          this.email.setErrors({
-            "invalid": true
-          });
-          this.password.setErrors({
-            "invalid": true
-          });
+
         }
       );
     }

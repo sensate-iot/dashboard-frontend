@@ -6,9 +6,7 @@
  * @email  dev@bietje.net
  */
 
-import {HttpErrorResponse, HttpEvent,
-        HttpHandler, HttpInterceptor,
-        HttpRequest} from '@angular/common/http';
+import {HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LoginService} from './login.service';
 import {Injectable} from '@angular/core';
@@ -28,7 +26,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     this.tokenSubject = new BehaviorSubject<string>(null);
   }
 
-  public addToken(req : HttpRequest<any>, token : string) {
+  public static addToken(req : HttpRequest<any>, token : string) {
     return req.clone({
       setHeaders: {
         Authorization: 'Bearer ' + token,
@@ -39,7 +37,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    return next.handle(this.addToken(req, this.auth.getJwtToken())).pipe(catchError(error  => {
+    return next.handle(RefreshTokenInterceptorService.addToken(req, this.auth.getJwtToken())).pipe(catchError(error  => {
       if (error instanceof HttpErrorResponse) {
         const err = <HttpErrorResponse>error;
         switch(err.status) {
@@ -48,12 +46,12 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
 
           case 403:
             this.logout();
-            console.log('Logged out..!');
+            console.warn('Logged out..!');
             location.reload(true);
             return throwError(error);
 
           default:
-            console.log('Error..!');
+            console.warn('JWT interception error!');
             return throwError(error);
         }
       }
@@ -68,8 +66,11 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
       return this.auth.refresh().pipe(flatMap((res : TokenReply, idx) => {
         this.auth.updateJwt(res.refreshToken, res.jwtToken, res.jwtExpiresInMinutes);
         this.tokenSubject.next(res.jwtToken);
-        return next.handle(this.addToken(req, res.jwtToken));
+        return next.handle(RefreshTokenInterceptorService.addToken(req, res.jwtToken));
       }), catchError(error => {
+        console.warn('Unable to refresh authentication token:');
+        console.warn(error.toString());
+
         this.isRefreshingToken =  false;
         return next.handle(req);
       }), finalize(() => {
@@ -78,7 +79,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     } else {
       return this.tokenSubject.pipe(filter(token => token != null),
         take(1),switchMap(token => {
-          return next.handle(this.addToken(req, token));
+          return next.handle(RefreshTokenInterceptorService.addToken(req, token));
         }));
     }
   }

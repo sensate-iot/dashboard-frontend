@@ -6,7 +6,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Jwt} from '../models/jwt.model';
 import * as moment from 'moment';
@@ -102,7 +102,7 @@ export class LoginService {
 
   public getJwt() : Jwt {
     const data = localStorage.getItem('jwt');
-    if(!data || data == null)
+    if(!data)
       return null;
 
     return JSON.parse(data, function (key, value) {
