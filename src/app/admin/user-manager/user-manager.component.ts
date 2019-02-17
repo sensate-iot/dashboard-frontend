@@ -3,6 +3,10 @@ import {RoleUpdate, User} from '../../models/user.model';
 import {AdminService} from '../../services/admin.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
+interface RoleIconMap {
+  [role:string] : string;
+}
+
 @Component({
   selector: 'app-user-manager',
   templateUrl: './user-manager.component.html',
@@ -13,11 +17,17 @@ export class UserManagerComponent implements OnInit {
   public form : FormGroup;
   public controls : FormControl[];
   public actionControl : FormControl;
-
   public searchFieldValue : string;
+
+  private roleIcons : RoleIconMap;
 
   constructor(private admin : AdminService, private builder : FormBuilder) {
     this.form = new FormGroup({});
+
+    this.roleIcons = {};
+    this.roleIcons["Users"] = "person_outline";
+    this.roleIcons["Administrators"] = "grade";
+    this.roleIcons["Banned"] = "lock";
   }
 
   public ngOnInit() : void {
@@ -83,5 +93,18 @@ export class UserManagerComponent implements OnInit {
     });
 
     console.log(JSON.stringify(objs));
+  }
+
+  public userToIcon(user : User) : string {
+    const admin = 'Administrators';
+    const users = 'Users';
+    const banned = 'Banned';
+
+    if(user.roles.includes(admin))
+      return this.roleIcons[admin];
+    else if(user.roles.includes(users))
+      return this.roleIcons[users];
+
+    return this.roleIcons[banned];
   }
 }

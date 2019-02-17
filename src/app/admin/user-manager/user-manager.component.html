@@ -34,6 +34,7 @@
                   <th>Full name</th>
                   <th>Phone number</th>
                   <th class="text-right">Registration date</th>
+                  <th>Role</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,7 @@
                   <td>{{user.firstName}} {{user.lastName}}</td>
                   <td>{{user.phoneNumber}}</td>
                   <td class="text-right">{{user.registeredAt.toUTCString()}}</td>
+                  <td><i class="material-icons">{{userToIcon(user)}}</i></td>
                 </tr>
                 <tr>
                   <td colspan="2"></td>

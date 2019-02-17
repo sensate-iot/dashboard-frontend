@@ -12,6 +12,7 @@ export class User {
   email : string;
   phoneNumber : string;
   registeredAt : Date | string;
+  roles : string[];
 }
 
 export class Profile {
