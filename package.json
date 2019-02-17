@@ -33,6 +33,7 @@
     "moment": "^2.21.0",
     "object-assign": "^4.1.1",
     "rxjs": "^6.3.3",
+    "scrypt-js": "^2.0.4",
     "sha.js": "^2.4.11",
     "ts-md5": "^1.2.4",
     "zone.js": "^0.8.26"
@@ -44,7 +45,7 @@
     "@angular/language-service": "7.0.2",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
-    "@types/node": "~6.0.60",
+    "@types/node": "^6.0.118",
     "brfs": "^2.0.1",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.8.0",
