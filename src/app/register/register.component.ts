@@ -108,7 +108,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   public isValidPhoneNumber() : boolean {
-    //return this.phoneNumberControl.valid;
+    /* Lookup phone number @backend */
     return true;
   }
 
@@ -130,9 +130,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.alerts.showNotification("A verification token has been sent to your email!", 'top-center', 'success');
       this.router.navigate(['/login']);
     }, error => {
-      console.log('Failed to register..');
-      console.log(error);
-      console.log(error.error);
+      console.debug('Failed to register..');
+      console.debug(error);
+      console.debug(error.error);
       const msg : Status = error.error;
       const display = 'Unable to sign up: ' + msg.message;
 

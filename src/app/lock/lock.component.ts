@@ -3,6 +3,8 @@ import {LockService} from '../services/lock.service';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material';
 import {Router} from '@angular/router';
+import {LoginService} from '../services/login.service';
+import {AlertService} from '../services/alert.service';
 
 export class UnlockErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -25,7 +27,7 @@ export class LockComponent implements OnInit {
   public password : FormControl;
   public matcher : UnlockErrorStateMatcher = new UnlockErrorStateMatcher();
 
-  constructor(private lock : LockService, private router : Router) {
+  constructor(private lock : LockService, private auth : LoginService, private alerts : AlertService, private router : Router) {
     this.mail = this.lock.getEmail();
   }
 
@@ -44,13 +46,19 @@ export class LockComponent implements OnInit {
       return;
 
     const pw = this.password.value.toString();
-    if(this.lock.unlock(pw)) {
-      this.router.navigateByUrl('/dashboard');
-      return;
+
+    if(!this.lock.isValid()) {
+      this.auth.logout();
+      this.alerts.showNotification('Lock expired, please login again!', 'top-center', 'rose');
+      this.router.navigate(['login']);
     }
 
-    this.password.setErrors({
-      'invalid': true
+    this.lock.unlock(pw).then(() => {
+        this.router.navigateByUrl('/dashboard');
+    }).catch(() => {
+      this.password.setErrors({
+        'invalid': true
+      });
     });
   }
 }

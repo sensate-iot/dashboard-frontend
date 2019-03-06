@@ -41,7 +41,6 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   public isAdministrator() : boolean {
-    console.log(AccountService.isAdmin());
     return AccountService.isAdmin();
   }
 

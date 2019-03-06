@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'reset-password/:email', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ForgotPasswordComponent },
-  { path: 'lock', component: LockComponent },
+  { path: 'lock', component: LockComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: RootComponent, children: [
       {path: '', component: DashboardComponent, canActivate: [AuthGuard, LockGuard]},

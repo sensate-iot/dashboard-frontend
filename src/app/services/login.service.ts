@@ -69,6 +69,10 @@ export class LoginService {
 
   public refresh() : Observable<TokenReply> {
     const jwt = this.getJwt();
+
+    if(jwt == null)
+      return;
+
     const data = {
       "Email" : jwt.email,
       "RefreshToken": jwt.refreshToken
