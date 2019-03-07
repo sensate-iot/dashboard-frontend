@@ -7,7 +7,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Profile, User, UserRoles} from '../models/user.model';
+import {Profile, RoleUpdate, User, UserRoles} from '../models/user.model';
 import {environment} from '../../environments/environment';
 import {UserRegistration} from '../models/user-registration.model';
 import {Status} from '../models/status.model';
@@ -44,6 +44,14 @@ export class AccountService {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
+  }
+
+  public updateRoles(updates : RoleUpdate[]) {
+    if(updates == null)
+      return;
+
+    const data = JSON.stringify(updates);
+    return this.http.post(environment.authApiHost + '/accounts/update-roles', data, this.options);
   }
 
   public resetPassword(email : string) {

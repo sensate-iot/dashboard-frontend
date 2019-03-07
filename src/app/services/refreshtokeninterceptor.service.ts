@@ -52,8 +52,9 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
 
           default:
             console.debug('JWT interception error!');
-            this.router.navigate(['login']);
-            return EMPTY;
+            //this.router.navigate(['login']);
+            return throwError(error);
+            //return EMPTY;
         }
       }
     }));
