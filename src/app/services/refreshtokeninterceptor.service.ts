@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 import {LoginService} from './login.service';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {throwError} from 'rxjs';
+import {throwError, EMPTY} from 'rxjs';
 import {Router} from '@angular/router';
 import {TokenReply} from '../models/tokenreply.model';
 import {catchError, filter, finalize, flatMap, switchMap, take} from 'rxjs/operators';
@@ -46,13 +46,14 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
 
           case 403:
             this.logout();
-            console.warn('Logged out..!');
-            location.reload(true);
-            return throwError(error);
+            console.debug('Logged out..!');
+            this.router.navigate(['login']);
+            return EMPTY;
 
           default:
-            console.warn('JWT interception error!');
-            return throwError(error);
+            console.debug('JWT interception error!');
+            this.router.navigate(['login']);
+            return EMPTY;
         }
       }
     }));

@@ -107,8 +107,10 @@ export class AccountService {
 
   public confirmPhoneNumber(token: string) {
     return new Promise((resolve, reject) => {
-      this.http.get<Status>(environment.authApiHost + '/accounts/confirm-phone-number/' + token, this.options)
-        .toPromise().then(() => {
+      this.http.get<Status>(environment.authApiHost + '/accounts/confirm-phone-number/' + token, {
+        observe: 'response',
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      }).toPromise().then(() => {
           localStorage.setItem('phone-confirmed', 'true');
           resolve();
       }, msg => {
@@ -153,6 +155,13 @@ export class AccountService {
       return false;
 
     return value === 'true';
+  }
+
+  private rawCheckEmailConfirmed() {
+    return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
   }
 
   public checkPhoneConfirmed() : void {

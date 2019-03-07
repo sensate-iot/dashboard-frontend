@@ -42,6 +42,28 @@ export class LoginService {
     return false;
   }
 
+  public revokeAllTokens() {
+    const jwt = this.getJwt();
+
+    if(jwt == null || jwt.refreshToken == null)
+      return;
+
+    return new Promise((resolve, reject) => {
+      this.http.delete(environment.authApiHost + '/tokens/revoke-all', {
+        headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
+      }).subscribe(() => {
+        LockService.destroyLock();
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('phone-confirmed');
+        localStorage.removeItem('roles');
+        localStorage.removeItem('admin');
+        resolve();
+      }, () => {
+        console.debug("Unable to revoke all tokens!");
+        reject();
+      });
+    });
+  }
 
   public logout() {
     const jwt = this.getJwt();

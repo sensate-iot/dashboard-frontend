@@ -70,45 +70,54 @@ export class LoginComponent implements OnInit {
     this.first = false;
 
     if(!this.auth.isLoggedIn()) {
-      this.auth.login(uname, pass).subscribe(
-        data => {
-          data.body.email = this.email.value;
-          LoginService.setSession(data.body);
+      this.auth.login(uname, pass).subscribe(data => {
+        data.body.email = this.email.value;
+        LoginService.setSession(data.body);
 
-          this.accounts.rawCheckPhoneConfirmed().subscribe((result) => {
-            /* Forward the user to the phone confirmation screen if a phone number has not yet been confirmed.. */
-            if(result.body.message == 'true') {
-              this.router.navigate(['/dashboard']);
-            } else {
-              this.router.navigate(['/dashboard/confirm-phone-number']);
-            }
-          }, () => {
+        this.accounts.rawCheckPhoneConfirmed().subscribe((result) => {
+          /* Forward the user to the phone confirmation screen if a phone number has not yet been confirmed.. */
+          if(result.body.message == 'true') {
             this.router.navigate(['/dashboard']);
-          });
-        },
-        error => {
-          const result = error.error;
-
-          if(result.errorCode == StatusCode.Banned) {
-            console.log('Showing notification!');
-            this.alerts.showNotification('This account has been suspended!', 'top-center', 'warning');
-
-            this.email.setErrors({
-              "banned": true
-            });
-
           } else {
-            this.email.setErrors({
-              "invalid": true
-            });
-            this.password.setErrors({
-              "invalid": true
-            });
+            this.router.navigate(['/dashboard/confirm-phone-number']);
           }
+        }, () => {
+          this.router.navigate(['/dashboard']);
+        });
+      }, error => {
+        const result = error.error;
 
-          LoginService.handleError(error);
+        if(result == null) {
+          this.email.setErrors({
+            "invalid": true
+          });
+          this.password.setErrors({
+            "invalid": true
+          });
 
+          return;
         }
+
+        if(result.errorCode == StatusCode.Banned) {
+          console.log('Showing notification!');
+          this.alerts.showNotification('This account has been suspended!', 'top-center', 'warning');
+
+          this.email.setErrors({
+            "banned": true
+          });
+
+        } else {
+          this.email.setErrors({
+            "invalid": true
+          });
+          this.password.setErrors({
+            "invalid": true
+          });
+        }
+
+        LoginService.handleError(error);
+
+      }
       );
     }
 

@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   terms : boolean;
 
   private first : boolean;
-  private origin : string;
+  private readonly origin : string;
   private confirmPasswordSubscription : Subscription;
 
   public matcher : FormMatcher;

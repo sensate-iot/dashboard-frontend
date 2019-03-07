@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {LockService} from '../../services/lock.service';
 import {LoginService} from '../../services/login.service';
 import {AccountService} from '../../services/account.service';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,7 @@ export class RootComponent implements OnInit, OnDestroy {
   public backgroundColor : string;
 
   constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
-              private settings : SettingsService, private router : Router) {
+              private settings : SettingsService, private alerts : AlertService, private router : Router) {
     this.id = settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
     this.accounts.checkPhoneConfirmed();
@@ -52,5 +53,13 @@ export class RootComponent implements OnInit, OnDestroy {
   public lockClicked() {
     this.lock.lock();
     this.router.navigate(['lock']);
+  }
+
+  public revokeAllTokens() {
+    this.auth.revokeAllTokens().then(() => {
+      this.router.navigate(['login']);
+    }).catch(() => {
+      this.alerts.showNotification('Unable to revoke all authentication tokens!', 'top-center', 'warning');
+    })
   }
 }
