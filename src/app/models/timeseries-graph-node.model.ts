@@ -9,3 +9,8 @@ export class TimeSeriesGraphNode {
   public Xcoord : Date | string;
   public Ycoord : number;
 }
+
+export class DayOfWeekGraphNode {
+  public Xcoord : number;
+  public Ycoord : number;
+}

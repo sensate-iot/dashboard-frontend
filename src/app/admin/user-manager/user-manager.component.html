@@ -7,10 +7,13 @@
         </div>
         <div class="card-content">
           <div class="row">
-            <div class="col-sm-4">
-              <h4 class="card-title">Striped Table</h4>
+            <div class="col-sm-5">
+              <h4 class="card-title">User management</h4>
             </div>
-            <div class="col-sm-8 search">
+            <div class="col-sm-2 select">
+              Select all: <mat-checkbox></mat-checkbox>
+            </div>
+            <div class="col-sm-5 search">
               <div class="right-part">
                 <form>
                   <mat-form-field color="#ff0000">
@@ -45,7 +48,7 @@
                   <td>{{user.firstName}} {{user.lastName}}</td>
                   <td>{{user.phoneNumber}}</td>
                   <td class="text-right">{{user.registeredAt.toUTCString()}}</td>
-                  <td><i class="material-icons">{{user.icon}}</i></td>
+                  <td><i class="material-icons">{{userToIcon(user)}}</i></td>
                 </tr>
                 <tr>
                   <td colspan="2"></td>

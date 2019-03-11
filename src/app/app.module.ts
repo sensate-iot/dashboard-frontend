@@ -43,6 +43,8 @@ import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard
 import {UserManagerComponent} from './admin/user-manager/user-manager.component';
 import {AdminService} from './services/admin.service';
 import { ChartCardComponent } from './shared/chart-card/chart-card.component';
+import { BarChartCardComponent } from './shared/bar-chart-card/bar-chart-card.component';
+import {DashBoardService} from './services/dashboard.service';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import { ChartCardComponent } from './shared/chart-card/chart-card.component';
     UpdateEmailComponent,
     UserManagerComponent,
     AdminDashboardComponent,
-    ChartCardComponent
+    ChartCardComponent,
+    BarChartCardComponent
   ],
   imports: [
     RouterModule,
@@ -92,6 +95,7 @@ import { ChartCardComponent } from './shared/chart-card/chart-card.component';
     LockService,
     AccountService,
     AdminService,
+    DashBoardService,
     AuthGuard,
     LockGuard,
     AlertService,

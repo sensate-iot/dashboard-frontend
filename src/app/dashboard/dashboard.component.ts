@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {DashBoardService} from '../services/dashboard.service';
+import {UserDashboard} from '../models/userdashboard.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +10,108 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  private measurementsTodayData : any;
+  private measurementsOverallData : any;
 
-  ngOnInit() {
+  private apiCallsPerDayData : any;
+  private measurementsPerHourOverallData : any;
+
+  private sensorCount : number;
+  private measurementsCount : number;
+  private apiCallCount : number;
+  private authTokenCount : number;
+
+  constructor(private db : DashBoardService) { }
+
+  public ngOnInit() {
+    this.db.getUserDashboard().subscribe(db => {
+      this.buildMeasurementsToday(db);
+      this.buildMeasurementsOverall(db);
+      this.buildMeasurementsOverallPerDay(db);
+      this.buildApiCalls(db);
+
+      this.sensorCount = db.SensorCount;
+      this.measurementsCount = db.MeasurementsTodayCount;
+      this.apiCallCount = db.ApiCallCount;
+      this.authTokenCount = db.SecurityTokenCount;
+    });
   }
 
+  /* Per hour today */
+  private buildMeasurementsToday(db : UserDashboard) {
+    const measurementLabels : string[] = [];
+    const measurementSeries : number[] = [];
+
+    db.MeasurementsToday.forEach(entry => {
+      const date = entry.Xcoord as Date;
+
+      measurementLabels.push(moment(date).utc().format('HH:mm'));
+      measurementSeries.push(entry.Ycoord);
+    });
+
+    this.measurementsTodayData = {
+      labels: measurementLabels,
+      series: [measurementSeries]
+    };
+  }
+
+  /* Cumulative graph */
+  private buildMeasurementsOverall(db : UserDashboard) {
+    const measurementLabels : string[] = [];
+    const measurementSeries : number[] = [];
+
+    db.MeasurementsCumulative.forEach(entry => {
+      const date = entry.Xcoord as Date;
+
+      measurementLabels.push(moment(date).utc().format('DD-MM-YYYY'));
+      measurementSeries.push(entry.Ycoord);
+    });
+
+    this.measurementsOverallData = {
+      labels: measurementLabels,
+      series: [measurementSeries]
+    };
+  }
+
+  private buildApiCalls(db : UserDashboard) {
+    const labels : string[] = [];
+    const series : number[] = [];
+
+    db.ApiCallsLastWeek.forEach(entry => {
+      const date = entry.Xcoord as Date;
+
+      labels.push(moment(date).utc().format('DD-MM-YYYY'));
+      series.push(entry.Ycoord);
+    });
+
+    this.apiCallsPerDayData = {
+      labels: labels,
+      series: [series]
+    };
+  }
+
+  /* Bar graph, hour of the day */
+  private buildMeasurementsOverallPerDay(db : UserDashboard) {
+    const labels : string[] = [];
+    const series : number[] = [];
+
+    let weekday = [];
+    weekday[0] = "Sun.";
+    weekday[1] = "Mon.";
+    weekday[2] = "Tue.";
+    weekday[3] = "Wed.";
+    weekday[4] = "Thu.";
+    weekday[5] = "Fri.";
+    weekday[6] = "Sat.";
+
+    db.MeasurementsPerDayCumulative.forEach(entry => {
+      labels.push(weekday[entry.Xcoord]);
+      series.push(entry.Ycoord);
+    });
+
+    this.measurementsPerHourOverallData = {
+      labels: labels,
+      series: [series]
+    };
+  }
 }

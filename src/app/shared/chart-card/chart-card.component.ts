@@ -2,7 +2,7 @@
  * Chart
  */
 
-import {AfterViewInit, Component, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
 import {IChartistData, IChartistLineChart, ILineChartOptions} from 'chartist';
 import * as Chartist from 'chartist';
 import {Guid} from 'guid-typescript';
@@ -20,6 +20,7 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() data: IChartistData;
   @Input() showPoint : boolean = false;
   @Input() interpolation : boolean = false;
+  @Output() onLabelInterpolation : EventEmitter<any> = new EventEmitter();
 
   private options : ILineChartOptions;
   private chart : IChartistLineChart;
@@ -66,7 +67,7 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
 
     return {
       lineSmooth: interpolation,
-      chartPadding: { top: 25, right: 25, bottom: 0, left: 0},
+      chartPadding: { top: 25, right: 25, bottom: 0, left: 10},
       showPoint: this.showPoint,
       axisX: {
         labelInterpolationFnc: function(value, index) {

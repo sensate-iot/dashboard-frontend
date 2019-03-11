@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AdminDashboard} from '../../models/admindashboard.model';
 import {AdminService} from '../../services/admin.service';
-import * as Chartist from 'chartist';
 import * as moment from 'moment';
 
 @Component({
