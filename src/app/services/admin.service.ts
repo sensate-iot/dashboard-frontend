@@ -43,7 +43,7 @@ export class AdminService {
   }
 
   public getAdminDashboard() {
-    return this.http.get<AdminDashboard>(environment.authApiHost + '/admin').pipe(map(value => {
+    return this.http.get<AdminDashboard>(environment.dashboardApiHost + '/dashboard/admin').pipe(map(value => {
       value.measurementStats.forEach(entry => {
         AdminService.fixDateObject(entry);
       });

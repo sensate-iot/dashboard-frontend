@@ -24,8 +24,8 @@ export class DashBoardService {
   }
 
   public getUserDashboard() {
-    return this.http.get<UserDashboard>(environment.authApiHost + '/dashboard').pipe(map(value => {
-      value.MeasurementsToday.forEach(entry => {
+    return this.http.get<UserDashboard>(environment.dashboardApiHost + '/dashboard').pipe(map(value => {
+      value.measurementsToday.forEach(entry => {
         DashBoardService.fixDateObject(entry);
       });
 

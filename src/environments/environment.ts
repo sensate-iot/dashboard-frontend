@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  authApiHost: 'http://localhost:5000'
+  authApiHost: 'http://localhost:5000',
+  dashboardApiHost: 'http://localhost:5001'
 };

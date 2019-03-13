@@ -30,10 +30,10 @@ export class DashboardComponent implements OnInit {
       this.buildMeasurementsOverallPerDay(db);
       this.buildApiCalls(db);
 
-      this.sensorCount = db.SensorCount;
-      this.measurementsCount = db.MeasurementsTodayCount;
-      this.apiCallCount = db.ApiCallCount;
-      this.authTokenCount = db.SecurityTokenCount;
+      this.sensorCount = db.sensorCount;
+      this.measurementsCount = db.measurementsTodayCount;
+      this.apiCallCount = db.apiCallCount;
+      this.authTokenCount = db.securityTokenCount;
     });
   }
 
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     const measurementLabels : string[] = [];
     const measurementSeries : number[] = [];
 
-    db.MeasurementsToday.forEach(entry => {
+    db.measurementsToday.forEach(entry => {
       const date = entry.Xcoord as Date;
 
       measurementLabels.push(moment(date).utc().format('HH:mm'));
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     const measurementLabels : string[] = [];
     const measurementSeries : number[] = [];
 
-    db.MeasurementsCumulative.forEach(entry => {
+    db.measurementsCumulative.forEach(entry => {
       const date = entry.Xcoord as Date;
 
       measurementLabels.push(moment(date).utc().format('DD-MM-YYYY'));
@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
     const labels : string[] = [];
     const series : number[] = [];
 
-    db.ApiCallsLastWeek.forEach(entry => {
+    db.apiCallsLastWeek.forEach(entry => {
       const date = entry.Xcoord as Date;
 
       labels.push(moment(date).utc().format('DD-MM-YYYY'));
@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit {
     weekday[5] = "Fri.";
     weekday[6] = "Sat.";
 
-    db.MeasurementsPerDayCumulative.forEach(entry => {
+    db.measurementsPerDayCumulative.forEach(entry => {
       labels.push(weekday[entry.Xcoord]);
       series.push(entry.Ycoord);
     });

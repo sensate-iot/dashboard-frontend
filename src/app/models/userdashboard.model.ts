@@ -5,13 +5,13 @@
 import {DayOfWeekGraphNode, TimeSeriesGraphNode} from './timeseries-graph-node.model';
 
 export class UserDashboard {
-  public MeasurementsToday : [TimeSeriesGraphNode];
-  public MeasurementsPerDayCumulative : [DayOfWeekGraphNode];
-  public ApiCallsLastWeek : [TimeSeriesGraphNode];
-  public MeasurementsCumulative : [TimeSeriesGraphNode]
+  public measurementsToday : [TimeSeriesGraphNode];
+  public measurementsPerDayCumulative : [DayOfWeekGraphNode];
+  public apiCallsLastWeek : [TimeSeriesGraphNode];
+  public measurementsCumulative : [TimeSeriesGraphNode]
 
-  public SensorCount : number;
-  public MeasurementsTodayCount : number;
-  public ApiCallCount : number;
-  public SecurityTokenCount : number;
+  public sensorCount : number;
+  public measurementsTodayCount : number;
+  public apiCallCount : number;
+  public securityTokenCount : number;
 }
