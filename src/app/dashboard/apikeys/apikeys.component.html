@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="material-icons">assignment</i>
+        </div>
+        <div class="card-content">
+          <div class="row">
+            <div class="col-sm-4">
+              <h4 class="card-title">API key management</h4>
+            </div>
+            <div class="col-sm-8">
+              <table class="hdr-table">
+                <tr>
+                  <td class="hdr-table-td">
+                    <mat-form-field>
+                      <mat-select placeholder="Action" [(ngModel)]="action">
+                        <mat-option value="create">Create API key</mat-option>
+                        <mat-option value="all">Show all keys</mat-option>
+                        <mat-option value="no-sys">Hide system keys</mat-option>
+                        <mat-option value="no-user">Hide user keys</mat-option>
+                        <mat-option value="no-rev">Hide revoked keys</mat-option>
+                        <mat-option value="no-sensors">Hide sensor keys</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    &nbsp;
+                    <button (click)="onSubmitClicked()" mat-raised-button>SUBMIT</button>
+                  </td>
+
+                  <td class="hdr-table-td align-right">
+                      <mat-form-field color="#ff0000">
+                        <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
+                      </mat-form-field>
+                      <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+          <div class="table-responsive">
+            <form [formGroup]="form">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Access</th>
+                  <th>Revoked</th>
+                  <th>Created on</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let key of apiKeys; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{key.name}}</td>
+                  <td>{{key.readOnly ? "Read-only" : "Read/Write"}}</td>
+                  <td>{{key.revoked ? "Yes" : "No"}}</td>
+                  <td>{{key.createdOn.toLocaleDateString()}}</td>
+                  <td>
+                    <button mat-mini-fab class="search-btn" (click)="onShowClicked(i)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
+                    <button mat-mini-fab class="search-btn" (click)="onRevokeClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                  </td>
+                </tr>
+
+                </tbody>
+              </table>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import {
   MatButtonModule,
-  MatCheckboxModule,
+  MatCheckboxModule, MatDialogModule,
   MatInputModule, MatListModule,
   MatMenuModule,
   MatRadioModule, MatSelectModule,
@@ -45,6 +45,9 @@ import {AdminService} from './services/admin.service';
 import { ChartCardComponent } from './shared/chart-card/chart-card.component';
 import { BarChartCardComponent } from './shared/bar-chart-card/bar-chart-card.component';
 import {DashBoardService} from './services/dashboard.service';
+import {ApikeysComponent, CreateApiKeyDialog} from './dashboard/apikeys/apikeys.component';
+import {ApiKeyService} from './services/apikey.service';
+import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create-api-key.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +72,13 @@ import {DashBoardService} from './services/dashboard.service';
     UserManagerComponent,
     AdminDashboardComponent,
     ChartCardComponent,
-    BarChartCardComponent
+    BarChartCardComponent,
+    ApikeysComponent,
+    CreateApiKeyComponent,
+    CreateApiKeyDialog
+  ],
+  entryComponents: [
+    CreateApiKeyDialog
   ],
   imports: [
     RouterModule,
@@ -83,6 +92,7 @@ import {DashBoardService} from './services/dashboard.service';
     MatListModule,
     MatToolbarModule,
     MatButtonModule,
+    MatDialogModule,
     MatRadioModule,
     MatSelectModule,
     MatInputModule,
@@ -94,6 +104,7 @@ import {DashBoardService} from './services/dashboard.service';
     LoginService,
     LockService,
     AccountService,
+    ApiKeyService,
     AdminService,
     DashBoardService,
     AuthGuard,

@@ -20,20 +20,22 @@ import {ConfirmPhoneNumberComponent} from './dashboard/profile/confirm-phone-num
 import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
 import {UserManagerComponent} from './admin/user-manager/user-manager.component';
 import {AdminGuard} from './guards/admin.guard';
+import {ApikeysComponent} from './dashboard/apikeys/apikeys.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  { path: '', component: RootComponent, canActivate: [AuthGuard, LockGuard], children: [
+    {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard, LockGuard]},
+    {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, LockGuard]},
+    {path: 'api-keys', component: ApikeysComponent, canActivate: [AuthGuard, LockGuard]},
+    {path: 'confirm-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]},
+    {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
+  ]},
+  { path: 'index', redirectTo: '/'},
   { path: 'login', component: LoginComponent },
   { path: 'reset-password/:email', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ForgotPasswordComponent },
   { path: 'lock', component: LockComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: RootComponent, children: [
-      {path: '', component: DashboardComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'confirm-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
-  ]},
   { path: 'admin', component: RootComponent, children: [
       {path: 'home', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
       {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}

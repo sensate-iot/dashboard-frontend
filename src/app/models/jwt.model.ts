@@ -11,4 +11,5 @@ export class Jwt {
   expiresInMinutes : number;
   jwtExpiresInMinutes : number;
   email : string;
+  systemApiKey: string;
 }

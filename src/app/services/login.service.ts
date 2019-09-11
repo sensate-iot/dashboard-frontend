@@ -13,10 +13,17 @@ import * as moment from 'moment';
 import {Observable} from 'rxjs';
 import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
+import {ApiKeyService} from './apikey.service';
 
 @Injectable()
 export class LoginService {
-  constructor(private http : HttpClient) { }
+  private readonly options: any;
+  constructor(private http : HttpClient, private keys: ApiKeyService) {
+    this.options = {
+      observe: 'response',
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    };
+  }
 
 
   public login(user: string, password: string) {
@@ -48,6 +55,8 @@ export class LoginService {
     if(jwt == null || jwt.refreshToken == null)
       return;
 
+    this.keys.revokeAll(true).subscribe(() => {});
+
     return new Promise((resolve, reject) => {
       this.http.delete(environment.authApiHost + '/tokens/revoke-all', {
         headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
@@ -56,6 +65,7 @@ export class LoginService {
         localStorage.removeItem('jwt');
         localStorage.removeItem('phone-confirmed');
         localStorage.removeItem('roles');
+        localStorage.removeItem('syskey');
         localStorage.removeItem('admin');
         resolve();
       }, () => {
@@ -71,14 +81,24 @@ export class LoginService {
     if(jwt == null || jwt.refreshToken == null)
       return;
 
+    const key = localStorage.getItem('syskey');
+
+    if(key != null) {
+      this.keys.revokeByKey(key).subscribe(() => {
+        console.debug('System API key revoked!');
+      });
+    }
+
     this.http.delete(environment.authApiHost + '/tokens/revoke/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     }).subscribe(() => {
+
       LockService.destroyLock();
       localStorage.removeItem('jwt');
       localStorage.removeItem('phone-confirmed');
       localStorage.removeItem('roles');
       localStorage.removeItem('admin');
+      localStorage.removeItem('syskey');
     }, () => {
       console.log('Unable to logout on server!');
       LockService.destroyLock();
@@ -86,6 +106,7 @@ export class LoginService {
       localStorage.removeItem('roles');
       localStorage.removeItem('admin');
       localStorage.removeItem('phone-confirmed');
+      localStorage.removeItem('syskey');
     });
   }
 
@@ -148,6 +169,7 @@ export class LoginService {
   public resetLogin() {
     LockService.destroyLock();
     localStorage.removeItem('jwt');
+    localStorage.removeItem('syskey');
   }
 
   public static handleError(error : any) {
@@ -162,5 +184,6 @@ export class LoginService {
     data.expiresInMinutes = expire.unix();
 
     localStorage.setItem('jwt', JSON.stringify(data));
+    localStorage.setItem('syskey', data.systemApiKey);
   }
 }
