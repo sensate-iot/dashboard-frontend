@@ -10,7 +10,7 @@ import {ApiKey, ApiKeyType} from '../../models/apikey.model';
 import {ApiKeyService} from '../../services/apikey.service';
 import {AlertService} from '../../services/alert.service';
 import {FormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-apikeys',

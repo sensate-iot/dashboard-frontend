@@ -8,7 +8,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AccountService} from '../../../services/account.service';
 import {DOCUMENT} from '@angular/common';
-import {ErrorStateMatcher} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {LoginService} from '../../../services/login.service';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {LockService} from '../services/lock.service';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import {Router} from '@angular/router';
 import {LoginService} from '../services/login.service';
 import {AlertService} from '../services/alert.service';

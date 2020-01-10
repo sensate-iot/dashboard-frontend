@@ -4,7 +4,7 @@ import {AccountService} from '../../../services/account.service';
 import {DOCUMENT} from '@angular/common';
 import {Router} from '@angular/router';
 import {LoginService} from '../../../services/login.service';
-import {ErrorStateMatcher} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

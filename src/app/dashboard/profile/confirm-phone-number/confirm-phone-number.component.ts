@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {AccountService} from '../../../services/account.service';
 import {Router} from '@angular/router';
-import {ErrorStateMatcher} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 import {AlertService} from '../../../services/alert.service';
 
 class FormErrorStateMatcher implements ErrorStateMatcher {
