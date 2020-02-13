@@ -63,7 +63,7 @@ import { SensorDetailComponent } from './sensors/sensor-detail/sensor-detail.com
 import {ShowActionsDialog} from './sensors/sensor-detail/show-actions.dialog';
 import { LargeChartCardComponent } from './shared/large-chart-card/large-chart-card.component';
 import {DataService} from './services/data.service';
-import {JsondateinterceptorService} from './services/jsondateinterceptor.service';
+import {JsonDateInterceptorService} from './services/json-date-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -149,7 +149,7 @@ import {JsondateinterceptorService} from './services/jsondateinterceptor.service
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: JsondateinterceptorService,
+      useClass: JsonDateInterceptorService,
       multi: true
     }
   ],

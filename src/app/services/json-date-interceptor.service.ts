@@ -8,8 +8,10 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/internal/Observable';
 import {map} from 'rxjs/operators';
+import { Injectable } from "@angular/core";
 
-export class JsondateinterceptorService implements HttpInterceptor {
+@Injectable()
+export class JsonDateInterceptorService implements HttpInterceptor {
   private _isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?Z$/;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
