@@ -10,16 +10,16 @@ import * as moment from 'moment';
 })
 export class DashboardComponent implements OnInit {
 
-  private measurementsTodayData : any;
-  private measurementsOverallData : any;
+  public measurementsTodayData : any;
+  public measurementsOverallData : any;
 
-  private apiCallsPerDayData : any;
-  private measurementsPerHourOverallData : any;
+  public apiCallsPerDayData : any;
+  public measurementsPerHourOverallData : any;
 
-  private sensorCount : number;
-  private measurementsCount : number;
-  private apiCallCount : number;
-  private authTokenCount : number;
+  public sensorCount : number;
+  public measurementsCount : number;
+  public apiCallCount : number;
+  public authTokenCount : number;
 
   constructor(private db : DashBoardService) { }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {TimeSeriesGraphNode} from '../../models/timeseries-graph-node.model';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
@@ -14,7 +13,7 @@ import {CreateActionDialog} from '../create-action.dialog';
 import {ICreateAction} from '../sensor-wizard/sensor-wizard.component';
 import {ShowActionsDialog} from './show-actions.dialog';
 import {DataService} from '../../services/data.service';
-import {DataPoint, Measurement} from '../../models/measurement.model';
+import {Measurement} from '../../models/measurement.model';
 import * as moment from 'moment';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
@@ -33,13 +32,13 @@ export class TriggerEdgeMatcher implements ErrorStateMatcher {
   styleUrls: ['./sensor-detail.component.css']
 })
 export class SensorDetailComponent implements OnInit {
-  private measurementDataToday: any;
+  public measurementDataToday: any;
 
-  private triggerFrom: FormGroup;
-  private matcher: TriggerEdgeMatcher;
+  public triggerFrom: FormGroup;
+  public matcher: TriggerEdgeMatcher;
 
-  private triggers: Trigger[];
-  private sensor: Sensor;
+  public triggers: Trigger[];
+  public sensor: Sensor;
 
   public constructor(
     private fb: FormBuilder, private triggerService: TriggerService,

@@ -9,13 +9,13 @@ import * as moment from 'moment';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
-  private dashboard : AdminDashboard;
-  private verifiedUsers : number;
+  public dashboard : AdminDashboard;
+  public verifiedUsers : number;
 
   public measurementData : any;
   public registrationData : any;
 
-  private measurementSeries : number[];
+  public measurementSeries : number[];
 
   constructor(private admin : AdminService) {
     this.dashboard = new AdminDashboard();

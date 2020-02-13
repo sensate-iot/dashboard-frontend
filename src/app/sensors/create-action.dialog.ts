@@ -10,12 +10,11 @@ import {ICreateAction} from './sensor-wizard/sensor-wizard.component';
   styleUrls: ['./create-action.dialog.css']
 })
 export class CreateActionDialog {
-  private showTarget: boolean;
-  private showSensorTarget: boolean;
-  private valid: boolean;
-  private noTarget: boolean;
+  public valid: boolean;
+  public noTarget: boolean;
 
-  private sensors: Sensor[];
+  public selectedNumber : number;
+  public sensors: Sensor[];
 
   private static SmsChannel  = 1;
   private static MqttChannel = 2;
@@ -36,6 +35,8 @@ export class CreateActionDialog {
 
   public selectChannel() {
     const selected = +this.data.selected;
+
+    this.selectedNumber = selected;
 
     if(selected === CreateActionDialog.SmsChannel || selected === CreateActionDialog.MqttChannel) {
       this.noTarget = true;

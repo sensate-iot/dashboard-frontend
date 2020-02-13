@@ -12,11 +12,11 @@ import {SensorService} from '../../services/sensor.service';
   styleUrls: ['./sensors-list.component.css']
 })
 export class SensorsListComponent implements OnInit {
-  private searchFieldValue : string;
-  private sensors: Sensor[];
-  private allSensors: Sensor[];
+  public searchFieldValue : string;
+  public sensors: Sensor[];
+  public allSensors: Sensor[];
 
-  private disableButtonAddTrigger: boolean;
+  public disableButtonAddTrigger: boolean;
 
   public form : FormGroup;
   public action : string;

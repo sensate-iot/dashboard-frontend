@@ -17,14 +17,14 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field *ngIf="+data.selected === 5" class="input-full-width">
+  <mat-form-field *ngIf="selectedNumber === 5" class="input-full-width">
     <mat-label>Select an option</mat-label>
     <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
       <mat-option *ngFor="let sensor of sensors" [value]="sensor.internalId">{{sensor.name}}</mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field   *ngIf="+data.selected !== 5" class="input-full-width">
+  <mat-form-field   *ngIf="selectedNumber !== 5" class="input-full-width">
     <input (ngModelChange)="selectTarget()" matInput placeholder="Name" [disabled]="noTarget" [(ngModel)]="data.target">
   </mat-form-field>
 </div>

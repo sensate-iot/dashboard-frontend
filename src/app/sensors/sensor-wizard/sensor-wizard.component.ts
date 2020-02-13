@@ -1,8 +1,6 @@
 import {Component, OnInit, AfterViewInit, Inject} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import {Trigger, TriggerAction} from '../../models/trigger.model';
 import {AlertService} from '../../services/alert.service';
 import {TriggerService} from '../../services/trigger.service';
@@ -10,6 +8,8 @@ import {Router} from '@angular/router';
 import {Sensor} from '../../models/sensor.model';
 import {SensorService} from '../../services/sensor.service';
 import {CreateActionDialog} from '../create-action.dialog';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 declare const $: any;
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
@@ -28,23 +28,23 @@ export class TriggerEdgeMatcher implements ErrorStateMatcher {
   styleUrls: ['./sensor-wizard.component.css']
 })
 export class SensorWizardComponent implements OnInit, AfterViewInit {
-  tabIndex = 0;
+  public tabIndex = 0;
 
-  private nameForm : FormGroup;
-  private name : FormControl;
-  private desc : FormControl;
+  public nameForm : FormGroup;
+  public name : FormControl;
+  public desc : FormControl;
 
-  private secretForm : FormGroup;
-  private secret : FormControl;
+  public secretForm : FormGroup;
+  public secret : FormControl;
 
-  private triggerFrom: FormGroup;
-  private matcher: TriggerEdgeMatcher;
-  private showTriggerForm: boolean;
+  public triggerFrom: FormGroup;
+  public matcher: TriggerEdgeMatcher;
+  public showTriggerForm: boolean;
 
-  private sensor: Sensor;
-  private sensorCreated: boolean;
+  public sensor: Sensor;
+  public sensorCreated: boolean;
 
-  private triggers: Trigger[];
+  public triggers: Trigger[];
 
   constructor(private fb: FormBuilder, private alerts: AlertService, private triggerService: TriggerService,
               private sensorService: SensorService, private router: Router, private dialog: MatDialog) {
