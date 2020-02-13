@@ -56,7 +56,7 @@ import { ConfirmEmailComponent } from './register/confirm-email/confirm-email.co
 import { SensorsListComponent } from './sensors/sensors-list/sensors-list.component';
 import {SensorWizardComponent} from './sensors/sensor-wizard/sensor-wizard.component';
 import {TriggerService} from './services/trigger.service';
-import {MatTableModule} from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
 import {SensorService} from './services/sensor.service';
 import {CreateActionDialog} from './sensors/create-action.dialog';
 import { SensorDetailComponent } from './sensors/sensor-detail/sensor-detail.component';

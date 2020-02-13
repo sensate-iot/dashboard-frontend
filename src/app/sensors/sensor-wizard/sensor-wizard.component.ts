@@ -1,6 +1,8 @@
 import {Component, OnInit, AfterViewInit, Inject} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
-import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSlideToggleChange} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import {Trigger, TriggerAction} from '../../models/trigger.model';
 import {AlertService} from '../../services/alert.service';
 import {TriggerService} from '../../services/trigger.service';

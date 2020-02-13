@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Trigger, TriggerAction, TriggerActionChannel} from '../../models/trigger.model';
 import {TriggerService} from '../../services/trigger.service';
 import {AlertService} from '../../services/alert.service';

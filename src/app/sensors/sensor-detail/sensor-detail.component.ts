@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TimeSeriesGraphNode} from '../../models/timeseries-graph-node.model';
-import {ErrorStateMatcher, MatDialog} from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Trigger, TriggerAction} from '../../models/trigger.model';
 import {TriggerService} from '../../services/trigger.service';

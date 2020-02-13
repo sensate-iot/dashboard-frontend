@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {Sensor} from '../models/sensor.model';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {SensorService} from '../services/sensor.service';
 import {ICreateAction} from './sensor-wizard/sensor-wizard.component';
 

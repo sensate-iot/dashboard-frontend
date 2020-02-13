@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {ApiKeyService} from '../../services/apikey.service';
 import {AlertService} from '../../services/alert.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {Sensor} from '../../models/sensor.model';
 import {SensorService} from '../../services/sensor.service';
 
