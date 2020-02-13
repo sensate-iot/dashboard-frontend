@@ -172,6 +172,14 @@ export class LoginService {
     localStorage.removeItem('syskey');
   }
 
+  public getSysKey() {
+    if(!this.isLoggedIn()) {
+      return null;
+    }
+
+    return localStorage.getItem('syskey');
+  }
+
   public static handleError(error : any) {
     LockService.destroyLock();
   }

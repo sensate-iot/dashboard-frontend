@@ -45,7 +45,7 @@ export class UpdatePhoneNumberComponent implements OnInit {
     const phone = '+' + this.countryCodeControl.value.toString() + this.phoneNumberControl.value.toString();
     this.accounts.updatePhoneNumber(phone).subscribe(() => {
       this.notifications.showNotification('A verification code has been sent to your phone!', 'top-center', 'success');
-      this.router.navigate(['/dashboard/confirm-phone-number']);
+      this.router.navigate(['/confirm-email-phone-number']);
     }, (error) => {
       const status : Status = error.error;
       this.notifications.showNotification('Unable to update phone number: ' + status.message, 'top-center', 'warning');

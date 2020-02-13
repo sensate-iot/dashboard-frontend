@@ -82,7 +82,7 @@
   size: .8em;
 }
 
-.search-btn{
+.icon-button {
   margin: 0 5px 0 7px;
   size: .8em;
 }
@@ -92,6 +92,31 @@
   color: #555;
 }
 
+.btn {
+}
+
 .mat-icon-button{
   margin-left: 7px;
+}
+
+.input-full-width {
+  width: 100%;
+}
+
+.vcenter {
+  margin-right: 2%;
+  display: inline-block;
+  vertical-align: bottom;
+  float: none;
+}
+
+.vcenter-nomargin {
+  display: inline-block;
+  vertical-align: bottom;
+  float: none;
+}
+
+.button-footer {
+  display: flex;
+  justify-content: right;
 }

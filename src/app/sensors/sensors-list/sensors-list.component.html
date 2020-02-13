@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="material-icons">assignment</i>
+        </div>
+        <div class="card-content">
+          <div class="row">
+            <div class="col-sm-4">
+              <h4 class="card-title">Sensor Management</h4>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-5 search">
+              <div class="right-part input-full-width">
+                <mat-form-field color="#ff0000" class="input-full-width">
+                  <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
+                </mat-form-field>
+
+
+              </div>
+            </div>
+            <div class="col-sm-1">
+              <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+            </div>
+
+          </div>
+          <div class="table-responsive">
+            <form [formGroup]="form">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Created on</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let sensor of sensors; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{sensor.name}}</td>
+                  <td>{{descText(sensor.description)}}</td>
+                  <td>{{sensor.createdAt.toLocaleDateString()}}</td>
+                  <td>
+                    <button mat-mini-fab class="search-btn" (click)="onShowClicked(i)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
+                    <button mat-mini-fab class="search-btn" routerLink="/sensors/{{sensor.internalId}}"><i class="material-icons" style="font-size:20px;">details</i></button>
+                    <button mat-mini-fab class="search-btn" (click)="onDeleteClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

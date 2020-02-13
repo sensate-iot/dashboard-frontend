@@ -37,6 +37,18 @@ export class AlertService {
     this.buildNotification(msg, from, align, type);
   }
 
+  public showSuccessNotification(msg: string) {
+    this.showNotification(msg, 'top-center', 'success');
+  }
+
+  public showWarninngNotification(msg: string) {
+    this.showNotification(msg, 'top-center', 'warning');
+  }
+
+  public showErrorNotification(msg: string) {
+    this.showNotification(msg, 'top-center', 'danger');
+  }
+
   private buildNotification(msg : string, from : string, align : string, type : string) {
 
     $.notify({

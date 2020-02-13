@@ -4,19 +4,27 @@
   z-index: 1;
 }
 
-.background {
-  background: url("../../assets/img/register_bg.jpg") center center;
-  background-size: cover;
+.parent {
+  position: relative;
 }
 
-.register-panel{
-  margin-top: 25px;
+.background {
+  background: url("../../assets/img/register_bg.jpg") ;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: scroll;
+}
+
+.register-content {
+  margin-top: -50px;
 }
 
 .card{
+  margin-top: 40px;
   position: relative;
-  display: inline-block;
-  padding: 40px 0 30px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   -webkit-animation-name: card;
   -moz-animation-name: card;
   -o-animation-name: card;
@@ -29,6 +37,27 @@
   -moz-animation-fill-mode: forwards;
   -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
+}
+
+.card-header{
+  position: relative;
+  overflow: hidden;
+  top: -40px;
+  width: 100%;
+  padding: 25px;
+  border-radius: 3px;
+  background: linear-gradient(60deg, #ec407a, #d81b60);
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-header h4{
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 25px;
+  margin-top: 5px;
 }
 
 /*

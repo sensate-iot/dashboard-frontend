@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {FormErrorStateMatcher} from '../profile.component';
 import {Router} from '@angular/router';
 import {AccountService} from '../../../../services/account.service';
+import {AlertService} from '../../../../services/alert.service';
 
 @Component({
   selector: 'app-update-email',
@@ -14,7 +15,7 @@ export class UpdateEmailComponent implements OnInit {
   emailControl : FormControl;
   updateMatcher : FormErrorStateMatcher;
 
-  constructor(private router : Router, private accounts : AccountService) { }
+  constructor(private router : Router, private accounts : AccountService, private notifs: AlertService) { }
 
   public ngOnInit() {
     this.createUpdateEmailForm();
@@ -38,8 +39,10 @@ export class UpdateEmailComponent implements OnInit {
     }
 
     this.accounts.updateEmail(this.emailControl.value).subscribe(() => {
-      this.router.navigate(['/dashboard/confirm-update-email']);
+      this.notifs.showNotification('A verification code has been sent to your email address!', 'top-center', 'success');
+      this.router.navigate(['/confirm-email-update-email']);
     },() => {
+      this.notifs.showNotification('Unable to update email!', 'top-center', 'warning');
       this.emailControl.setErrors({
         "unable": true
       });

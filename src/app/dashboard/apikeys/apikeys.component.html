@@ -10,13 +10,13 @@
             <div class="col-sm-4">
               <h4 class="card-title">API key management</h4>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-8 search">
+              <div class="right-part">
               <table class="hdr-table">
                 <tr>
                   <td class="hdr-table-td">
                     <mat-form-field>
                       <mat-select placeholder="Action" [(ngModel)]="action">
-                        <mat-option value="create">Create API key</mat-option>
                         <mat-option value="all">Show all keys</mat-option>
                         <mat-option value="no-sys">Hide system keys</mat-option>
                         <mat-option value="no-user">Hide user keys</mat-option>
@@ -28,14 +28,16 @@
                     <button (click)="onSubmitClicked()" mat-raised-button>SUBMIT</button>
                   </td>
 
-                  <td class="hdr-table-td align-right">
+                  <td class="hdr-table-td ">
                       <mat-form-field color="#ff0000">
                         <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
                       </mat-form-field>
                       <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+                      <button mat-mini-fab class="add-btn" (click)="createNewKeyClicked()"><i class="material-icons" style="font-size:18px;">add</i></button>
                   </td>
                 </tr>
               </table>
+              </div>
             </div>
 
           </div>

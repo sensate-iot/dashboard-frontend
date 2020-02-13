@@ -103,9 +103,5 @@ export class ForgotPasswordComponent implements OnInit {
           break;
       }
     });
-
-    /*this.token.setErrors({
-      'invalid': true
-    });*/
   }
 }

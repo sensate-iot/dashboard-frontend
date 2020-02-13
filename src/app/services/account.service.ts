@@ -32,6 +32,15 @@ export class AccountService {
     }));
   }
 
+  public confirmRegistration(userId: string, token: string) {
+    const url = `${environment.authApiHost}/accounts/confirm/${userId}/${token}`;
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(url, {
+      observe: 'response',
+      headers: headers
+    });
+  }
+
   public updateUser(user : Profile) {
     const profile = {
       "FirstName" : user.firstName,

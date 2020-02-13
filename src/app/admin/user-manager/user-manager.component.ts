@@ -4,6 +4,7 @@ import {AdminService} from '../../services/admin.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
+import {Subject} from 'rxjs/internal/Subject';
 
 interface RoleIconMap {
   [role:string] : string;
@@ -37,6 +38,7 @@ export class UserManagerComponent implements OnInit {
   public controls : FormControl[];
   public actionControl : FormControl;
   public searchFieldValue : string;
+  public selectAll : boolean;
 
   private readonly roleIcons : RoleIconMap;
 
@@ -50,6 +52,8 @@ export class UserManagerComponent implements OnInit {
   }
 
   public ngOnInit() : void {
+    this.selectAll = false;
+
     this.users = [];
     this.admin.getRecentUsers().subscribe(value => {
       this.setUserData(value);
@@ -124,6 +128,12 @@ export class UserManagerComponent implements OnInit {
     });
 
     console.log(JSON.stringify(objs));
+  }
+
+  public selectAllChanged() {
+    this.controls.forEach((control) => {
+      control.setValue(this.selectAll);
+    });
   }
 
   public userToIcon(user : User) : string {

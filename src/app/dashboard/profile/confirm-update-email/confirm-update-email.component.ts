@@ -12,6 +12,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import {FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {LoginService} from '../../../services/login.service';
+import {AlertService} from '../../../services/alert.service';
 
 class FormErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -33,7 +34,7 @@ export class ConfirmUpdateEmailComponent implements OnInit {
 
   constructor(private accounts : AccountService,
               @Inject(DOCUMENT) private document : Window,
-              private router : Router, private auth : LoginService) { }
+              private router : Router, private auth : LoginService, private notifs: AlertService) { }
 
   ngOnInit() {
     this.matcher = new FormErrorStateMatcher();
@@ -53,6 +54,7 @@ export class ConfirmUpdateEmailComponent implements OnInit {
   onConfirm() {
     this.accounts.confirmUpdateEmail(this.codeField.value).subscribe(res => {
       this.auth.resetLogin();
+      this.notifs.showNotification('Your email has been updated. Please log in.', 'top-center', 'success');
       this.router.navigate(['/login']);
     }, error => {
       this.codeField.setErrors({

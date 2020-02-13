@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="row">
+  <div class="card">
+    <div class="card-header">
+      <i class="material-icons">assignment</i>
+    </div>
+    <div class="card-content">
+      <div class="row">
+        <div class="col-sm-4">
+          <h4 class="card-title">Trigger Management</h4>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+      <div class="row">
+        <div class="table-responsive" style="height:200px;overflow:auto;padding-left:15px;padding-right:15px">
+          <table class="mat-table table">
+            <tr class="mat-header-row">
+              <th class="mat-header-cell">Key value</th>
+              <th class="mat-header-cell">Lower edge</th>
+              <th class="mat-header-cell">Upper edge</th>
+              <th class="mat-header-cell">Message</th>
+              <th class="mat-header-cell">Actions</th>
+            </tr>
+            <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
+              <td class="mat-cell">{{trigger.keyValue}}</td>
+              <td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>
+              <td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>
+              <td class="mat-cell">{{trigger.message}}</td>
+              <td class="mat-cell">
+                <button mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
+                <button mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
+                <button mat-mini-fab class="icon-button" (click)="showActions(i)"><i class="material-icons" style="font-size:20px;">pageview</i></button>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+      <div class="row">
+          <form [formGroup]="triggerFrom">
+
+            <div class="col-md-2 col-xs-12 vcenter">
+              <mat-form-field class="input-full-width" color="accent" >
+                <input matInput type="text" placeholder="Key value" name="name" formControlName="keyValue">
+                <mat-error *ngIf="triggerFrom.get('keyValue').hasError('required')">
+                  Enter a valid datapoint key value!
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 col-xs-12 vcenter">
+              <mat-form-field class="input-full-width" color="accent" >
+                <input matInput type="text" placeholder="Lower edge" [errorStateMatcher]="matcher" name="lowerEdge" formControlName="lowerEdge">
+                <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
+                  Lower or edge required!
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 col-xs-12 vcenter">
+              <mat-form-field class="input-full-width" color="accent" >
+                <input matInput type="text" placeholder="Upper edge" [errorStateMatcher]="matcher" name="upperEdge" formControlName="upperEdge">
+                <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
+                  Lower or upper edge required!
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4 col-xs-8 vcenter-nomargin">
+              <mat-form-field class="input-full-width" color="accent">
+                      <textarea cdkTextareaAutosize cdkAutosizeMaxRows="3" cdkAutosizeMinRows="3" formControlName="msg"
+                                matInput placeholder="Message" name="msg"></textarea>
+                <mat-error *ngIf="triggerFrom.get('msg').hasError('required')">
+                  A message is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-1 col-xs-4 vcenter-nomargin">
+              <button mat-mini-fab class="search-btn" (click)="createTrigger()">
+                <i class="material-icons" style="font-size:20px;">add</i></button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="row">
+    <app-large-chart-card
+      title="{{sensor.name}}"
+      headerIcon="settings_remote"
+      linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
+      boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"
+      [data]="measurementDataToday">
+    </app-large-chart-card>
+  </div>
+</div>

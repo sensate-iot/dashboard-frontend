@@ -44,10 +44,17 @@ export class ConfirmPhoneNumberComponent implements OnInit {
       this.notifications.showNotification('Phone number updated!', 'top-center', 'success');
       this.router.navigate(['/dashboard']);
     }, error => {
-      console.log(error);
-      this.codeField.setErrors({
-        "invalid" : true
-      });
+      console.log(error.error.errorCode);
+      if(error.error.errorCode === 401) {
+        this.codeField.setErrors({
+          "expired" : true
+        });
+      } else {
+        this.codeField.setErrors({
+          "invalid" : true
+        });
+      }
+
     });
   }
 

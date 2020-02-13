@@ -18,6 +18,9 @@
                   <mat-error *ngIf="codeField.hasError('required') || codeField.hasError('invalid')">
                     Enter a valid confirmation code!
                   </mat-error>
+                  <mat-error *ngIf="codeField.hasError('expired')">
+                    Confirmation code has expired. A new code will be sent.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>

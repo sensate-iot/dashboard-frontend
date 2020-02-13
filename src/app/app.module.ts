@@ -6,9 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -50,6 +52,18 @@ import {DashBoardService} from './services/dashboard.service';
 import {ApikeysComponent, CreateApiKeyDialog} from './dashboard/apikeys/apikeys.component';
 import {ApiKeyService} from './services/apikey.service';
 import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create-api-key.component';
+import { ConfirmEmailComponent } from './register/confirm-email/confirm-email.component';
+import { SensorsListComponent } from './sensors/sensors-list/sensors-list.component';
+import {SensorWizardComponent} from './sensors/sensor-wizard/sensor-wizard.component';
+import {TriggerService} from './services/trigger.service';
+import {MatTableModule} from '@angular/material';
+import {SensorService} from './services/sensor.service';
+import {CreateActionDialog} from './sensors/create-action.dialog';
+import { SensorDetailComponent } from './sensors/sensor-detail/sensor-detail.component';
+import {ShowActionsDialog} from './sensors/sensor-detail/show-actions.dialog';
+import { LargeChartCardComponent } from './shared/large-chart-card/large-chart-card.component';
+import {DataService} from './services/data.service';
+import {JsondateinterceptorService} from './services/jsondateinterceptor.service';
 
 @NgModule({
   declarations: [
@@ -77,10 +91,19 @@ import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create
     BarChartCardComponent,
     ApikeysComponent,
     CreateApiKeyComponent,
-    CreateApiKeyDialog
+    CreateApiKeyDialog,
+    CreateActionDialog,
+    ShowActionsDialog,
+    ConfirmEmailComponent,
+    SensorsListComponent,
+    SensorWizardComponent,
+    SensorDetailComponent,
+    LargeChartCardComponent
   ],
   entryComponents: [
-    CreateApiKeyDialog
+    CreateApiKeyDialog,
+    CreateActionDialog,
+    ShowActionsDialog
   ],
   imports: [
     RouterModule,
@@ -94,21 +117,27 @@ import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create
     MatListModule,
     MatToolbarModule,
     MatButtonModule,
+    MatExpansionModule,
     MatDialogModule,
     MatRadioModule,
+    MatTableModule,
     MatSelectModule,
     MatInputModule,
+    MatSlideToggleModule,
     MatMenuModule,
     MatCheckboxModule
 
   ],
   providers: [
     LoginService,
+    TriggerService,
+    SensorService,
     LockService,
     AccountService,
     ApiKeyService,
     AdminService,
     DashBoardService,
+    DataService,
     AuthGuard,
     LockGuard,
     AlertService,
@@ -116,6 +145,11 @@ import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RefreshTokenInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JsondateinterceptorService,
       multi: true
     }
   ],
