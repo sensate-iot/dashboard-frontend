@@ -2,7 +2,12 @@ import {Component, Inject} from '@angular/core';
 import {Sensor} from '../models/sensor.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {SensorService} from '../services/sensor.service';
-import {ICreateAction} from './sensor-wizard/sensor-wizard.component';
+
+export interface ICreateAction {
+  target : string;
+  selected: string;
+  message: string;
+}
 
 @Component({
   selector: 'create-action-dialog',
@@ -13,14 +18,18 @@ export class CreateActionDialog {
   public valid: boolean;
   public noTarget: boolean;
 
+  public hasMessage: boolean;
+
   public selectedNumber : number;
   public sensors: Sensor[];
 
   private static SmsChannel  = 1;
   private static MqttChannel = 2;
 
-  constructor(public ref: MatDialogRef<CreateActionDialog>, @Inject(MAT_DIALOG_DATA) public data: ICreateAction,
-              private sensorService: SensorService) {
+  public constructor(public ref: MatDialogRef<CreateActionDialog>,
+                     @Inject(MAT_DIALOG_DATA) public data: ICreateAction,
+                     private sensorService: SensorService) {
+
     this.sensorService.find().subscribe((sensors) => {
       this.sensors = sensors;
     });
@@ -41,12 +50,21 @@ export class CreateActionDialog {
     if(selected === CreateActionDialog.SmsChannel || selected === CreateActionDialog.MqttChannel) {
       this.noTarget = true;
       this.valid = true;
+      this.data.target = '';
     } else {
       this.noTarget = false;
+    }
+
+    if(!this.noTarget && this.data.target.length === 0) {
+      this.valid = false;
     }
   }
 
   public selectTarget() {
     this.valid = true;
+  }
+
+  public onMessageChanged() {
+    this.hasMessage = this.data.message.length > 0;
   }
 }

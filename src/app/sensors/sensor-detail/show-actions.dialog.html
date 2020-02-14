@@ -4,11 +4,13 @@
     <tr class="mat-header-row">
       <th class="mat-header-cell">Channel</th>
       <th class="mat-header-cell">Target</th>
+      <th class="mat-header-cell">Message</th>
       <th class="mat-header-cell">Actions</th>
     </tr>
     <tr class="mat-row" *ngFor="let action of data.trigger.actions; let i = index">
       <td class="mat-cell" style="padding-bottom: 1%">{{actionMap.get(action.channel)}}</td>
-      <td class="mat-cell" style="padding-bottom: 1%">{{action.target ? action.target : ''}}</td>
+      <td class="mat-cell" style="padding-bottom: 1%">{{action.target ? getTargetName(action) : ''}}</td>
+      <td class="mat-cell" style="padding-bottom: 1%">{{action.message ? action.message : ''}}</td>
       <td class="mat-cell" style="padding-bottom: 1%">
         <button mat-mini-fab class="icon-button" (click)="removeAction(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
       </td>

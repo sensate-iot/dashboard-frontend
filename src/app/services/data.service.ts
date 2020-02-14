@@ -29,12 +29,16 @@ export class DataService {
   public constructor(private http: HttpClient, private login: LoginService) {
   }
 
-  public get(sensorId: string, start: Date, end: Date, limit: number) {
+  public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}&sensorId=${sensorId}&start=${start.toISOString()}&end=${end.toISOString()}`;
 
     if(limit > 0) {
-      url += `&max=${limit}`;
+      url += `&limit=${limit}`;
+    }
+
+    if(skip > 0) {
+      url += `&skip=${skip}`;
     }
 
     return this.http.get<Measurement[]>(url, this.options);

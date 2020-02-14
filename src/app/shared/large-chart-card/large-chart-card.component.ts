@@ -1,7 +1,13 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IChartistData, IChartistLineChart, ILineChartOptions} from 'chartist';
 import * as Chartist from 'chartist';
+import * as ChartistLegend from 'chartist-plugin-legend';
 import {Guid} from 'guid-typescript';
+
+export class ChartistLegendDataArray {
+  public name: string;
+  public data: Array<number>;
+}
 
 @Component({
   selector: 'app-large-chart-card',
@@ -24,36 +30,47 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
   public readonly guid : string;
 
   private viewDidLoad : boolean = false;
+  private chartCreated = false;
 
   constructor() {
     const tmp = Guid.create().toString();
     this.guid = 'chart_' + tmp.split('-').join('');
+    const legend = new ChartistLegend();
   }
 
   public ngOnInit() {
   }
 
   public ngOnChanges(changes : SimpleChanges) {
-    if(this.data)
+    if(this.data === undefined) {
+      return;
+    }
+
+    if(!this.chartCreated) {
       this.options = this.buildChartOptions(this.data.labels);
+      this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
+      // this.chart = new Chartist.Line('.ct-chart', this.data, this.options);
+      this.startAnimationForLineChart();
+      this.chart.update(this.data, this.options);
+
+      this.chartCreated = true;
+    }
 
     if(this.viewDidLoad) {
-      this.chart.update(this.data, this.options);
+      // this.chart.update(this.data, this.options);
     }
   }
 
   public ngAfterViewInit() {
-    if(this.data) {
-      this.options = this.buildChartOptions(this.data.labels);
-    } else {
-      this.options = {
-        height: 400
-      }
-    }
+    // if(this.data) {
+    //   // this.options = this.buildChartOptions(this.data.labels);
+    // } else {
+    //   this.options = {
+    //     height: 400
+    //   }
+    // }
 
     this.viewDidLoad = true;
-    this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
-    this.startAnimationForLineChart();
   }
 
   private buildChartOptions(labels : any[]) {
@@ -73,6 +90,11 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
       lineSmooth: interpolation,
       chartPadding: { top: 25, right: 25, bottom: 0, left: 10},
       showPoint: this.showPoint,
+      fullWidth:true,
+      plugins: [
+        Chartist.plugins.legend({
+        })
+      ],
       axisX: {
         labelInterpolationFnc: function(value, index) {
           if(num < max) {
@@ -90,43 +112,41 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
 
   private startAnimationForLineChart() {
     let seq: any, delays: any, durations: any;
-    let chartRendered : boolean;
 
     seq = 0;
     delays = 80;
     durations = 500;
-    chartRendered = false;
+
+    setTimeout(() => {
+      this.chart.off('draw');
+    }, 750);
 
     this.chart.on('draw', function(data) {
-      if(!chartRendered) {
-        console.log('Rendering chart...');
-        if (data.type === 'line' || data.type === 'area') {
+      if (data.type === 'line' || data.type === 'area') {
 
-          data.element.animate({
-            d: {
-              begin: 600,
-              dur: 700,
-              from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-              to: data.path.clone().stringify(),
-              easing: Chartist.Svg.Easing.easeOutQuint
-            }
-          });
-        } else if (data.type === 'point') {
-          seq++;
-          data.element.animate({
-            opacity: {
-              begin: seq * delays,
-              dur: durations,
-              from: 0,
-              to: 1,
-              easing: 'ease'
-            }
-          });
-        }
+        data.element.animate({
+          d: {
+            begin: 600,
+            dur: 700,
+            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+            to: data.path.clone().stringify(),
+            easing: Chartist.Svg.Easing.easeOutQuint
+          }
+        });
+      } else if (data.type === 'point') {
+        seq++;
+        data.element.animate({
+          opacity: {
+            begin: seq * delays,
+            dur: durations,
+            from: 0,
+            to: 1,
+            easing: 'ease'
+          }
+        });
       }
     });
 
     seq = 0;
   }
-
 }

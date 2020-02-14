@@ -512,3 +512,100 @@ b{
   padding: 9px;
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
 }
+
+/* Chartist plugin bladiebla */
+
+/*$chartist-series-colors: (*/
+/*#d70206,*/
+/*#f05b4f,*/
+/*#f4c63d,*/
+/*#d17905,*/
+/*#453d3f,*/
+/*#59922b,*/
+/*#0544d3,*/
+/*#6b0392,*/
+/*#f05b4f,*/
+/*#dda458,*/
+/*#eacf7d,*/
+/*#86797d,*/
+/*#b2c326,*/
+/*#6188e2,*/
+/*#a748ca*/
+/*) !default;*/
+
+.ct-chart {
+  position: relative;
+}
+
+.ct-legend {
+  position: relative;
+  z-index: 10;
+  list-style: none;
+  text-align: center;
+}
+.ct-legend li {
+  position: relative;
+  padding-left: 23px;
+  margin-right: 10px;
+  margin-bottom: 3px;
+  cursor: pointer;
+  display: inline-block;
+}
+.ct-legend li:before {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  content: '';
+  border: 3px solid transparent;
+  border-radius: 2px;
+}
+.ct-legend li.inactive:before {
+  background: transparent;
+}
+.ct-legend.ct-legend-inside {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.ct-legend.ct-legend-inside li{
+  display: block;
+  margin: 0;
+}
+
+.ct-legend .ct-series-0:before {
+  background-color: #d70206;
+  border-color: #d70206;
+}
+.ct-legend .ct-series-1:before {
+  background-color: #f05b4f;
+  border-color: #f05b4f;
+}
+.ct-legend .ct-series-2:before {
+  background-color: #f4c63d;
+  border-color: #f4c63d;
+}
+.ct-legend .ct-series-3:before {
+  background-color: #d17905;
+  border-color: #d17905;
+}
+.ct-legend .ct-series-4:before {
+  background-color: #453d3f;
+  border-color: #453d3f;
+}
+
+
+/*.ct-series-0 {*/
+  /*background-color: #d70206;*/
+  /*border-color: #d70206;*/
+/*}*/
+
+/*.ct-series-1 {*/
+  /*background-color: #f05b4f;*/
+  /*border-color: #f05b4f;*/
+/*}*/
+
+/*.ct-series-2 {*/
+  /*background-color: #f4c63d;*/
+  /*border-color: #f4c63d;*/
+/*}*/

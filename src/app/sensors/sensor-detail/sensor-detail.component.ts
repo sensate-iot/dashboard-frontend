@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
@@ -9,12 +9,12 @@ import {SensorService} from '../../services/sensor.service';
 import {flatMap} from 'rxjs/operators';
 import {Sensor} from '../../models/sensor.model';
 import {AlertService} from '../../services/alert.service';
-import {CreateActionDialog} from '../create-action.dialog';
-import {ICreateAction} from '../sensor-wizard/sensor-wizard.component';
+import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
 import {ShowActionsDialog} from './show-actions.dialog';
 import {DataService} from '../../services/data.service';
 import {Measurement} from '../../models/measurement.model';
 import * as moment from 'moment';
+import {ChartistLegendDataArray} from '../../shared/large-chart-card/large-chart-card.component';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -40,6 +40,8 @@ export class SensorDetailComponent implements OnInit {
   public triggers: Trigger[];
   public sensor: Sensor;
 
+  public sensors: Sensor[];
+
   public constructor(
     private fb: FormBuilder, private triggerService: TriggerService,
     private sensorService: SensorService,
@@ -57,53 +59,62 @@ export class SensorDetailComponent implements OnInit {
 
     this.route.params.pipe(flatMap(params => {
       const sensorId = params['id'] || '';
-      console.log("Sensor ID: " + sensorId);
       return this.sensorService.get(sensorId);
     }), flatMap(sensor => {
-      console.log("Sensor name: " + sensor.name);
       this.sensor = sensor;
       return this.triggerService.getAllFor(sensor.internalId);
     })).subscribe(triggers => {
       this.triggers = triggers;
       const now = new Date();
       const yesterday = new Date();
-      // const yesterday = <Date>this.sensor.createdAt;
 
       yesterday.setDate(now.getDate() - 1);
-      console.log(this.sensor);
-      this.dataService.get(this.sensor.internalId, yesterday, now, 10).subscribe((data) => {
+
+      this.dataService.get(this.sensor.internalId, yesterday, now, 100).subscribe((data) => {
         this.measurementDataToday = this.createGraphData(data);
       });
     }, (error) => {
       this.alertService.showWarninngNotification("Unable to load sensor data!");
     });
 
-
+    this.sensorService.find().subscribe((sensors) => {
+      this.sensors = sensors;
+    }, (error) => {
+      console.debug("Unable to fetch sensor data: " + JSON.stringify(error));
+    });
   }
-
-  private static HoursPerDay = 24;
 
   private createGraphData(measurements: Measurement[]) {
     const labels = [];
-    const data = new Array<Array<number>>();
+    const data = new Map<string, Array<number>>();
 
     measurements.forEach(measurement => {
       labels.push(moment(measurement.timestamp).utc().format('HH:mm'));
       let idx = 0;
 
       for (const key in measurement.data) {
-        if(data.length <= idx) {
-          data.push(new Array<number>());
+        if(!data.has(key)) {
+          data.set(key, new Array<number>());
         }
 
-        data[idx].push(measurement.data[key].value);
-        idx++;
+        data.get(key).push(measurement.data[key].value);
       }
     });
 
+    const finalData = new Array<ChartistLegendDataArray>();
+
+    data.forEach((value: Array<number>, key: string, m) => {
+      let data = new ChartistLegendDataArray();
+
+      data.name = key;
+      data.data = value;
+      finalData.push(data);
+    });
+
+
     return {
       labels: labels,
-      series: data
+      series: finalData
     };
   }
 
@@ -116,8 +127,6 @@ export class SensorDetailComponent implements OnInit {
     const lower = form.get('lowerEdge').value.toString();
     const condition = upper.length === 0 && lower.length === 0;
 
-    console.log(`Condition: ${condition}`);
-
     return condition ? { 'edgeRequired': true } : null;
   }
 
@@ -129,11 +138,6 @@ export class SensorDetailComponent implements OnInit {
         Validators.minLength(1)
       ]),
 
-      msg: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4)
-      ]),
-
       upperEdge: new FormControl(''),
       lowerEdge: new FormControl('')
     }, { validator: this.atLeastOneRequired })
@@ -141,11 +145,12 @@ export class SensorDetailComponent implements OnInit {
 
   public showActions(idx: number) {
     const data = {
-      trigger: this.triggers[idx]
+      trigger: this.triggers[idx],
+      sensors: this.sensors
     };
 
     const dialog = this.dialog.open(ShowActionsDialog, {
-      width: '600px',
+      width: '700px',
       height: '425px',
       data: data
     });
@@ -154,12 +159,13 @@ export class SensorDetailComponent implements OnInit {
   public createAction(i: number) {
     const data = {
       target: "",
-      selected: ""
+      selected: "",
+      message: ""
     };
 
     const dialog = this.dialog.open(CreateActionDialog, {
-      width: '250px',
-      height: '275px',
+      width: '450px',
+      height: '400px',
       data: data
     });
 
@@ -177,8 +183,14 @@ export class SensorDetailComponent implements OnInit {
       }
 
       action.channel = +result.selected;
+      action.message = result.message;
+
       this.triggerService.addAction(trigger, action).subscribe((t) => {
         console.debug(`Created action: ${JSON.stringify(t)}`);
+        if(trigger.actions === null) {
+          trigger.actions = [];
+        }
+
         trigger.actions.push(action);
         this.alertService.showSuccessNotification("Action created!");
       }, (error) => {
@@ -191,13 +203,11 @@ export class SensorDetailComponent implements OnInit {
   public createTrigger() {
     let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
     let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
-    const msg = this.triggerFrom.get('msg').value.toString();
     const keyValue = this.triggerFrom.get('keyValue').value.toString();
 
     const trigger = new Trigger();
 
     trigger.keyValue = keyValue;
-    trigger.message = msg;
     trigger.sensorId = this.sensor.internalId;
 
     if(upperRaw.length !== 0) {
@@ -210,16 +220,11 @@ export class SensorDetailComponent implements OnInit {
       trigger.lowerEdge = +lowerRaw;
     }
 
-    console.log(JSON.stringify(trigger));
-
     this.triggerService.createTrigger(trigger).subscribe((t) => {
       this.alertService.showSuccessNotification("Trigger created!");
       this.triggers.push(t);
 
-      this.triggerFrom.get('upperEdge').setValue('');
-      this.triggerFrom.get('lowerEdge').setValue('');
-      this.triggerFrom.get('msg').setValue('');
-      this.triggerFrom.get('keyValue').setValue('');
+      this.triggerFrom.reset();
     }, (error) => {
       console.debug(`Unable to store trigger: ${error.toString()}`);
       this.alertService.showWarninngNotification("Unable to store trigger!");

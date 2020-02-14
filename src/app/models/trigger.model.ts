@@ -8,6 +8,7 @@
 export class TriggerAction {
   public channel: number;
   public target: string;
+  public message: string;
 }
 
 export enum TriggerActionChannel {
@@ -21,10 +22,8 @@ export enum TriggerActionChannel {
 
 export class TriggerInvocation {
   public id: number;
-  public measurementBuckedId: string;
-  public measurementId: 0;
   public triggerId: number;
-  public timestamp: Date | string;
+  public timestamp: Date;
 }
 
 export class Trigger {
@@ -33,7 +32,6 @@ export class Trigger {
   public upperEdge: Number;
   public keyValue: string;
   public sensorId: string;
-  public message: string;
 
   public actions: TriggerAction[];
   public invocations: TriggerInvocation[];

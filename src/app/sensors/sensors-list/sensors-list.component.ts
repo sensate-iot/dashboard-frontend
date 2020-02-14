@@ -16,8 +16,6 @@ export class SensorsListComponent implements OnInit {
   public sensors: Sensor[];
   public allSensors: Sensor[];
 
-  public disableButtonAddTrigger: boolean;
-
   public form : FormGroup;
   public action : string;
 
@@ -103,8 +101,4 @@ export class SensorsListComponent implements OnInit {
     this.copyMessage(sensor.secret);
     this.alerts.showNotification('Sensor secret copied to clipboard!', 'top-center', 'success');
   }
-
-  public onDetailsClicked(num: number) {
-  }
-
 }

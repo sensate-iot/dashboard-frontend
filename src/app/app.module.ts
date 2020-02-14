@@ -64,6 +64,7 @@ import {ShowActionsDialog} from './sensors/sensor-detail/show-actions.dialog';
 import { LargeChartCardComponent } from './shared/large-chart-card/large-chart-card.component';
 import {DataService} from './services/data.service';
 import {JsonDateInterceptorService} from './services/json-date-interceptor.service';
+import { QueryToolComponent } from './sensors/query-tool/query-tool.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import {JsonDateInterceptorService} from './services/json-date-interceptor.servi
     SensorsListComponent,
     SensorWizardComponent,
     SensorDetailComponent,
-    LargeChartCardComponent
+    LargeChartCardComponent,
+    QueryToolComponent
   ],
   entryComponents: [
     CreateApiKeyDialog,

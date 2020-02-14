@@ -1,9 +1,5 @@
-<h1 mat-dialog-title>Create API key</h1>
+<h1 mat-dialog-title>Create trigger action</h1>
 <div>
-
-
-
-
   <mat-form-field class="input-full-width">
     <mat-label>Select an option</mat-label>
     <mat-select (ngModelChange)="selectChannel()" [(ngModel)]="data.selected" [(value)]="data.selected">
@@ -17,6 +13,12 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-form-field class="input-full-width" color="accent">
+    <textarea cdkTextareaAutosize cdkAutosizeMaxRows="5" cdkAutosizeMinRows="5"
+              [(ngModel)]="data.message" (ngModelChange)="onMessageChanged()"
+              matInput placeholder="Message" name="msg"></textarea>
+  </mat-form-field>
+
   <mat-form-field *ngIf="selectedNumber === 5" class="input-full-width">
     <mat-label>Select an option</mat-label>
     <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
@@ -25,11 +27,11 @@
   </mat-form-field>
 
   <mat-form-field   *ngIf="selectedNumber !== 5" class="input-full-width">
-    <input (ngModelChange)="selectTarget()" matInput placeholder="Name" [disabled]="noTarget" [(ngModel)]="data.target">
+    <input (ngModelChange)="selectTarget()" matInput placeholder="Target" [disabled]="noTarget" [(ngModel)]="data.target">
   </mat-form-field>
 </div>
 <br/>
 <div mat-dialog-actions class="button-footer">
   <button mat-button (click)="onCancelClick()">Cancel</button>
-  <button mat-button [disabled]="!valid" [mat-dialog-close]="data">OK</button>
+  <button mat-button [disabled]="!valid || !hasMessage" [mat-dialog-close]="data">OK</button>
 </div>

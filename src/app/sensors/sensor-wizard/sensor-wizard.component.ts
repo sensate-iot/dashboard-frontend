@@ -1,5 +1,5 @@
-import {Component, OnInit, AfterViewInit, Inject} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators} from '@angular/forms';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {Trigger, TriggerAction} from '../../models/trigger.model';
 import {AlertService} from '../../services/alert.service';
@@ -7,7 +7,7 @@ import {TriggerService} from '../../services/trigger.service';
 import {Router} from '@angular/router';
 import {Sensor} from '../../models/sensor.model';
 import {SensorService} from '../../services/sensor.service';
-import {CreateActionDialog} from '../create-action.dialog';
+import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 declare const $: any;
@@ -74,11 +74,6 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
       keyValue: new FormControl('', [
         Validators.required,
         Validators.minLength(1)
-      ]),
-
-      msg: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4)
       ]),
 
       upperEdge: new FormControl(''),
@@ -242,13 +237,11 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
   createTrigger() {
     let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
     let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
-    const msg = this.triggerFrom.get('msg').value.toString();
     const keyValue = this.triggerFrom.get('keyValue').value.toString();
 
     const trigger = new Trigger();
 
     trigger.keyValue = keyValue;
-    trigger.message = msg;
     trigger.sensorId = this.sensor.internalId;
 
     if(upperRaw.length !== 0) {
@@ -269,7 +262,6 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
 
       this.triggerFrom.get('upperEdge').setValue('');
       this.triggerFrom.get('lowerEdge').setValue('');
-      this.triggerFrom.get('msg').setValue('');
       this.triggerFrom.get('keyValue').setValue('');
     }, (error) => {
       console.debug(`Unable to store trigger: ${error.toString()}`);
@@ -293,8 +285,8 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
     };
 
     const dialog = this.dialog.open(CreateActionDialog, {
-      width: '250px',
-      height: '275px',
+      width: '450px',
+      height: '400px',
       data: data
     });
 
@@ -312,6 +304,8 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
       }
 
       action.channel = +result.selected;
+      action.message = result.message;
+
       this.triggerService.addAction(trigger, action).subscribe((t) => {
         console.debug(`Created action: ${JSON.stringify(t)}`);
       }, (error) => {
@@ -343,11 +337,6 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
   }
 
   public onSubmitClick() {
-    this.router.navigate(['/sensors']);
+    this.router.navigate([`/sensors/${this.sensor.internalId}`]);
   }
-}
-
-export interface ICreateAction {
-  target : string;
-  selected: string;
 }

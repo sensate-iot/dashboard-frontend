@@ -25,6 +25,7 @@
     "@types/chartist": "^0.9.47",
     "ajv": "^6.10.2",
     "chartist": "0.11.4",
+    "chartist-plugin-legend": "^0.6.2",
     "core-js": "^3.6.4",
     "crypto": "^1.0.1",
     "guid-typescript": "^1.0.9",
