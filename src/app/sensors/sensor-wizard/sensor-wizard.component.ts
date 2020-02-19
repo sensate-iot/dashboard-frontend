@@ -10,6 +10,7 @@ import {SensorService} from '../../services/sensor.service';
 import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {NoopScrollStrategy} from '@angular/cdk/overlay';
 declare const $: any;
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
@@ -287,6 +288,7 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
     const dialog = this.dialog.open(CreateActionDialog, {
       width: '450px',
       height: '400px',
+      scrollStrategy: new NoopScrollStrategy(),
       data: data
     });
 

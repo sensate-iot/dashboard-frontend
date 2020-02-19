@@ -11,6 +11,7 @@ import {ApiKeyService} from '../../services/apikey.service';
 import {AlertService} from '../../services/alert.service';
 import {FormGroup} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {NoopScrollStrategy} from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-apikeys',
@@ -138,7 +139,8 @@ export class ApikeysComponent implements OnInit {
     const dialog = this.dialog.open(CreateApiKeyDialog, {
       width: '250px',
       height: '250px',
-      data: data
+      data: data,
+      scrollStrategy: new NoopScrollStrategy()
     });
 
     const sub = dialog.afterClosed().subscribe((result : ICreateApiKey) => {

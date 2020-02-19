@@ -11,6 +11,11 @@ import {environment} from '../../environments/environment';
 import {LoginService} from './login.service';
 import {Measurement} from '../models/measurement.model';
 
+export interface ILocation {
+  longitude: number;
+  latitude: number;
+}
+
 @Injectable()
 export class DataService {
   private  options: {
@@ -26,12 +31,32 @@ export class DataService {
     withCredentials?: boolean;
   };
 
-  public constructor(private http: HttpClient, private login: LoginService) {
+  public constructor(
+    private readonly http: HttpClient,
+    private readonly login: LoginService
+  ) {
   }
 
   public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}&sensorId=${sensorId}&start=${start.toISOString()}&end=${end.toISOString()}`;
+
+    if(limit > 0) {
+      url += `&limit=${limit}`;
+    }
+
+    if(skip > 0) {
+      url += `&skip=${skip}`;
+    }
+
+    return this.http.get<Measurement[]>(url, this.options);
+  }
+
+  public getNear(sensorId: string, start: Date, end: Date, location: ILocation, radius: number, limit: number = 0, skip: number = 0) {
+    const key = this.login.getSysKey();
+    let url = `${environment.dataApiHost}/measurements?key=${key}&sensorId=${sensorId}`+
+      `&start=${start.toISOString()}&end=${end.toISOString()}` +
+      `&longitude=${location.longitude}&latitude=${location.latitude}&radius=${radius}`;
 
     if(limit > 0) {
       url += `&limit=${limit}`;

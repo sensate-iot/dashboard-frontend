@@ -15,6 +15,7 @@ import {DataService} from '../../services/data.service';
 import {Measurement} from '../../models/measurement.model';
 import * as moment from 'moment';
 import {ChartistLegendDataArray} from '../../shared/large-chart-card/large-chart-card.component';
+import {NoopScrollStrategy} from '@angular/cdk/overlay';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -152,6 +153,7 @@ export class SensorDetailComponent implements OnInit {
     const dialog = this.dialog.open(ShowActionsDialog, {
       width: '700px',
       height: '425px',
+      scrollStrategy: new NoopScrollStrategy(),
       data: data
     });
   }
@@ -166,6 +168,7 @@ export class SensorDetailComponent implements OnInit {
     const dialog = this.dialog.open(CreateActionDialog, {
       width: '450px',
       height: '400px',
+      scrollStrategy: new NoopScrollStrategy(),
       data: data
     });
 

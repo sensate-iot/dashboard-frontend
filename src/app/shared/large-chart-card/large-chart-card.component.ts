@@ -32,7 +32,7 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
   private viewDidLoad : boolean = false;
   private chartCreated = false;
 
-  constructor() {
+  public constructor() {
     const tmp = Guid.create().toString();
     this.guid = 'chart_' + tmp.split('-').join('');
     const legend = new ChartistLegend();
@@ -41,36 +41,42 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
   public ngOnInit() {
   }
 
-  public ngOnChanges(changes : SimpleChanges) {
-    if(this.data === undefined) {
-      return;
-    }
-
-    if(!this.chartCreated) {
+  private createOrUpdateChart() {
+    if(!this.chartCreated && this.viewDidLoad && this.data) {
       this.options = this.buildChartOptions(this.data.labels);
       this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
       // this.chart = new Chartist.Line('.ct-chart', this.data, this.options);
       this.startAnimationForLineChart();
       this.chart.update(this.data, this.options);
 
-      this.chartCreated = true;
-    }
+      this.chartCreated = this.data.series.length > 0;
 
-    if(this.viewDidLoad) {
-      // this.chart.update(this.data, this.options);
+    } else {
+      if(this.chart !== undefined && this.data) {
+        this.chart.update(this.data, this.options);
+      }
     }
   }
 
+  public ngOnChanges(changes : SimpleChanges) {
+    if(this.data === undefined) {
+      return;
+    }
+
+    this.createOrUpdateChart();
+  }
+
   public ngAfterViewInit() {
-    // if(this.data) {
-    //   // this.options = this.buildChartOptions(this.data.labels);
-    // } else {
-    //   this.options = {
-    //     height: 400
-    //   }
-    // }
+    if(this.data) {
+      this.options = this.buildChartOptions(this.data.labels);
+    } else {
+      this.options = {
+        height: 400
+      }
+    }
 
     this.viewDidLoad = true;
+    this.createOrUpdateChart();
   }
 
   private buildChartOptions(labels : any[]) {
@@ -92,8 +98,7 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
       showPoint: this.showPoint,
       fullWidth:true,
       plugins: [
-        Chartist.plugins.legend({
-        })
+        Chartist.plugins.legend({ })
       ],
       axisX: {
         labelInterpolationFnc: function(value, index) {

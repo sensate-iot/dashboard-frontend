@@ -65,6 +65,10 @@ import { LargeChartCardComponent } from './shared/large-chart-card/large-chart-c
 import {DataService} from './services/data.service';
 import {JsonDateInterceptorService} from './services/json-date-interceptor.service';
 import { QueryToolComponent } from './sensors/query-tool/query-tool.component';
+import { QueryBuilderDialog } from './sensors/query-builder-dialog/query-builder.dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -94,18 +98,20 @@ import { QueryToolComponent } from './sensors/query-tool/query-tool.component';
     CreateApiKeyComponent,
     CreateApiKeyDialog,
     CreateActionDialog,
+    QueryBuilderDialog,
     ShowActionsDialog,
     ConfirmEmailComponent,
     SensorsListComponent,
     SensorWizardComponent,
     SensorDetailComponent,
     LargeChartCardComponent,
-    QueryToolComponent
+    QueryToolComponent,
   ],
   entryComponents: [
     CreateApiKeyDialog,
     CreateActionDialog,
-    ShowActionsDialog
+    ShowActionsDialog,
+    QueryBuilderDialog
   ],
   imports: [
     RouterModule,
@@ -117,11 +123,14 @@ import { QueryToolComponent } from './sensors/query-tool/query-tool.component';
     BrowserAnimationsModule,
     MatSidenavModule,
     MatListModule,
+    MatIconModule,
+    MatNativeDateModule,
     MatToolbarModule,
     MatButtonModule,
     MatExpansionModule,
     MatDialogModule,
     MatRadioModule,
+    MatDatepickerModule,
     MatTableModule,
     MatSelectModule,
     MatInputModule,
