@@ -3,16 +3,21 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IQueryBuilderInterface} from './query-builder.interface';
 import {Sensor} from '../../models/sensor.model';
 import {SensorService} from '../../services/sensor.service';
-import {FormControl} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import * as moment from 'moment';
+import {Observable} from 'rxjs/internal/Observable';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-query-builder-dialog',
   templateUrl: './query-builder.dialog.html',
   styleUrls: ['./query-builder.dialog.css']
 })
-export class QueryBuilderDialog  {
+export class QueryBuilderDialog implements OnInit {
   public sensors : Sensor[];
+  public filteredSensors: Observable<Sensor[]>;
+
+  public sensorControl: FormControl;
 
   public startTime: FormControl;
   public endTime: FormControl;
@@ -49,6 +54,10 @@ export class QueryBuilderDialog  {
     this.startTime.setValue('00:00:00.000');
     this.endTime.setValue('00:00:00.000');
 
+    this.sensorControl = new FormControl('', [
+      Validators.required
+    ]);
+
     this.latitudeControl = new FormControl({
       value: '',
       disabled: !data.geoQuery
@@ -63,9 +72,35 @@ export class QueryBuilderDialog  {
     });
   }
 
+  public ngOnInit(): void {
+    this.filteredSensors = this.sensorControl.valueChanges.pipe(
+      startWith(''),
+      map((value: string | Sensor) => {
+        let filter = '';
+
+        if(typeof value === "string") {
+          const tmp = value as string;
+          filter = tmp.toLowerCase();
+        } else {
+          const tmp = value as Sensor;
+          filter = tmp.name.toLowerCase();
+        }
+
+        return this.sensors.filter(sensor => sensor.name.toLowerCase().indexOf(filter) === 0);
+      })
+    );
+  }
+
+  public sensorDisplayFn(sensor: Sensor) {
+    return sensor ? sensor.name : undefined;
+  }
 
   private validateForm(): boolean {
     let rv = true;
+
+    if(this.sensorControl.hasError('required')) {
+      rv = false;
+    }
 
     if(this.data.geoQuery) {
       if(+this.latitudeControl.value < QueryBuilderDialog.LatitudeMin ||
@@ -77,8 +112,6 @@ export class QueryBuilderDialog  {
         rv = false;
       }
 
-      console.log("RV: " + rv);
-
       if(+this.longitudeControl.value < QueryBuilderDialog.LongitudeMin ||
         +this.longitudeControl.value > QueryBuilderDialog.LongitudeMax || this.longitudeControl.value === null) {
         this.longitudeControl.setErrors({
@@ -88,8 +121,6 @@ export class QueryBuilderDialog  {
         rv = false;
       }
 
-      console.log("RV: " + rv);
-
       if(this.maxRangeControl.value === null || +this.maxRangeControl.value.toString().length <= 0) {
         this.maxRangeControl.setErrors({
           invalid: true
@@ -97,8 +128,6 @@ export class QueryBuilderDialog  {
 
         rv = false;
       }
-
-      console.log("RV: " + rv);
     }
 
     return rv;
@@ -109,6 +138,9 @@ export class QueryBuilderDialog  {
       return ;
     }
 
+    const sensor = this.sensorControl.value as Sensor;
+    this.data.sensor = sensor.internalId;
+
     const start = moment(this.startTime.value, 'HH:mm:ss.SSS').utc(false).toDate();
     const startDate = this.startControl.value as Date;
     start.setFullYear(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
@@ -116,7 +148,6 @@ export class QueryBuilderDialog  {
     const end = moment(this.endTime.value, 'HH:mm:ss.SSS').utc(false).toDate();
     const endDate = this.endControl.value as Date;
     end.setFullYear(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-
 
     this.data.start = start;
     this.data.end   = end;

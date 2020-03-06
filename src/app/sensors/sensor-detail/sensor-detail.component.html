@@ -24,8 +24,8 @@
             </tr>
             <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
               <td class="mat-cell">{{trigger.keyValue}}</td>
-              <td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>
-              <td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>
+              <td class="mat-cell">{{trigger.lowerEdge !== null ? trigger.lowerEdge : ""}}</td>
+              <td class="mat-cell">{{trigger.upperEdge !== null ? trigger.upperEdge : ""}}</td>
               <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
               <td class="mat-cell">
                 <button mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
@@ -80,6 +80,7 @@
       linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
       boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"
       maxLabels="24"
+      [reset]="resetView"
       [data]="measurementDataToday">
     </app-large-chart-card>
   </div>

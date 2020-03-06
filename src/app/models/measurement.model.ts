@@ -10,15 +10,16 @@ export class GeoJSON {
   coordinates: number[];
 }
 
-export class DataPoint {
+export interface DataPoint {
   unit: string;
   value: number;
-  precision: number;
-  accuracy: number;
+  precision?: number;
+  accuracy?: number;
 }
 
-export class Measurement {
+export interface Measurement {
   timestamp: Date;
+  platformTime: Date;
   location: GeoJSON;
   data: Map<string, DataPoint>;
 }

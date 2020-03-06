@@ -26,6 +26,7 @@ import {SensorWizardComponent} from './sensors/sensor-wizard/sensor-wizard.compo
 import {SensorsListComponent} from './sensors/sensors-list/sensors-list.component';
 import {SensorDetailComponent} from './sensors/sensor-detail/sensor-detail.component';
 import {QueryToolComponent} from './sensors/query-tool/query-tool.component';
+import {MapToolComponent} from './sensors/map-tool/map-tool.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,7 @@ const routes: Routes = [
       {path: 'create', component: SensorWizardComponent, canActivate: [AuthGuard, LockGuard]},
       {path: 'manager', component: SensorsListComponent, canActivate: [AuthGuard, LockGuard]},
       {path: 'query-tool', component: QueryToolComponent, canActivate: [AuthGuard, LockGuard]},
+      {path: 'map-tool', component: MapToolComponent, canActivate: [AuthGuard, LockGuard]},
       {path: ':id', component: SensorDetailComponent, canActivate: [AuthGuard, LockGuard]}
     ]
   },

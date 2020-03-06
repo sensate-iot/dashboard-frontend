@@ -69,6 +69,12 @@ import { QueryBuilderDialog } from './sensors/query-builder-dialog/query-builder
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
+import { MapToolComponent } from './sensors/map-tool/map-tool.component';
+import {LeafletModule} from '@asymmetrik/ngx-leaflet';
+import {GraphService} from './services/graph.service';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {WebSocketService} from './services/websocket.service';
+import {RealTimeDataService} from './services/realtimedata.service';
 
 @NgModule({
   declarations: [
@@ -106,6 +112,7 @@ import {MatIconModule} from '@angular/material/icon';
     SensorDetailComponent,
     LargeChartCardComponent,
     QueryToolComponent,
+    MapToolComponent
   ],
   entryComponents: [
     CreateApiKeyDialog,
@@ -114,6 +121,7 @@ import {MatIconModule} from '@angular/material/icon';
     QueryBuilderDialog
   ],
   imports: [
+    LeafletModule.forRoot(),
     RouterModule,
     BrowserModule,
     FormsModule,
@@ -131,6 +139,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatDialogModule,
     MatRadioModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
     MatTableModule,
     MatSelectModule,
     MatInputModule,
@@ -146,9 +155,12 @@ import {MatIconModule} from '@angular/material/icon';
     LockService,
     AccountService,
     ApiKeyService,
+    RealTimeDataService,
+    WebSocketService,
     AdminService,
     DashBoardService,
     DataService,
+    GraphService,
     AuthGuard,
     LockGuard,
     AlertService,

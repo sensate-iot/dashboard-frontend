@@ -10,7 +10,9 @@
               <h4 class="card-title">Sensor Management</h4>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-3">
-              <mat-slide-toggle>Live data</mat-slide-toggle>
+              <mat-slide-toggle (click)="liveDataToggled($event)"
+                                [disabled]="liveDataElementDisabled"
+                                [(ngModel)]="liveDataEnabled">Live data</mat-slide-toggle>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-1">
               <button (click)="onQueryClick()" mat-mini-fab class="search-btn">
@@ -33,6 +35,7 @@
       linearColor="linear-gradient(60deg, #ffa726, #fb8c00)"
       boxShadow="0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"
       maxLabels="24"
+      [reset]="resetChart"
       [data]="measurementData">
     </app-large-chart-card>
   </div>

@@ -74,11 +74,20 @@ export class UserManagerComponent implements OnInit {
   }
 
   public onSearchClicked() {
-    if(this.searchFieldValue == undefined)
+    if(this.searchFieldValue == undefined) {
       return;
+    }
+
+    if(this.searchFieldValue.length <= 0) {
+      this.admin.getRecentUsers().subscribe(value => {
+        this.form.removeControl('users');
+        this.setUserData(value);
+      });
+
+      return;
+    }
 
     this.admin.findUsers(this.searchFieldValue).subscribe(value => {
-      console.log(value.length);
       this.form.removeControl('users');
       this.setUserData(value);
     });

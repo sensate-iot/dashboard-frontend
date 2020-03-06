@@ -4,11 +4,6 @@ import * as Chartist from 'chartist';
 import * as ChartistLegend from 'chartist-plugin-legend';
 import {Guid} from 'guid-typescript';
 
-export class ChartistLegendDataArray {
-  public name: string;
-  public data: Array<number>;
-}
-
 @Component({
   selector: 'app-large-chart-card',
   templateUrl: './large-chart-card.component.html',
@@ -23,6 +18,7 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
   @Input() boxShadow: string;
   @Input() headerIcon: string;
   @Input() maxLabels: number = 10;
+  @Input() reset: boolean = false;
   @Output() onLabelInterpolation : EventEmitter<any> = new EventEmitter();
 
   private options : ILineChartOptions;
@@ -42,7 +38,7 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   private createOrUpdateChart() {
-    if(!this.chartCreated && this.viewDidLoad && this.data) {
+    if((!this.chartCreated || this.reset) && this.viewDidLoad && this.data) {
       this.options = this.buildChartOptions(this.data.labels);
       this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
       // this.chart = new Chartist.Line('.ct-chart', this.data, this.options);
@@ -53,7 +49,7 @@ export class LargeChartCardComponent implements OnInit, AfterViewInit, OnChanges
 
     } else {
       if(this.chart !== undefined && this.data) {
-        this.chart.update(this.data, this.options);
+        this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
       }
     }
   }

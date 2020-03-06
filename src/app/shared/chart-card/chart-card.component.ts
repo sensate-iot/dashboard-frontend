@@ -2,7 +2,7 @@
  * Chart
  */
 
-import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IChartistData, IChartistLineChart, ILineChartOptions} from 'chartist';
 import * as Chartist from 'chartist';
 import {Guid} from 'guid-typescript';
@@ -24,6 +24,7 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
 
   private options : ILineChartOptions;
   private chart : IChartistLineChart;
+  private chartCreated: boolean;
   public readonly guid : string;
 
   private viewDidLoad : boolean = false;
@@ -31,27 +32,48 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
   constructor() {
     const tmp = Guid.create().toString();
     this.guid = 'chart_' + tmp.split('-').join('');
+    this.chartCreated = false;
   }
 
   public ngOnInit() {
   }
 
-  public ngOnChanges(changes : SimpleChanges) {
-    if(this.data)
+  private createOrUpdateChart() {
+    if(!this.chartCreated && this.viewDidLoad && this.data) {
       this.options = this.buildChartOptions(this.data.labels);
-
-    if(this.viewDidLoad) {
+      this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
+      // this.chart = new Chartist.Line('.ct-chart', this.data, this.options);
+      this.startAnimationForLineChart();
       this.chart.update(this.data, this.options);
+
+      this.chartCreated = this.data.series.length > 0;
+
+    } else {
+      if(this.chart !== undefined && this.data) {
+        this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
+      }
     }
   }
 
+  public ngOnChanges(changes : SimpleChanges) {
+    if(this.data === undefined) {
+      return;
+    }
+
+    this.createOrUpdateChart();
+  }
+
   public ngAfterViewInit() {
-    if(this.data)
+    if(this.data) {
       this.options = this.buildChartOptions(this.data.labels);
+    } else {
+      this.options = {
+        height: 400
+      }
+    }
 
     this.viewDidLoad = true;
-    this.chart = new Chartist.Line('.' + this.guid, this.data, this.options);
-    this.startAnimationForLineChart();
+    this.createOrUpdateChart();
   }
 
   private buildChartOptions(labels : any[]) {
@@ -69,12 +91,18 @@ export class ChartCardComponent implements OnInit, AfterViewInit, OnChanges {
       lineSmooth: interpolation,
       chartPadding: { top: 25, right: 25, bottom: 0, left: 10},
       showPoint: this.showPoint,
+      fullWidth: true,
       axisX: {
         labelInterpolationFnc: function(value, index) {
-          if (index % modulo === 0 && num > max)
-            return null;
+          if(num < max) {
+            return value;
+          }
 
-          return value;
+          if (index % modulo === 0 && num > max) {
+            return value;
+          }
+
+          return null;
         }
       }
     };

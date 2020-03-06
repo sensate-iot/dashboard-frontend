@@ -82,8 +82,7 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
     }, { validator: this.atLeastOneRequired })
   }
 
-  ngOnInit() {
-
+  public ngOnInit() {
     this.name = new FormControl('', [
       Validators.required,
       Validators.minLength(4)
@@ -111,7 +110,7 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
     this.createTriggerForm();
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     const preBtn = <HTMLElement>document.getElementById('preBtn');
     const moveTab = <HTMLElement>document.querySelector('.move-tab');
     const submitBtn = <HTMLElement>document.getElementById('submitBtn');
@@ -133,7 +132,7 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
         if (this.tabIndex === 1) {
           moveTab.style.left = '30vw';
         } else if (this.tabIndex === 2) {
-          moveTab.style.left = '56vw';
+          moveTab.style.left = '57vw';
         }
       }
     });
@@ -164,7 +163,7 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
       moveTab.style.left = screenWidth > 990 ? '20vw' : '30vw';
       // nextBtn.style.visibility = 'visible';
       nextBtn.style.display = 'block';
-      moveTab.innerHTML = 'Account';
+      moveTab.innerHTML = 'Security';
     }else if (this.tabIndex === 1) {
       this.tabIndex--;
       moveTab.style.left = '-1vw';
@@ -190,11 +189,11 @@ export class SensorWizardComponent implements OnInit, AfterViewInit {
       this.tabIndex++;
       moveTab.style.left = screenWidth > 990 ? '20vw' : '30vw';
       preBtn.style.visibility = 'visible';
-      moveTab.innerHTML = 'Account';
+      moveTab.innerHTML = 'Security';
     } else if (this.tabIndex === 1) {
       this.tabIndex++;
-      moveTab.style.left = screenWidth > 990 ? '42vw' : '56vw';
-      moveTab.innerHTML = 'Address';
+      moveTab.style.left = screenWidth > 990 ? '42vw' : '57vw';
+      moveTab.innerHTML = 'Triggers';
       // nextBtn.style.visibility = 'hidden';
       nextBtn.style.display = 'none';
       submitBtn.style.display = 'block';

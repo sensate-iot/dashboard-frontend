@@ -10,7 +10,7 @@ export const ROUTES = [
     ]
   },
   {
-    path: '#admin-tools', id: 'admin-tools', admin: true, title: 'Administrative tools', icon: 'apps', children: [
+    path: '#admin-tools', id: 'admin-tools', admin: true, title: 'Administrative tools', icon: 'vpn_key', children: [
       {path: '/admin/home', title: 'Dashboard', icon: 'DB'},
       {path: '/admin/user-manager', title: 'User manager', icon: 'UM'}
     ]
@@ -22,5 +22,6 @@ export const ROUTES = [
     ]
   },
   {path: '/sensors/query-tool', title: 'Query Tool', icon: 'code', admin: false, children: null},
+  {path: '/sensors/map-tool', title: 'Map Tool', icon: 'map', admin: false, children: null},
   {path: '/profile', title: 'User Profile', admin: false, icon: 'person', children: null}
 ];

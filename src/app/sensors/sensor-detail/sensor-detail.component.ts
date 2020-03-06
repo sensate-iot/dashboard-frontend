@@ -14,8 +14,8 @@ import {ShowActionsDialog} from './show-actions.dialog';
 import {DataService} from '../../services/data.service';
 import {Measurement} from '../../models/measurement.model';
 import * as moment from 'moment';
-import {ChartistLegendDataArray} from '../../shared/large-chart-card/large-chart-card.component';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
+import {ChartistLegendDataArray} from '../../services/graph.service';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -38,10 +38,11 @@ export class SensorDetailComponent implements OnInit {
   public triggerFrom: FormGroup;
   public matcher: TriggerEdgeMatcher;
 
+  public sensors: Sensor[];
   public triggers: Trigger[];
   public sensor: Sensor;
 
-  public sensors: Sensor[];
+  public resetView: boolean;
 
   public constructor(
     private fb: FormBuilder, private triggerService: TriggerService,
@@ -53,6 +54,7 @@ export class SensorDetailComponent implements OnInit {
 
     this.sensor = new Sensor();
     this.sensor.name = "";
+    this.resetView = true;
   }
 
   public ngOnInit() {
@@ -141,7 +143,7 @@ export class SensorDetailComponent implements OnInit {
 
       upperEdge: new FormControl(''),
       lowerEdge: new FormControl('')
-    }, { validator: this.atLeastOneRequired })
+    }, { validator: this.atLeastOneRequired });
   }
 
   public showActions(idx: number) {
