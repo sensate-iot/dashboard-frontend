@@ -59,41 +59,20 @@ export class QueryBuilderDialog implements OnInit {
     ]);
 
     this.latitudeControl = new FormControl({
-      value: '',
+      value: data.latitude,
       disabled: !data.geoQuery
     });
     this.longitudeControl = new FormControl({
-      value: '',
+      value: data.longitude,
       disabled: !data.geoQuery
     });
     this.maxRangeControl = new FormControl({
-      value: '',
+      value: data.max,
       disabled: !data.geoQuery
     });
   }
 
-  public ngOnInit(): void {
-    this.filteredSensors = this.sensorControl.valueChanges.pipe(
-      startWith(''),
-      map((value: string | Sensor) => {
-        let filter = '';
-
-        if(typeof value === "string") {
-          const tmp = value as string;
-          filter = tmp.toLowerCase();
-        } else {
-          const tmp = value as Sensor;
-          filter = tmp.name.toLowerCase();
-        }
-
-        return this.sensors.filter(sensor => sensor.name.toLowerCase().indexOf(filter) === 0);
-      })
-    );
-  }
-
-  public sensorDisplayFn(sensor: Sensor) {
-    return sensor ? sensor.name : undefined;
-  }
+  public ngOnInit(): void { }
 
   private validateForm(): boolean {
     let rv = true;
@@ -138,8 +117,13 @@ export class QueryBuilderDialog implements OnInit {
       return ;
     }
 
-    const sensor = this.sensorControl.value as Sensor;
-    this.data.sensor = sensor.internalId;
+    if(this.data.multi) {
+      this.data.result = this.sensorControl.value as Sensor[];
+    } else {
+      const sensor = this.sensorControl.value as Sensor;
+      this.data.result = [];
+      this.data.result.push(sensor);
+    }
 
     const start = moment(this.startTime.value, 'HH:mm:ss.SSS').utc(false).toDate();
     const startDate = this.startControl.value as Date;

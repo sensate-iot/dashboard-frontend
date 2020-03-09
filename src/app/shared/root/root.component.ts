@@ -29,6 +29,7 @@ export class RootComponent implements OnInit, OnDestroy {
     this.backgroundColor = this.settings.getSidebarColor();
     this.accounts.checkPhoneConfirmed();
     this.accounts.checkAndStoreRoles();
+    this.auth.setUserId();
   }
 
   ngOnInit() {

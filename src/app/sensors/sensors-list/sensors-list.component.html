@@ -44,9 +44,19 @@
                   <td>{{descText(sensor.description)}}</td>
                   <td>{{sensor.createdAt.toLocaleDateString()}}</td>
                   <td>
-                    <button mat-mini-fab class="search-btn" (click)="onShowClicked(i)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
+                    <button mat-mini-fab
+                            [disabled]="isLinkedSensor(sensor)"
+                            class="search-btn" (click)="onShowClicked(i)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
                     <button mat-mini-fab class="search-btn" routerLink="/sensors/{{sensor.internalId}}"><i class="material-icons" style="font-size:20px;">details</i></button>
-                    <button mat-mini-fab class="search-btn" (click)="onDeleteClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                    <button mat-mini-fab class="search-btn"
+                            *ngIf="!isLinkedSensor(sensor)"
+                            (click)="onLinkSensorClicked(sensor)"><i class="material-icons" style="font-size:20px;">link</i></button>
+                    <button mat-mini-fab class="search-btn"
+                            *ngIf="!isLinkedSensor(sensor)"
+                            (click)="onDeleteClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                    <button mat-mini-fab class="search-btn"
+                            *ngIf="isLinkedSensor(sensor)"
+                            (click)="unUnlinkClicked(sensor, i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
                   </td>
                 </tr>
                 </tbody>

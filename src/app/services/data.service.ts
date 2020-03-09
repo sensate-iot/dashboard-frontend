@@ -10,10 +10,22 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {LoginService} from './login.service';
 import {Measurement} from '../models/measurement.model';
+import {longStackSupport} from 'q';
 
 export interface ILocation {
   longitude: number;
   latitude: number;
+}
+
+interface Filter {
+  sensorIds: string[];
+  start: string;
+  end: string;
+  skip: number;
+  limit: number;
+  longitude: number;
+  latitude: number;
+  radius: number;
 }
 
 @Injectable()
@@ -35,6 +47,48 @@ export class DataService {
     private readonly http: HttpClient,
     private readonly login: LoginService
   ) {
+  }
+
+  public getFromMany(sensorId: string[], start: Date, end: Date, limit: number = 0, skip: number = 0) {
+    const key = this.login.getSysKey();
+    let url = `${environment.dataApiHost}/measurements?key=${key}`;
+    const filter : Filter = {
+      end: end.toISOString(),
+      start: start.toISOString(),
+      latitude: null,
+      longitude: null,
+      radius: null,
+      limit: limit,
+      skip: skip,
+      sensorIds: sensorId
+    };
+
+    return this.http.post<Measurement[]>(url, JSON.stringify(filter), this.options);
+  }
+
+  public getNearFromMany(
+    sensorIds: string[],
+    start: Date,
+    end: Date,
+    location: ILocation,
+    radius: number,
+    limit: number = 0,
+    skip: number = 0
+  ) {
+    const key = this.login.getSysKey();
+    let url = `${environment.dataApiHost}/measurements?key=${key}`;
+    const filter : Filter = {
+      end: end.toISOString(),
+      start: start.toISOString(),
+      latitude: location.latitude,
+      longitude: location.longitude,
+      radius: radius,
+      limit: limit,
+      skip: skip,
+      sensorIds: sensorIds
+    };
+
+    return this.http.post<Measurement[]>(url, JSON.stringify(filter), this.options);
   }
 
   public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0) {

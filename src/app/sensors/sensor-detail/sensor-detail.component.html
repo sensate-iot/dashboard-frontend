@@ -28,8 +28,8 @@
               <td class="mat-cell">{{trigger.upperEdge !== null ? trigger.upperEdge : ""}}</td>
               <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
               <td class="mat-cell">
-                <button mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
-                <button mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
+                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
+                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
                 <button mat-mini-fab class="icon-button" (click)="showActions(i)"><i class="material-icons" style="font-size:20px;">pageview</i></button>
               </td>
             </tr>
@@ -42,7 +42,8 @@
 
             <div class="col-md-2 col-xs-12 vcenter">
               <mat-form-field class="input-full-width" color="accent" >
-                <input matInput type="text" placeholder="Key value" name="name" formControlName="keyValue">
+                <input matInput type="text" placeholder="Key value"
+                       name="name" formControlName="keyValue">
                 <mat-error *ngIf="triggerFrom.get('keyValue').hasError('required')">
                   Enter a valid datapoint key value!
                 </mat-error>
@@ -50,28 +51,65 @@
             </div>
             <div class="col-md-4 col-xs-12 vcenter">
               <mat-form-field class="input-full-width" color="accent" >
-                <input matInput type="text" placeholder="Lower edge" [errorStateMatcher]="matcher" name="lowerEdge" formControlName="lowerEdge">
+                <input matInput type="text" placeholder="Lower edge"
+                       [errorStateMatcher]="matcher" name="lowerEdge" formControlName="lowerEdge">
                 <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
                   Lower or edge required!
                 </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-4 col-xs-12 vcenter">
-              <mat-form-field class="input-full-width" color="accent" >
-                <input matInput type="text" placeholder="Upper edge" [errorStateMatcher]="matcher" name="upperEdge" formControlName="upperEdge">
+              <mat-form-field class="input-full-width" color="accent">
+                <input matInput type="text" placeholder="Upper edge"
+                       [errorStateMatcher]="matcher" name="upperEdge" formControlName="upperEdge">
                 <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
                   Lower or upper edge required!
                 </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-1 col-xs-4 vcenter-nomargin">
-              <button mat-mini-fab class="search-btn" (click)="createTrigger()">
+              <button mat-mini-fab
+                      [disabled]="isLinkedSensor(sensor)"
+                      class="search-btn" (click)="createTrigger()">
                 <i class="material-icons" style="font-size:20px;">add</i></button>
             </div>
           </form>
       </div>
     </div>
   </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <i class="material-icons">link</i>
+      </div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-sm-4">
+            <h4 class="card-title">Sensor Links</h4>
+          </div>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+          <div class="table-responsive" style="height:150px;overflow:auto;padding-left:15px;padding-right:15px">
+            <table class="mat-table table">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell">User</th>
+                <th class="mat-header-cell">Actions</th>
+              </tr>
+              <tr class="mat-row" *ngFor="let link of links; let i = index">
+                <td class="mat-cell">{{link.userId}}</td>
+                <td class="mat-cell">
+                  <button  mat-mini-fab class="icon-button" (click)="removeLink(link, i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="row">
     <app-large-chart-card

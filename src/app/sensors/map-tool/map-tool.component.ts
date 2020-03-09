@@ -39,8 +39,7 @@ type MapLocationTuple = [number, number, number];
 })
 export class MapToolComponent implements OnInit, OnDestroy {
   public options: any;
-  public sensorName: string;
-  private selectedSensor: Sensor;
+  private selectedSensors: Sensor[];
   public measurementData: IMapDataStats;
   public searchKeys: ISearchKey[];
   public keySet: Map<string, ISearchKey>;
@@ -173,7 +172,11 @@ export class MapToolComponent implements OnInit, OnDestroy {
     this.connnectToLiveData();
   }
 
-  public onMapReady(map) {
+  public onMapClick(click: any) {
+    this.onQueryClick(click.latlng.lat, click.latlng.lng, true);
+  }
+
+  public onMapReady(map: any) {
     const locations: MapLocationTuple[] = [];
 
     // @ts-ignore
@@ -188,18 +191,19 @@ export class MapToolComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onQueryClick() {
+  public onQueryClick(lat: number = null, lng: number = null, geoQuery: boolean = false) {
     const data : IQueryBuilderInterface = {
       sensors: this.sensors,
       end: new Date(),
       start: new Date(),
-      latitude:null,
-      longitude:null,
-      geoQuery: false,
+      latitude:lat,
+      longitude:lng,
+      geoQuery: geoQuery,
       limit:null,
-      max:null,
-      sensor: null,
-      skip: null
+      max: geoQuery ? 300 : null,
+      result: null,
+      skip: null,
+      multi: true
     };
 
     const dialog = this.dialog.open(QueryBuilderDialog, {
@@ -216,21 +220,21 @@ export class MapToolComponent implements OnInit, OnDestroy {
 
       this.query = result;
 
-      if(this.selectedSensor !== null && this.selectedSensor !== undefined && this.liveDataEnabled) {
+      if(this.selectedSensors !== null && this.selectedSensors !== undefined &&
+        this.selectedSensors.length > 0 && this.liveDataEnabled) {
         this.liveDataEnabled = false;
-        this.liveDataService.unsubscribe(this.selectedSensor);
+        this.liveDataService.unsubscribeMany(this.selectedSensors);
       }
 
-      for(let sensor of this.sensors) {
-        if(sensor.internalId === result.sensor) {
-          this.selectedSensor = sensor;
-          break;
-        }
-      }
+      this.selectedSensors = result.result;
 
-      if(this.selectedSensor === null) {
+      if(this.selectedSensors === null || this.selectedSensors.length <= 0) {
         return;
       }
+
+      const sensors = this.selectedSensors.map((sensor) => {
+        return sensor.internalId;
+      });
 
       if(result.geoQuery) {
         const location: ILocation = {
@@ -238,19 +242,17 @@ export class MapToolComponent implements OnInit, OnDestroy {
           latitude: result.latitude
         };
 
-        this.dataService.getNear(result.sensor, result.start, result.end, location, result.max, result.limit, result.skip)
+        this.dataService.getNearFromMany(sensors, result.start, result.end, location, result.max, result.limit, result.skip)
           .subscribe((result) => {
             this.measurementData = this.graphService.createMapData(result);
-            this.sensorName = this.selectedSensor.name;
 
             this.graphService.normalizeMapData(this.measurementData);
             this.liveDataElementDisabled = false;
             this.generateMapData();
           });
       } else {
-        this.dataService.get(result.sensor, result.start, result.end, result.limit, result.skip).subscribe((result) => {
+        this.dataService.getFromMany(sensors, result.start, result.end, result.limit, result.skip).subscribe((result) => {
           this.measurementData = this.graphService.createMapData(result);
-          this.sensorName = this.selectedSensor.name;
 
           this.graphService.normalizeMapData(this.measurementData);
           this.liveDataElementDisabled = false;
@@ -363,9 +365,9 @@ export class MapToolComponent implements OnInit, OnDestroy {
 
   public liveDataToggled(event: any) {
     if(!this.liveDataEnabled) {
-      this.liveDataService.subscribe(this.selectedSensor);
+      this.liveDataService.subcribeMany(this.selectedSensors);
     } else {
-      this.liveDataService.unsubscribe(this.selectedSensor);
+      this.liveDataService.unsubscribeMany(this.selectedSensors);
     }
   }
 }

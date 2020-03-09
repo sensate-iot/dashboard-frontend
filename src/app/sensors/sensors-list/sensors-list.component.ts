@@ -5,6 +5,9 @@ import {AlertService} from '../../services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import {Sensor} from '../../models/sensor.model';
 import {SensorService} from '../../services/sensor.service';
+import {AddSensorLinkDialog} from './add-sensor-link-dialog/add-sensor-link-dialog.component';
+import {SensorLink} from '../../models/sensorlink.model';
+import {LoginService} from '../../services/login.service';
 
 @Component({
   selector: 'app-sensors-list',
@@ -20,6 +23,7 @@ export class SensorsListComponent implements OnInit {
   public action : string;
 
   public constructor(private keys : ApiKeyService, private sensorService: SensorService,
+              private readonly login: LoginService,
               private alerts : AlertService, private dialog: MatDialog) {
     this.form = new FormGroup({});
   }
@@ -61,6 +65,37 @@ export class SensorsListComponent implements OnInit {
     });
   }
 
+  public isLinkedSensor(sensor: Sensor) {
+    return this.sensorService.isLinkedSensor(sensor);
+  }
+
+  public onLinkSensorClicked(sensor: Sensor) {
+    const link: SensorLink = {
+      sensorId: sensor.internalId,
+      userId: ""
+    };
+
+    const dialog = this.dialog.open(AddSensorLinkDialog, {
+      width: '400px',
+      height: '225px',
+      data: link
+    });
+
+    dialog.afterClosed().subscribe((result: SensorLink) => {
+      if(result.userId.length <= 0) {
+        return;
+      }
+
+      this.sensorService.linkSensor(result.userId, result.sensorId).subscribe(() => {
+        this.alerts.showSuccessNotification("Sensor linked!")
+      }, error => {
+        this.alerts.showWarninngNotification(`Unable to link sensor: ${error.error.message}`);
+        console.debug("Unable to link sensors: ");
+        console.debug(error);
+      });
+    });
+  }
+
   private copyMessage(val: string){
     let selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
@@ -92,6 +127,20 @@ export class SensorsListComponent implements OnInit {
     }, (error) => {
       console.log(`Unable to delete sensors: ${JSON.stringify(error)}`);
       this.alerts.showWarninngNotification("Unable to delete sensor!");
+    });
+  }
+
+  public unUnlinkClicked(sensor: Sensor, idx: number) {
+    const link: SensorLink = {
+      userId: this.login.getJwt().email,
+      sensorId: sensor.internalId
+    };
+
+    this.sensorService.deleteSensorLink(link).subscribe(() => {
+      this.sensors.splice(idx, 1);
+    }, error => {
+      console.debug("Unable to unlink sensor: ");
+      console.debug(error);
     });
   }
 

@@ -28,6 +28,14 @@ export class RealTimeDataService {
     });
   }
 
+  public subcribeMany(sensors: Sensor[]) {
+    sensors.forEach(sensor => this.subscribe(sensor));
+  }
+
+  public unsubscribeMany(sensors: Sensor[]) {
+    sensors.forEach(sensor => this.unsubscribe(sensor));
+  }
+
   public subscribe(sensor: Sensor) {
     const request: ISensorAuth = {
       sensorId: sensor.internalId.toString(),

@@ -4,6 +4,7 @@
       <div class="card-header">
         <i class="material-icons">assignment</i>
       </div>
+
       <div class="card-content">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-8">
@@ -22,6 +23,26 @@
 
         </div>
 
+        <div class="row map"
+             leaflet [leafletOptions]="options"
+             (leafletMapReady)="onMapReady($event)"
+             (leafletClick)="onMapClick($event)"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <i class="material-icons">assignment</i>
+      </div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-8">
+            <h4 class="card-title">Data Filter</h4>
+          </div>
+        </div>
         <div class="row">
           <div class="table-responsive" style="height:200px;overflow:auto;padding-left:15px;padding-right:15px">
             <table class="mat-table table">
@@ -82,21 +103,5 @@
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="card">
-      <div class="card-header">
-        <i class="material-icons">assignment</i>
-      </div>
-      <div class="card-content">
-        <div class="row map"
-             leaflet [leafletOptions]="options"
-             (leafletMapReady)="onMapReady($event)"
-        >
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 

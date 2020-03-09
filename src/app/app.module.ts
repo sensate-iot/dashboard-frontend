@@ -75,6 +75,8 @@ import {GraphService} from './services/graph.service';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {WebSocketService} from './services/websocket.service';
 import {RealTimeDataService} from './services/realtimedata.service';
+import { SensorSelectComponent } from './sensors/sensor-select/sensor-select.component';
+import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dialog/add-sensor-link-dialog.component';
 
 @NgModule({
   declarations: [
@@ -112,13 +114,16 @@ import {RealTimeDataService} from './services/realtimedata.service';
     SensorDetailComponent,
     LargeChartCardComponent,
     QueryToolComponent,
-    MapToolComponent
+    MapToolComponent,
+    SensorSelectComponent,
+    AddSensorLinkDialog
   ],
   entryComponents: [
     CreateApiKeyDialog,
     CreateActionDialog,
     ShowActionsDialog,
-    QueryBuilderDialog
+    QueryBuilderDialog,
+    AddSensorLinkDialog
   ],
   imports: [
     LeafletModule.forRoot(),

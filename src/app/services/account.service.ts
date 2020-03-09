@@ -32,6 +32,10 @@ export class AccountService {
     }));
   }
 
+  public getAllUsers() {
+    return this.http.get<string[]>(environment.authApiHost + '/accounts/list');
+  }
+
   public confirmRegistration(userId: string, token: string) {
     const url = `${environment.authApiHost}/accounts/confirm/${userId}/${token}`;
     const headers = new HttpHeaders().set('Content-Type', 'application/json')

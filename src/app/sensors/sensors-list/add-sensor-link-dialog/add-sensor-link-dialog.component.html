@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Query builder</h1>
+<mat-form-field class="input-full-width">
+  <input type="text"
+         placeholder="Select target user"
+         aria-label="Users"
+         matInput
+         name="user"
+         [formControl]="emailControl"
+         [matAutocomplete]="auto" />
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+    <mat-option *ngFor="let email of filteredEmails | async" [value]="email">
+      {{email}}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-error *ngIf="emailControl.hasError('required')">
+    Enter a valid sensor name!
+  </mat-error>
+</mat-form-field>
+
+<div mat-dialog-actions class="button-footer">
+  <button mat-button (click)="onCancelClick()" >Cancel</button>
+  <button mat-button (click)="onOkClick()">OK</button>
+</div>

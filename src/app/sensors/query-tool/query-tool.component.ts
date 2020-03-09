@@ -118,8 +118,9 @@ export class QueryToolComponent implements OnInit, OnDestroy {
       geoQuery: false,
       limit:null,
       max:null,
-      sensor: null,
-      skip: null
+      result: null,
+      skip: null,
+      multi: false
     };
 
     const dialog = this.dialog.open(QueryBuilderDialog, {
@@ -140,7 +141,7 @@ export class QueryToolComponent implements OnInit, OnDestroy {
       }
 
       for(let sensor of this.sensors) {
-        if(sensor.internalId === result.sensor) {
+        if(sensor.internalId === result.result[0].internalId) {
           this.selectedSensor = sensor;
           break;
         }
@@ -158,7 +159,7 @@ export class QueryToolComponent implements OnInit, OnDestroy {
 
         this.resetChart = true;
 
-        this.dataService.getNear(result.sensor, result.start, result.end, location, result.max, result.limit, result.skip)
+        this.dataService.getNear(result.result[0].internalId, result.start, result.end, location, result.max, result.limit, result.skip)
           .subscribe((result) => {
             this.measurements = result;
             this.measurementData = this.graphService.createGraphData(result);
@@ -170,7 +171,7 @@ export class QueryToolComponent implements OnInit, OnDestroy {
         });
 
       } else {
-        this.dataService.get(result.sensor, result.start, result.end, result.limit, result.skip).subscribe((result) => {
+        this.dataService.get(result.result[0].internalId, result.start, result.end, result.limit, result.skip).subscribe((result) => {
           this.measurements = result;
           this.measurementData = this.graphService.createGraphData(result);
           this.sensorName = this.selectedSensor.name;

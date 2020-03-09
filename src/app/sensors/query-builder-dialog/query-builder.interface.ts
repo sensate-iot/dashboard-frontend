@@ -9,7 +9,7 @@ import {Sensor} from '../../models/sensor.model';
 
 export interface IQueryBuilderInterface {
   sensors: Sensor[];
-  sensor: string;
+  result: Sensor[];
   start: Date;
   end: Date;
   longitude: number;
@@ -18,4 +18,5 @@ export interface IQueryBuilderInterface {
   max: number;
   skip: number;
   limit: number;
+  multi: boolean;
 }

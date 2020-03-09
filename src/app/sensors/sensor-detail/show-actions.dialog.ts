@@ -6,6 +6,7 @@ import {AlertService} from '../../services/alert.service';
 import {Sensor} from '../../models/sensor.model';
 
 export interface IShowActions {
+  disableActions: boolean;
   trigger: Trigger;
   sensors: Sensor[];
 }

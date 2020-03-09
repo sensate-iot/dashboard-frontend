@@ -14,17 +14,33 @@ import {Observable} from 'rxjs';
 import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
 import {ApiKeyService} from './apikey.service';
+import {AccountService} from './account.service';
 
 @Injectable()
 export class LoginService {
   private readonly options: any;
-  constructor(private http : HttpClient, private keys: ApiKeyService) {
+  constructor(private http : HttpClient,
+              private readonly accounts: AccountService,
+              private readonly keys: ApiKeyService) {
     this.options = {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     };
   }
 
+  public setUserId() {
+    if(!this.isLoggedIn() || localStorage.getItem('userId') !== null) {
+      return;
+    }
+
+    this.accounts.getUser().subscribe(user => {
+      localStorage.setItem("userId", user.id);
+    });
+  }
+
+  public getUserId() {
+    return localStorage.getItem("userId");
+  }
 
   public login(user: string, password: string) {
     const body = {
@@ -32,6 +48,7 @@ export class LoginService {
       "Password": password
     };
 
+    localStorage.removeItem('userId');
     LockService.createLock(user, password);
     return this.http.post<Jwt>(environment.authApiHost + '/tokens/request', body, {
       observe: 'response',
@@ -65,6 +82,7 @@ export class LoginService {
         localStorage.removeItem('jwt');
         localStorage.removeItem('phone-confirmed');
         localStorage.removeItem('roles');
+        localStorage.removeItem('userId');
         localStorage.removeItem('syskey');
         localStorage.removeItem('admin');
         resolve();
@@ -98,6 +116,7 @@ export class LoginService {
       localStorage.removeItem('phone-confirmed');
       localStorage.removeItem('roles');
       localStorage.removeItem('admin');
+      localStorage.removeItem('userId');
       localStorage.removeItem('syskey');
     }, () => {
       console.log('Unable to logout on server!');
@@ -105,6 +124,7 @@ export class LoginService {
       localStorage.removeItem('jwt');
       localStorage.removeItem('roles');
       localStorage.removeItem('admin');
+      localStorage.removeItem('userId');
       localStorage.removeItem('phone-confirmed');
       localStorage.removeItem('syskey');
     });
@@ -169,6 +189,7 @@ export class LoginService {
   public resetLogin() {
     LockService.destroyLock();
     localStorage.removeItem('jwt');
+    localStorage.removeItem('userId');
     localStorage.removeItem('syskey');
   }
 

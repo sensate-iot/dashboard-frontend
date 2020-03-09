@@ -1,24 +1,11 @@
 <h1 mat-dialog-title>Query builder</h1>
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12">
-      <mat-form-field class="input-full-width">
-        <input type="text"
-               placeholder="Select sensor"
-               aria-label="Sensor"
-               matInput
-               [formControl]="sensorControl"
-               [matAutocomplete]="auto" />
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="sensorDisplayFn">
-          <mat-option *ngFor="let sensor of filteredSensors | async" [value]="sensor">
-            {{sensor.name}}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-error *ngIf="sensorControl.hasError('required')">
-          Enter a valid sensor name!
-        </mat-error>
-      </mat-form-field>
-    </div>
+    <!--<div class="col-xs-12 col-md-12 col-lg-12">-->
+      <app-sensor-select
+        [multi]="data.multi"
+        [form]="sensorControl"
+        [sensors]="sensors" ></app-sensor-select>
   </div>
 
   <div class="row">

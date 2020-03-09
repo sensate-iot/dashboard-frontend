@@ -12,7 +12,9 @@
       <td class="mat-cell" style="padding-bottom: 1%">{{action.target ? getTargetName(action) : ''}}</td>
       <td class="mat-cell" style="padding-bottom: 1%">{{action.message ? action.message : ''}}</td>
       <td class="mat-cell" style="padding-bottom: 1%">
-        <button mat-mini-fab class="icon-button" (click)="removeAction(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
+        <button mat-mini-fab class="icon-button" (click)="removeAction(i)" [disabled]="data.disableActions">
+          <i class="material-icons" style="font-size:20px;">clear</i>
+        </button>
       </td>
     </tr>
   </table>

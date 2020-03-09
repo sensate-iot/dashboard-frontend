@@ -1,21 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Trigger, TriggerAction} from '../../models/trigger.model';
 import {TriggerService} from '../../services/trigger.service';
-import {ActivatedRoute, Data} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {SensorService} from '../../services/sensor.service';
 import {flatMap} from 'rxjs/operators';
 import {Sensor} from '../../models/sensor.model';
 import {AlertService} from '../../services/alert.service';
 import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
-import {ShowActionsDialog} from './show-actions.dialog';
+import {IShowActions, ShowActionsDialog} from './show-actions.dialog';
 import {DataService} from '../../services/data.service';
 import {Measurement} from '../../models/measurement.model';
 import * as moment from 'moment';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {ChartistLegendDataArray} from '../../services/graph.service';
+import {SensorLink} from '../../models/sensorlink.model';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -41,6 +42,7 @@ export class SensorDetailComponent implements OnInit {
   public sensors: Sensor[];
   public triggers: Trigger[];
   public sensor: Sensor;
+  public links: SensorLink[];
 
   public resetView: boolean;
 
@@ -65,6 +67,18 @@ export class SensorDetailComponent implements OnInit {
       return this.sensorService.get(sensorId);
     }), flatMap(sensor => {
       this.sensor = sensor;
+      if(!this.isLinkedSensor(sensor)) {
+        this.triggerFrom.get('keyValue').enable();
+        this.triggerFrom.get('upperEdge').enable();
+        this.triggerFrom.get('lowerEdge').enable();
+      }
+
+      this.sensorService.getSensorLinks(sensor).subscribe(links => {
+        this.links = links;
+      }, error => {
+        this.alertService.showWarninngNotification("Unable to fetch sensor links!");
+      });
+
       return this.triggerService.getAllFor(sensor.internalId);
     })).subscribe(triggers => {
       this.triggers = triggers;
@@ -85,6 +99,10 @@ export class SensorDetailComponent implements OnInit {
     }, (error) => {
       console.debug("Unable to fetch sensor data: " + JSON.stringify(error));
     });
+  }
+
+  public isLinkedSensor(sensor: Sensor) {
+    return this.sensorService.isLinkedSensor(sensor);
   }
 
   private createGraphData(measurements: Measurement[]) {
@@ -136,20 +154,21 @@ export class SensorDetailComponent implements OnInit {
   private createTriggerForm() {
     this.matcher = new TriggerEdgeMatcher();
     this.triggerFrom = this.fb.group({
-      keyValue: new FormControl('', [
+      keyValue: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}, [
         Validators.required,
         Validators.minLength(1)
       ]),
 
-      upperEdge: new FormControl(''),
-      lowerEdge: new FormControl('')
+      upperEdge: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}),
+      lowerEdge: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}),
     }, { validator: this.atLeastOneRequired });
   }
 
   public showActions(idx: number) {
-    const data = {
+    const data: IShowActions = {
       trigger: this.triggers[idx],
-      sensors: this.sensors
+      sensors: this.sensors,
+      disableActions: this.isLinkedSensor(this.sensor)
     };
 
     const dialog = this.dialog.open(ShowActionsDialog, {
@@ -255,5 +274,13 @@ export class SensorDetailComponent implements OnInit {
     }, (error) => {
       console.warn(`Unable to remove trigger: ${error.toString()}`);
     });
+  }
+
+  public removeLink(link: SensorLink, idx: number) {
+    this.sensorService.deleteSensorLink(link).subscribe(() => {
+      this.links.splice(idx, 1);
+    }, error => {
+      this.alertService.showWarninngNotification("Unable to remove link!");
+    })
   }
 }

@@ -11,10 +11,11 @@ import {Sensor} from '../models/sensor.model';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {LoginService} from './login.service';
+import {SensorLink} from '../models/sensorlink.model';
 
 @Injectable()
 export class SensorService {
-  private options: any;
+  private readonly options: any;
 
   public constructor(private http: HttpClient, private login: LoginService) {
     this.options = {
@@ -47,9 +48,41 @@ export class SensorService {
     );
   }
 
+  public getSensorLinks(sensor: Sensor) {
+    const url = `${environment.networkApiHost}/sensors/links?sensorId=${sensor.internalId}&key=${this.login.getSysKey()}`;
+    return this.http.get<SensorLink[]>(url);
+  }
+
+  public deleteSensorLink(link: SensorLink) {
+    const url = `${environment.networkApiHost}/sensors/links?key=${this.login.getSysKey()}`;
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(link)
+    };
+
+    return this.http.delete(url, options);
+  }
+
+  public isLinkedSensor(sensor: Sensor) {
+    return sensor.owner !== this.login.getUserId();
+  }
+
   public delete(sensor: Sensor) {
     const url = `${environment.networkApiHost}/sensors/${sensor.internalId}?key=${this.login.getSysKey()}`;
     return this.http.delete(url, this.options);
+  }
+
+  public linkSensor(userId: string, sensorId: string) {
+    const url = `${environment.networkApiHost}/sensors/links?key=${this.login.getSysKey()}`;
+    const data = {
+      userId: userId,
+      sensorId: sensorId
+    };
+
+    return this.http.post(url, JSON.stringify(data), this.options);
   }
 
   public get(id: string) {
