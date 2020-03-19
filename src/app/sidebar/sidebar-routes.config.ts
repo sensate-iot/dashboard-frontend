@@ -12,7 +12,8 @@ export const ROUTES = [
   {
     path: '#admin-tools', id: 'admin-tools', admin: true, title: 'Administrative tools', icon: 'vpn_key', children: [
       {path: '/admin/home', title: 'Dashboard', icon: 'DB'},
-      {path: '/admin/user-manager', title: 'User manager', icon: 'UM'}
+      {path: '/admin/user-manager', title: 'User manager', icon: 'UM'},
+      {path: '/admin/audit-logs', title: 'Audit logs', icon: 'AL'}
     ]
   },
   {

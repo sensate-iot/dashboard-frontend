@@ -59,7 +59,7 @@ const routes: Routes = [
     path: 'admin', component: RootComponent, children: [
       {path: 'home', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
       {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
-      {path: 'auditlogs', component: AuditlogComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
+      {path: 'audit-logs', component: AuditlogComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
     ]
   },
   {path: '*', redirectTo: '/dashboard', canActivate: [AuthGuard]}

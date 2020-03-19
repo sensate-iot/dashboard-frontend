@@ -10,7 +10,7 @@ import {Injectable} from '@angular/core';
 import {LoginService} from './login.service';
 import {ISensorAuth, IWebSocketRequest} from '../models/realtimedata.model';
 import {Sensor} from '../models/sensor.model';
-import sha256 from 'crypto-js/sha256';
+import * as sha from 'sha.js';
 
 @Injectable()
 export class RealTimeDataService {
@@ -44,8 +44,9 @@ export class RealTimeDataService {
     };
 
 
-    const hash = sha256(JSON.stringify(request));
-    request.sensorSecret = hash.toString();
+    const stream = sha('sha256');
+    stream.end(JSON.stringify(request));
+    request.sensorSecret = stream.read().toString('hex');
 
     const subscribeRequest: IWebSocketRequest<ISensorAuth> = {
       request: "subscribe",
@@ -62,7 +63,7 @@ export class RealTimeDataService {
       timestamp: new Date().toISOString()
     };
 
-    const hash = sha256(JSON.stringify(request));
+    const hash = sha(JSON.stringify(request));
     request.sensorSecret = hash.toString();
 
     const subscribeRequest: IWebSocketRequest<ISensorAuth> = {
