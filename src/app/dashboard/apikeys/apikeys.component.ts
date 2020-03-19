@@ -5,13 +5,14 @@
  * @email  dev@bietje.net
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ApiKey, ApiKeyType} from '../../models/apikey.model';
 import {ApiKeyService} from '../../services/apikey.service';
 import {AlertService} from '../../services/alert.service';
 import {FormGroup} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-apikeys',
@@ -19,37 +20,72 @@ import {NoopScrollStrategy} from '@angular/cdk/overlay';
   styleUrls: ['./apikeys.component.css']
 })
 export class ApikeysComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   public searchFieldValue : string;
   private allKeys : ApiKey[];
   public apiKeys : ApiKey[];
+  public shownKeys: ApiKey[];
 
   public form : FormGroup;
   public action : string;
 
-  constructor(private keys : ApiKeyService, private alerts : AlertService, private dialog: MatDialog) {
+  public pageOptions =  [10,25,100,200];
+  public pageSize: number;
+  public length: number;
+
+  public constructor(private keys : ApiKeyService, private alerts : AlertService, private dialog: MatDialog) {
     this.form = new FormGroup({});
+    this.shownKeys = [];
+    this.apiKeys = [];
+    this.allKeys = [];
+    this.pageSize = this.pageOptions[0];
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.keys.getAllKeys().subscribe(keys => {
-      this.apiKeys = keys;
+      this.apiKeys = [];
       this.allKeys = keys;
+
+      keys.forEach(key => {
+        if(key.revoked) {
+          return;
+        }
+
+        this.apiKeys.push(key);
+      });
+
+      this.paginate();
     }, error => {
       this.apiKeys = [];
+      this.paginate();
       this.alerts.showNotification('Unable to fetch API keys!', 'top-center', 'warning');
     });
   }
 
+  public onPaginate(event: any) {
+    this.pageSize = event.pageSize;
+    this.paginate();
+  }
+
+  public paginate() {
+    this.shownKeys = this.apiKeys.slice(this.paginator.pageIndex * this.pageSize).slice(0, this.pageSize);
+  }
+
   public onSearchClicked() {
-    const query = this.searchFieldValue;
+    const query = this.searchFieldValue.toLowerCase();
     const keys : ApiKey[] = [];
 
-    this.apiKeys.forEach(key => {
-      if(key.name.toLowerCase().includes(query.toLowerCase()))
+    this.allKeys.forEach(key => {
+      if(key.name.toLowerCase().includes(query)) {
         keys.push(key);
+      }
     });
 
+
+    this.paginator.firstPage();
     this.apiKeys = keys;
+    this.paginate();
   }
 
   private copyMessage(val: string){
@@ -67,6 +103,7 @@ export class ApikeysComponent implements OnInit {
   }
 
   public onSubmitClicked() {
+    this.paginator.firstPage();
     let keys : ApiKey[] = [];
 
     switch(this.action) {
@@ -91,6 +128,16 @@ export class ApikeysComponent implements OnInit {
         });
         break;
 
+      case "rev":
+        this.allKeys.forEach(key => {
+          if(key.revoked) {
+            keys.push(key);
+          }
+        });
+
+        keys = this.apiKeys.concat(keys);
+        break;
+
       case "no-rev":
         this.apiKeys.forEach(key => {
           if(!key.revoked)
@@ -110,10 +157,11 @@ export class ApikeysComponent implements OnInit {
     }
 
     this.apiKeys = keys;
+    this.paginate();
   }
 
   public onRevokeClicked(idx : number) {
-    const key = this.apiKeys[idx];
+    const key = this.shownKeys[idx];
 
     this.keys.revoke(key.id).subscribe(() => {
       key.revoked = true;
@@ -124,7 +172,7 @@ export class ApikeysComponent implements OnInit {
   }
 
   public onShowClicked(num : number) {
-    const key = this.apiKeys[num];
+    const key = this.shownKeys[num];
     this.copyMessage(key.apiKey);
     this.alerts.showNotification('API key copied to clipboard!', 'top-center', 'success');
   }

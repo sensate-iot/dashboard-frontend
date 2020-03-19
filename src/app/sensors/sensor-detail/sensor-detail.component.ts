@@ -94,8 +94,8 @@ export class SensorDetailComponent implements OnInit {
       this.alertService.showWarninngNotification("Unable to load sensor data!");
     });
 
-    this.sensorService.find().subscribe((sensors) => {
-      this.sensors = sensors;
+    this.sensorService.all(true).subscribe((sensors) => {
+      this.sensors = sensors.values;
     }, (error) => {
       console.debug("Unable to fetch sensor data: " + JSON.stringify(error));
     });

@@ -12,6 +12,7 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {LoginService} from './login.service';
 import {SensorLink} from '../models/sensorlink.model';
+import {PaginationResult} from '../models/paginationresult.model';
 
 @Injectable()
 export class SensorService {
@@ -92,20 +93,13 @@ export class SensorService {
     }));
   }
 
-  public find(name: string = '') {
-    let url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}`;
+  public all(link = true, skip = 0, limit = 0) {
+    const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}&skip=${skip}&limit=${limit}&link=${link}`;
+    return this.http.get<PaginationResult<Sensor>>(url);
+  }
 
-    if(name !== null && name.length > 0) {
-      url = `${url}&name=${name}`;
-    }
-
-    return this.http.get<Sensor[]>(url).pipe(map(value => {
-      value.forEach(entry => {
-        const date = entry.createdAt as string;
-        entry.createdAt = new Date(Date.parse(date));
-      });
-
-      return value;
-    }));
+  public find(name: string, skip = 0, limit = 0) {
+    const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}&name=${name}&skip=${skip}&limit=${limit}`;
+    return this.http.get<PaginationResult<Sensor>>(url);
   }
 }

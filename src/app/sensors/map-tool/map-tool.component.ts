@@ -161,8 +161,8 @@ export class MapToolComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.createSearchKeyForm();
 
-    this.sensorService.find().subscribe(sensors => {
-      this.sensors = sensors;
+    this.sensorService.all().subscribe(sensors => {
+      this.sensors = sensors.values;
     }, error => {
       this.alertService.showWarninngNotification("Unable to fetch sensors!");
       console.debug("Unable to fetch sensors:");

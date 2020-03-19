@@ -7,10 +7,10 @@
         </div>
         <div class="card-content">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <h4 class="card-title">API key management</h4>
             </div>
-            <div class="col-sm-8 search">
+            <div class="col-sm-9 search">
               <div class="right-part">
               <table class="hdr-table">
                 <tr>
@@ -20,6 +20,7 @@
                         <mat-option value="all">Show all keys</mat-option>
                         <mat-option value="no-sys">Hide system keys</mat-option>
                         <mat-option value="no-user">Hide user keys</mat-option>
+                        <mat-option value="rev">Show revoked keys</mat-option>
                         <mat-option value="no-rev">Hide revoked keys</mat-option>
                         <mat-option value="no-sensors">Hide sensor keys</mat-option>
                       </mat-select>
@@ -29,11 +30,13 @@
                   </td>
 
                   <td class="hdr-table-td ">
+                    <form>
                       <mat-form-field color="#ff0000">
                         <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
                       </mat-form-field>
-                      <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+                      <button mat-mini-fab type="submit" class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
                       <button mat-mini-fab class="add-btn" (click)="createNewKeyClicked()"><i class="material-icons" style="font-size:18px;">add</i></button>
+                    </form>
                   </td>
                 </tr>
               </table>
@@ -55,7 +58,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let key of apiKeys; let i = index">
+                <tr *ngFor="let key of shownKeys; let i = index">
                   <td>{{i+1}}</td>
                   <td>{{key.name}}</td>
                   <td>{{key.readOnly ? "Read-only" : "Read/Write"}}</td>
@@ -71,6 +74,13 @@
               </table>
             </form>
 
+          </div>
+          <div class="row">
+            <mat-paginator [length]="apiKeys.length"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="pageOptions"
+                           (page)="onPaginate($event)">
+            </mat-paginator>
           </div>
         </div>
       </div>

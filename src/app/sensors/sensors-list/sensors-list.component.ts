@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {ApiKeyService} from '../../services/apikey.service';
 import {AlertService} from '../../services/alert.service';
@@ -8,6 +8,7 @@ import {SensorService} from '../../services/sensor.service';
 import {AddSensorLinkDialog} from './add-sensor-link-dialog/add-sensor-link-dialog.component';
 import {SensorLink} from '../../models/sensorlink.model';
 import {LoginService} from '../../services/login.service';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-sensors-list',
@@ -15,9 +16,14 @@ import {LoginService} from '../../services/login.service';
   styleUrls: ['./sensors-list.component.css']
 })
 export class SensorsListComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public pageOptions =  [10,25,100,200];
+  public pageSize: number;
+  public pageIndex: number;
+  public count: number;
+
   public searchFieldValue : string;
   public sensors: Sensor[];
-  public allSensors: Sensor[];
 
   public form : FormGroup;
   public action : string;
@@ -26,15 +32,32 @@ export class SensorsListComponent implements OnInit {
               private readonly login: LoginService,
               private alerts : AlertService, private dialog: MatDialog) {
     this.form = new FormGroup({});
+    this.pageSize = this.pageOptions[0];
+    this.pageIndex = 0;
   }
 
   private fetchSensors() {
-    this.sensorService.find().subscribe((sensors) => {
-      this.allSensors = sensors;
-      this.sensors = sensors;
-    }, error1 => {
-      this.alerts.showWarninngNotification("Unable to fetch sensors!");
-    });
+    if(this.searchFieldValue === undefined || this.searchFieldValue.length <= 0) {
+      this.sensorService.all(true, this.pageIndex * this.pageSize, this.pageSize).subscribe((sensors) => {
+        this.sensors = sensors.values;
+        this.count = sensors.count;
+      }, error1 => {
+        this.alerts.showWarninngNotification("Unable to fetch sensors!");
+      });
+    } else {
+      this.sensorService.find(this.searchFieldValue, this.pageIndex * this.pageSize, this.pageSize).subscribe((sensors) => {
+        this.sensors = sensors.values;
+        this.count = sensors.count;
+      }, error1 => {
+        this.alerts.showWarninngNotification("Unable to fetch sensors!");
+      });
+    }
+  }
+
+  public onPaginate(event: any) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.fetchSensors();
   }
 
   public ngOnInit() {
@@ -50,19 +73,8 @@ export class SensorsListComponent implements OnInit {
   }
 
   public onSearchClicked() {
-    const query = this.searchFieldValue;
-
-    if(query.length === 0) {
-      this.sensors = this.allSensors;
-      return;
-    }
-
-    this.sensors = new Array<Sensor>();
-
-    this.allSensors.forEach(sensor => {
-      if(sensor.name.toLowerCase().includes(query.toLowerCase()))
-        this.sensors.push(sensor);
-    });
+    this.paginator.firstPage();
+    this.fetchSensors();
   }
 
   public isLinkedSensor(sensor: Sensor) {
@@ -82,6 +94,10 @@ export class SensorsListComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe((result: SensorLink) => {
+      if(result === null || result === undefined) {
+        return;
+      }
+
       if(result.userId.length <= 0) {
         return;
       }

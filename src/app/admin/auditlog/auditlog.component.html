@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <i class="material-icons">assignment</i>
+      </div>
+      <div class="card-content">
+        <div class="row">
+          <div class="col-lg-2 col-xs-12">
+            <h4 class="card-title">Audit logs</h4>
+          </div>
+          <div class="col-lg-2 col-xs-12">
+            <mat-form-field class="input-full-width">
+              <mat-label>Request method</mat-label>
+              <mat-select [formControl]="methodSelectControl">
+                <mat-option *ngFor="let option of methods" [value]="option.method">{{option.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4 col-xs-12">
+            <form>
+              <mat-form-field class="search-field" color="#ff0000">
+                <input [(ngModel)]="emailFieldValue" name="searchField" matInput type="search" placeholder="Enter email">
+              </mat-form-field>
+              <button mat-mini-fab class="search-btn" (click)="onSearchClicked()">
+                <i class="material-icons" style="font-size:18px;">search</i>
+              </button>
+            </form>
+          </div>
+          <div class="col-lg-4 col-xs-12">
+            <form>
+              <mat-form-field class="search-field" color="#ff0000">
+                <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Enter query">
+              </mat-form-field>
+              <button mat-mini-fab class="search-btn" (click)="onSearchClicked()">
+                <i class="material-icons" style="font-size:18px;">search</i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+          <table mat-table [dataSource]="logs" class="none">
+            <ng-container matColumnDef="method">
+              <th mat-header-cell *matHeaderCellDef>Method</th>
+              <td mat-cell *matCellDef="let element">{{getMethodText(element.method)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="route">
+              <th class="route" mat-header-cell *matHeaderCellDef>Route</th>
+              <td class="route" mat-cell *matCellDef="let element">{{element.route}}</td>
+            </ng-container>
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef>Address</th>
+              <td mat-cell *matCellDef="let element">{{element.address}}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>User</th>
+              <td mat-cell *matCellDef="let element">{{getUserText(element)}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayCols"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayCols;"></tr>
+          </table>
+        </div>
+        <div class="row">
+          <mat-paginator [length]="length"
+                         [pageSize]="pageSize"
+                         [pageSizeOptions]="pageOptions"
+                         (page)="paginate($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -49,7 +49,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-4 col-xs-12 vcenter">
+            <div class="col-md-3 col-xs-12 vcenter">
               <mat-form-field class="input-full-width" color="accent" >
                 <input matInput type="text" placeholder="Lower edge"
                        [errorStateMatcher]="matcher" name="lowerEdge" formControlName="lowerEdge">
@@ -58,7 +58,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-4 col-xs-12 vcenter">
+            <div class="col-md-3 col-xs-12 vcenter">
               <mat-form-field class="input-full-width" color="accent">
                 <input matInput type="text" placeholder="Upper edge"
                        [errorStateMatcher]="matcher" name="upperEdge" formControlName="upperEdge">
@@ -67,8 +67,9 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-1 col-xs-4 vcenter-nomargin">
-              <button mat-mini-fab
+            <div class="col-md-3 col-xs-4 vcenter-nomargin">
+              <mat-slide-toggle>Text trigger</mat-slide-toggle>
+              <button mat-mini-fab style="margin-left:5%"
                       [disabled]="isLinkedSensor(sensor)"
                       class="search-btn" (click)="createTrigger()">
                 <i class="material-icons" style="font-size:20px;">add</i></button>

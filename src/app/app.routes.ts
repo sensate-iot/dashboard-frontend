@@ -27,6 +27,7 @@ import {SensorsListComponent} from './sensors/sensors-list/sensors-list.componen
 import {SensorDetailComponent} from './sensors/sensor-detail/sensor-detail.component';
 import {QueryToolComponent} from './sensors/query-tool/query-tool.component';
 import {MapToolComponent} from './sensors/map-tool/map-tool.component';
+import {AuditlogComponent} from './admin/auditlog/auditlog.component';
 
 const routes: Routes = [
   {
@@ -57,8 +58,8 @@ const routes: Routes = [
   {
     path: 'admin', component: RootComponent, children: [
       {path: 'home', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
-      {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
-
+      {path: 'user-manager', component: UserManagerComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},
+      {path: 'auditlogs', component: AuditlogComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]}
     ]
   },
   {path: '*', redirectTo: '/dashboard', canActivate: [AuthGuard]}

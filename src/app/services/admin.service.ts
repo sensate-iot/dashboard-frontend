@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {TimeSeriesGraphNode} from '../models/timeseries-graph-node.model';
 import {User} from '../models/user.model';
+import {PaginationResult} from '../models/paginationresult.model';
 
 @Injectable()
 export class AdminService {
@@ -28,19 +29,14 @@ export class AdminService {
     }));
   }
 
-  public findUsers(email : string) {
+  public findUsers(email : string, skip = 0, limit = 0) {
     const data = {
       query: email
     };
 
-    return this.http.post<User[]>(environment.authApiHost + '/admin/find-users', data).pipe(map(value => {
-      value.forEach(entry => {
-        const raw = entry.registeredAt as any;
-        entry.registeredAt = new Date(Date.parse(raw));
-      });
-      return value;
-    }));
+    return this.http.post<PaginationResult<User>>(`${environment.authApiHost}/admin/find-users?skip=${skip}&limit=${limit}`, data);
   }
+
 
   public getAdminDashboard() {
     return this.http.get<AdminDashboard>(environment.dashboardApiHost + '/dashboard/admin').pipe(map(value => {

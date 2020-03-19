@@ -77,6 +77,9 @@ import {WebSocketService} from './services/websocket.service';
 import {RealTimeDataService} from './services/realtimedata.service';
 import { SensorSelectComponent } from './sensors/sensor-select/sensor-select.component';
 import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dialog/add-sensor-link-dialog.component';
+import { AuditlogComponent } from './admin/auditlog/auditlog.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {AuditlogService} from './services/auditlog.service';
 
 @NgModule({
   declarations: [
@@ -116,7 +119,8 @@ import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dial
     QueryToolComponent,
     MapToolComponent,
     SensorSelectComponent,
-    AddSensorLinkDialog
+    AddSensorLinkDialog,
+    AuditlogComponent
   ],
   entryComponents: [
     CreateApiKeyDialog,
@@ -134,6 +138,7 @@ import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dial
     HttpClientModule,
     Routing,
     BrowserAnimationsModule,
+    MatPaginatorModule,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
@@ -155,6 +160,7 @@ import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dial
   ],
   providers: [
     LoginService,
+    AuditlogService,
     TriggerService,
     SensorService,
     LockService,

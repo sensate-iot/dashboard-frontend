@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {RoleUpdate, User} from '../../models/user.model';
 import {AdminService} from '../../services/admin.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
 import {Subject} from 'rxjs/internal/Subject';
+import {MatPaginator} from '@angular/material/paginator';
 
 interface RoleIconMap {
   [role:string] : string;
@@ -33,12 +34,18 @@ class UserData extends User {
   styleUrls: ['./user-manager.component.css']
 })
 export class UserManagerComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   public users : UserData[];
   public form : FormGroup;
   public controls : FormControl[];
   public actionControl : FormControl;
   public searchFieldValue : string;
   public selectAll : boolean;
+
+  public pageOptions =  [10,25,100,200];
+  public pageSize: number;
+  public length: number;
 
   private readonly roleIcons : RoleIconMap;
 
@@ -55,7 +62,11 @@ export class UserManagerComponent implements OnInit {
     this.selectAll = false;
 
     this.users = [];
+    this.length = 0;
+    this.pageSize = 10;
+
     this.admin.getRecentUsers().subscribe(value => {
+      this.length = value.length;
       this.setUserData(value);
     });
 
@@ -73,12 +84,13 @@ export class UserManagerComponent implements OnInit {
     this.users = users.map(user => new UserData(user, this.userToIcon(user)));
   }
 
-  public onSearchClicked() {
-    if(this.searchFieldValue == undefined) {
-      return;
-    }
+  public onPaginate(event: any) {
+    this.pageSize = event.pageSize;
+    this.onSearchClicked();
+  }
 
-    if(this.searchFieldValue.length <= 0) {
+  public onSearchClicked() {
+    if(this.searchFieldValue === undefined || this.searchFieldValue.length <= 0) {
       this.admin.getRecentUsers().subscribe(value => {
         this.form.removeControl('users');
         this.setUserData(value);
@@ -87,9 +99,10 @@ export class UserManagerComponent implements OnInit {
       return;
     }
 
-    this.admin.findUsers(this.searchFieldValue).subscribe(value => {
+    this.admin.findUsers(this.searchFieldValue, this.paginator.pageIndex * this.pageSize, this.pageSize).subscribe(value => {
       this.form.removeControl('users');
-      this.setUserData(value);
+      this.setUserData(value.values);
+      this.length = value.count;
     });
   }
 

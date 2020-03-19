@@ -30,8 +30,8 @@ export class CreateActionDialog {
                      @Inject(MAT_DIALOG_DATA) public data: ICreateAction,
                      private sensorService: SensorService) {
 
-    this.sensorService.find().subscribe((sensors) => {
-      this.sensors = sensors;
+    this.sensorService.all(false).subscribe((sensors) => {
+      this.sensors = sensors.values;
     });
 
     this.valid = false;

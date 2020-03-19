@@ -64,6 +64,13 @@
             </form>
 
           </div>
+          <div class="row">
+            <mat-paginator [length]="count"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="pageOptions"
+                           (page)="onPaginate($event)">
+            </mat-paginator>
+          </div>
         </div>
       </div>
     </div>

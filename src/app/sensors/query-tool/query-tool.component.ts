@@ -76,8 +76,8 @@ export class QueryToolComponent implements OnInit, OnDestroy {
       series: data
     };
 
-    this.sensorService.find().subscribe((sensors) => {
-      this.sensors = sensors;
+    this.sensorService.all().subscribe((sensors) => {
+      this.sensors = sensors.values;
     }, (error) => {
       console.debug(`Unable to load sensors:`);
       console.debug(error);

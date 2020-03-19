@@ -19,7 +19,7 @@
                   <mat-form-field color="#ff0000">
                     <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
                   </mat-form-field>
-                  <button mat-mini-fab class="search-btn" (click)="onSearchClicked()">
+                  <button  mat-mini-fab class="search-btn" (click)="onSearchClicked()">
                     <i class="material-icons" style="font-size:18px;">search</i>
                   </button>
                 </form>
@@ -70,6 +70,13 @@
               </table>
             </form>
 
+          </div>
+          <div class="row">
+            <mat-paginator [length]="length"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="pageOptions"
+                           (page)="onPaginate($event)">
+            </mat-paginator>
           </div>
         </div>
       </div>
