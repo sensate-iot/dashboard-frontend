@@ -80,6 +80,7 @@ import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dial
 import { AuditlogComponent } from './admin/auditlog/auditlog.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {AuditlogService} from './services/auditlog.service';
+import {CookieService} from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -159,6 +160,7 @@ import {AuditlogService} from './services/auditlog.service';
 
   ],
   providers: [
+    CookieService,
     LoginService,
     AuditlogService,
     TriggerService,

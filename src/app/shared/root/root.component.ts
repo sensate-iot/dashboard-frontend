@@ -25,14 +25,15 @@ export class RootComponent implements OnInit, OnDestroy {
 
   constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
               private settings : SettingsService, private alerts : AlertService, private router : Router) {
-    this.id = settings.getSidebarImageIndex();
-    this.backgroundColor = this.settings.getSidebarColor();
-    this.accounts.checkPhoneConfirmed();
-    this.accounts.checkAndStoreRoles();
-    this.auth.setUserId();
   }
 
-  ngOnInit() {
+  public async ngOnInit() {
+    this.auth.readAuthCookie();
+    this.id = this.settings.getSidebarImageIndex();
+    this.backgroundColor = this.settings.getSidebarColor();
+    this.accounts.checkPhoneConfirmed();
+    await this.accounts.checkAndStoreRoles();
+    this.auth.setUserId();
   }
 
   ngOnDestroy() {

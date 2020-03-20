@@ -160,12 +160,23 @@ export class AccountService {
     return confirmed == 'true';
   }
 
-  public checkAndStoreRoles() : void {
-    this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles').subscribe(value => {
-      localStorage.setItem('roles', JSON.stringify(value));
+  public getRoles() {
+    return this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles');
+  }
 
-      if(value.roles.indexOf('Administrators') >= 0)
-        localStorage.setItem('admin', 'true');
+  public checkAndStoreRoles() {
+    return new Promise<void>((resolve, reject) => {
+      this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles').subscribe(value => {
+        localStorage.setItem('roles', JSON.stringify(value));
+
+        if(value.roles.indexOf('Administrators') >= 0) {
+          localStorage.setItem('admin', 'true');
+        }
+
+        resolve();
+      }, () => {
+        resolve();
+      });
     });
   }
 

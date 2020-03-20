@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     if(!this.auth.isLoggedIn()) {
       this.auth.login(uname, pass).subscribe(data => {
         data.body.email = this.email.value;
-        LoginService.setSession(data.body);
+        this.auth.setSession(data.body);
 
         this.accounts.rawCheckPhoneConfirmed().subscribe((result) => {
           /* Forward the user to the phone confirmation screen if a phone number has not yet been confirmed.. */

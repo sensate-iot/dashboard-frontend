@@ -15,17 +15,23 @@ import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
 import {ApiKeyService} from './apikey.service';
 import {AccountService} from './account.service';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable()
 export class LoginService {
+  private readonly host: string;
   private readonly options: any;
-  constructor(private http : HttpClient,
-              private readonly accounts: AccountService,
-              private readonly keys: ApiKeyService) {
+  private static AuthCookie = 'SensateIoTAuth';
+
+  public constructor(private http : HttpClient,
+                     private readonly accounts: AccountService,
+                     private readonly cookies: CookieService,
+                     private readonly keys: ApiKeyService) {
     this.options = {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     };
+    this.host = window.location.hostname.replace(/^[^.]+\./g, "");
   }
 
   public setUserId() {
@@ -40,6 +46,22 @@ export class LoginService {
 
   public getUserId() {
     return localStorage.getItem("userId");
+  }
+
+  public readAuthCookie() {
+    const data = this.cookies.get(LoginService.AuthCookie);
+
+    if(data === null || data.length <= 0) {
+      return;
+    }
+
+    const json = atob(data);
+    const jwt = JSON.parse(json);
+
+    localStorage.setItem('jwt', json);
+    localStorage.setItem('syskey', jwt.systemApiKey);
+
+    return jwt;
   }
 
   public login(user: string, password: string) {
@@ -57,13 +79,13 @@ export class LoginService {
   }
 
   public isLoggedIn() : boolean {
-    const jwt = this.getJwt();
+    let jwt = this.readAuthCookie();
 
-    if(jwt != null) {
-      return jwt.refreshToken != null;
+    if(jwt === null || jwt === undefined) {
+      return false;
     }
 
-    return false;
+    return jwt.refreshToken != null;
   }
 
   public revokeAllTokens() {
@@ -78,16 +100,11 @@ export class LoginService {
       this.http.delete(environment.authApiHost + '/tokens/revoke-all', {
         headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
       }).subscribe(() => {
-        LockService.destroyLock();
-        localStorage.removeItem('jwt');
-        localStorage.removeItem('phone-confirmed');
-        localStorage.removeItem('roles');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('syskey');
-        localStorage.removeItem('admin');
+        this.resetLogin();
         resolve();
       }, () => {
         console.debug("Unable to revoke all tokens!");
+        this.resetLogin();
         reject();
       });
     });
@@ -110,23 +127,10 @@ export class LoginService {
     this.http.delete(environment.authApiHost + '/tokens/revoke/' + jwt.refreshToken, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
     }).subscribe(() => {
-
-      LockService.destroyLock();
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('phone-confirmed');
-      localStorage.removeItem('roles');
-      localStorage.removeItem('admin');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('syskey');
+      this.resetLogin();
     }, () => {
-      console.log('Unable to logout on server!');
-      LockService.destroyLock();
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('roles');
-      localStorage.removeItem('admin');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('phone-confirmed');
-      localStorage.removeItem('syskey');
+      console.debug('Unable to logout on server!');
+      this.resetLogin();
     });
   }
 
@@ -154,7 +158,7 @@ export class LoginService {
     jwt.refreshToken = refresh;
     jwt.jwtToken = token;
     jwt.expiresInMinutes = expiry;
-    LoginService.setSession(jwt);
+    this.setSession(jwt);
   }
 
   public getJwtToken() : string {
@@ -189,8 +193,13 @@ export class LoginService {
   public resetLogin() {
     LockService.destroyLock();
     localStorage.removeItem('jwt');
+    localStorage.removeItem('roles');
+    localStorage.removeItem('admin');
     localStorage.removeItem('userId');
+    localStorage.removeItem('phone-confirmed');
     localStorage.removeItem('syskey');
+    console.debug(`Removing cookie!`);
+    this.cookies.delete(LoginService.AuthCookie, null, this.host);
   }
 
   public getSysKey() {
@@ -205,7 +214,7 @@ export class LoginService {
     LockService.destroyLock();
   }
 
-  public static setSession(data : Jwt) {
+  public setSession(data : Jwt) {
     const expire = moment().add(data.expiresInMinutes, 'minutes');
     const jwtExpire = moment().add(data.jwtExpiresInMinutes, 'minutes');
 
@@ -214,5 +223,8 @@ export class LoginService {
 
     localStorage.setItem('jwt', JSON.stringify(data));
     localStorage.setItem('syskey', data.systemApiKey);
+
+    const cookie = btoa(JSON.stringify(data));
+    this.cookies.set(LoginService.AuthCookie, cookie, expire.toDate(), null, this.host);
   }
 }
