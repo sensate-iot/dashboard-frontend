@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoginService} from '../../services/login.service';
 import {Router} from '@angular/router';
 import {SettingsService} from '../../services/settings.service';
+import {AppsService} from '../../services/apps.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,9 @@ import {SettingsService} from '../../services/settings.service';
 export class HeaderComponent implements OnInit {
   mobile : boolean;
 
-  constructor(private auth : LoginService, private router : Router, private settings : SettingsService) { }
+  constructor(private auth : LoginService,
+              private apps: AppsService,
+              private router : Router, private settings : SettingsService) { }
 
   ngOnInit() {
     this.mobile = this.settings.isMobile();
@@ -22,8 +25,9 @@ export class HeaderComponent implements OnInit {
     return this.auth.isLoggedIn();
   }
 
-  logoutClicked() {
-    this.auth.logout();
-    this.router.navigate(['login']);
+  public logoutClicked() {
+    this.auth.logout().then(() => {
+      this.apps.forward('login');
+    });
   }
 }

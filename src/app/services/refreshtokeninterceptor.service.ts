@@ -15,13 +15,14 @@ import {throwError, EMPTY} from 'rxjs';
 import {Router} from '@angular/router';
 import {TokenReply} from '../models/tokenreply.model';
 import {catchError, filter, finalize, flatMap, switchMap, take} from 'rxjs/operators';
+import {AppsService} from './apps.service';
 
 @Injectable()
 export class RefreshTokenInterceptorService implements HttpInterceptor {
   private isRefreshingToken : boolean;
   private tokenSubject : BehaviorSubject<string>;
 
-  constructor(private auth : LoginService, private router : Router) {
+  constructor(private auth : LoginService, private router : Router, private apps: AppsService) {
     this.isRefreshingToken = false;
     this.tokenSubject = new BehaviorSubject<string>(null);
   }
@@ -47,14 +48,12 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
           case 403:
             this.logout();
             console.debug('Logged out..!');
-            this.router.navigate(['login']);
+            this.apps.forward('login');
             return EMPTY;
 
           default:
             console.debug('JWT interception error!');
-            //this.router.navigate(['login']);
             return throwError(error);
-            //return EMPTY;
         }
       }
     }));
@@ -88,6 +87,5 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
 
   private logout() {
     this.auth.resetLogin();
-    //this.router.navigate(['login']);
   }
 }

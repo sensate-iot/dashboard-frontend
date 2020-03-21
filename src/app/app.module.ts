@@ -81,6 +81,7 @@ import { AuditlogComponent } from './admin/auditlog/auditlog.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {AuditlogService} from './services/auditlog.service';
 import {CookieService} from 'ngx-cookie-service';
+import {AppsService} from './services/apps.service';
 
 @NgModule({
   declarations: [
@@ -161,6 +162,7 @@ import {CookieService} from 'ngx-cookie-service';
   ],
   providers: [
     CookieService,
+    AppsService,
     LoginService,
     AuditlogService,
     TriggerService,

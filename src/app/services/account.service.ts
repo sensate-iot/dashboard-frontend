@@ -38,7 +38,8 @@ export class AccountService {
 
   public confirmRegistration(userId: string, token: string) {
     const url = `${environment.authApiHost}/accounts/confirm/${userId}/${token}`;
-    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
     return this.http.get(url, {
       observe: 'response',
       headers: headers
@@ -196,21 +197,23 @@ export class AccountService {
     });
   }
 
-  public checkPhoneConfirmed() : void {
-    this.rawCheckPhoneConfirmed().pipe(map(res => {
-      if(res.body.errorCode != 200)
-        return 'false';
+  public checkPhoneConfirmed() {
+    return new Promise<boolean>(resolve => {
+        this.rawCheckPhoneConfirmed().pipe(map(res => {
+          if (res.errorCode != 200)
+            return 'false';
 
-      return res.body.message;
-    })).subscribe(res => {
-      localStorage.setItem('phone-confirmed', res.toString());
-    });
+          return res.message;
+        })).subscribe(res => {
+          localStorage.setItem('phone-confirmed', res.toString());
+          console.log(res);
+          resolve(res.toString() === 'true');
+        }, () => { resolve(true); });
+      }
+    );
   }
 
   public rawCheckPhoneConfirmed() {
-    return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    });
+    return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed');
   }
 }

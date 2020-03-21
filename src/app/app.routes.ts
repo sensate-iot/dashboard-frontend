@@ -35,8 +35,8 @@ const routes: Routes = [
       {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard, LockGuard]},
       {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard, LockGuard]},
       {path: 'api-keys', component: ApikeysComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'confirm-email-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]},
-      {path: 'confirm-email-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
+      {path: 'confirm-update-email', component: ConfirmUpdateEmailComponent, canActivate: [AuthGuard, LockGuard]},
+      {path: 'confirm-phone-number', component: ConfirmPhoneNumberComponent, canActivate: [AuthGuard, LockGuard]}
     ]
   },
   {
@@ -53,8 +53,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'reset-password/:email', component: ForgotPasswordComponent},
   {path: 'reset-password', component: ForgotPasswordComponent},
-  {path: 'lock', component: LockComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
+  {path: 'lock', component: LockComponent, canActivate: [AuthGuard]},
   {
     path: 'admin', component: RootComponent, children: [
       {path: 'home', component: AdminDashboardComponent, canActivate: [AuthGuard, LockGuard, AdminGuard]},

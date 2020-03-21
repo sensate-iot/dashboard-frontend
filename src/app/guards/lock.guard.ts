@@ -3,16 +3,18 @@ import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '
 import { Observable } from 'rxjs';
 import {LockService} from '../services/lock.service';
 import {LoginService} from '../services/login.service';
+import {AppsService} from '../services/apps.service';
 
 @Injectable()
 export class LockGuard implements CanActivate {
-  constructor(private lock : LockService, private auth : LoginService, private router : Router) { }
+  constructor(private lock : LockService, private auth : LoginService, private apps: AppsService, private router: Router) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<boolean> | Promise<boolean> | boolean {
     if(this.lock.isLocked()) {
       if(!this.lock.isValid()) {
-        this.auth.logout();
-        this.router.navigate(['login']);
+        this.auth.logout().then(() => {
+          this.apps.forward('login');
+        });
         return true;
       }
 

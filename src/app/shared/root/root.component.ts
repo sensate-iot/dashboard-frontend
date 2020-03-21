@@ -12,6 +12,7 @@ import {LockService} from '../../services/lock.service';
 import {LoginService} from '../../services/login.service';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
+import {AppsService} from '../../services/apps.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class RootComponent implements OnInit, OnDestroy {
   public backgroundColor : string;
 
   constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
+              private apps: AppsService,
               private settings : SettingsService, private alerts : AlertService, private router : Router) {
   }
 
@@ -31,7 +33,11 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.readAuthCookie();
     this.id = this.settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
-    this.accounts.checkPhoneConfirmed();
+    this.accounts.checkPhoneConfirmed().then(result => {
+      if(!result) {
+        this.router.navigate(['/confirm-phone-number']);
+      }
+    });
     await this.accounts.checkAndStoreRoles();
     this.auth.setUserId();
   }
@@ -48,8 +54,9 @@ export class RootComponent implements OnInit, OnDestroy {
   }
 
   public logoutClicked() {
-    this.auth.logout();
-    this.router.navigate(['login']);
+    this.auth.logout().then(() => {
+      this.apps.forward('login');
+    });
   }
 
   public lockClicked() {
@@ -59,7 +66,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   public revokeAllTokens() {
     this.auth.revokeAllTokens().then(() => {
-      this.router.navigate(['login']);
+      this.apps.forward('login');
     }).catch(() => {
       this.alerts.showNotification('Unable to revoke all authentication tokens!', 'top-center', 'warning');
     })

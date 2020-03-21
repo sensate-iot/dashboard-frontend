@@ -76,10 +76,10 @@ export class LoginComponent implements OnInit {
 
         this.accounts.rawCheckPhoneConfirmed().subscribe((result) => {
           /* Forward the user to the phone confirmation screen if a phone number has not yet been confirmed.. */
-          if(result.body.message == 'true') {
+          if(result.message == 'true') {
             this.router.navigate(['/dashboard']);
           } else {
-            this.router.navigate(['/confirm-email-phone-number']);
+            this.router.navigate(['/confirm-phone-number']);
           }
         }, () => {
           this.router.navigate(['/']);

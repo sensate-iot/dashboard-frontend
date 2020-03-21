@@ -91,8 +91,10 @@ export class LoginService {
   public revokeAllTokens() {
     const jwt = this.getJwt();
 
-    if(jwt == null || jwt.refreshToken == null)
+    if(jwt == null || jwt.refreshToken == null) {
+      this.resetLogin();
       return;
+    }
 
     this.keys.revokeAll(true).subscribe(() => {});
 
@@ -111,26 +113,32 @@ export class LoginService {
   }
 
   public logout() {
-    const jwt = this.getJwt();
+    return new Promise<void>(resolve => {
+      const jwt = this.getJwt();
 
-    if(jwt == null || jwt.refreshToken == null)
-      return;
+      if(jwt == null || jwt.refreshToken == null) {
+        this.resetLogin();
+        return;
+      }
 
-    const key = localStorage.getItem('syskey');
+      const key = localStorage.getItem('syskey');
 
-    if(key != null) {
-      this.keys.revokeByKey(key).subscribe(() => {
-        console.debug('System API key revoked!');
+      if(key != null) {
+        this.keys.revokeByKey(key).subscribe(() => {
+          console.debug('System API key revoked!');
+        });
+      }
+
+      this.http.delete(environment.authApiHost + '/tokens/revoke/' + jwt.refreshToken, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
+      }).subscribe(() => {
+        this.resetLogin();
+        resolve();
+      }, () => {
+        console.debug('Unable to logout on server!');
+        this.resetLogin();
+        resolve();
       });
-    }
-
-    this.http.delete(environment.authApiHost + '/tokens/revoke/' + jwt.refreshToken, {
-      headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
-    }).subscribe(() => {
-      this.resetLogin();
-    }, () => {
-      console.debug('Unable to logout on server!');
-      this.resetLogin();
     });
   }
 

@@ -40,7 +40,7 @@ export class UpdateEmailComponent implements OnInit {
 
     this.accounts.updateEmail(this.emailControl.value).subscribe(() => {
       this.notifs.showNotification('A verification code has been sent to your email address!', 'top-center', 'success');
-      this.router.navigate(['/confirm-email-update-email']);
+      this.router.navigate(['/confirm-update-email']);
     },() => {
       this.notifs.showNotification('Unable to update email!', 'top-center', 'warning');
       this.emailControl.setErrors({
