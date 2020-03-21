@@ -1,0 +1,198 @@
+<div class="container">
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <i class="material-icons">assignment</i>
+      </div>
+
+      <div class="card-content">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-8">
+            <h4 class="card-title">Data Map</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <mat-horizontal-stepper [linear]="true" #stepper>
+            <mat-step>
+              <ng-template matStepLabel>About</ng-template>
+
+              <form [formGroup]="nameForm">
+                <div class="row">
+                  <div class="col-md-8 col-md-offset-2">
+                    <mat-form-field class="input-full-width" color="accent">
+                      <input matInput type="text" placeholder="Sensor name" name="name" formControlName="name">
+                      <mat-error *ngIf="false">
+                        Enter a valid confirmation code!
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-8 col-md-offset-2">
+                    <mat-form-field class="input-full-width" color="accent">
+                    <textarea cdkTextareaAutosize cdkAutosizeMaxRows="10" cdkAutosizeMinRows="5" formControlName="desc"
+                              matInput placeholder="Description" name="desc"></textarea>
+                      <mat-error *ngIf="false">
+                        Enter a valid confirmation code!
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div class="row btn-row">
+                <button class="btn btn-rose" [disabled]="true" (click)="stepper.previous()">PREVIOUS</button>
+                <button class="btn btn-rose" (click)="stepper.next()">NEXT</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Secrets</ng-template>
+
+              <form [formGroup]="secretForm">
+                <div class="row" style="padding-bottom: 6%">
+                  <div class="col-md-8 col-md-offset-4">
+                    <mat-slide-toggle (change)="onToggleChanged($event)" name="sensor-secret-slider">Let Sensate IoT
+                      generate a secret
+                    </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-8 col-md-offset-2">
+                    <mat-form-field class="input-full-width">
+                      <input formControlName="secret" matInput placeholder="Sensor Secret"
+                             name="sensor">
+                      <mat-error *ngIf="true">
+                        Enter a valid confirmation code!
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div class="row btn-row">
+                <button class="btn btn-rose" (click)="stepper.previous()">PREVIOUS</button>
+                <button class="btn btn-rose" (click)="createSensor()">NEXT</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Triggers</ng-template>
+              <div class="table-responsive" style="height:200px;overflow:auto">
+                <table class="mat-table table">
+                  <tr class="mat-header-row">
+                    <th class="mat-header-cell">Key value</th>
+                    <th class="mat-header-cell">Lower edge</th>
+                    <th class="mat-header-cell">Upper edge</th>
+                    <th class="mat-header-cell">Actions</th>
+                  </tr>
+                  <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
+                    <td class="mat-cell">{{trigger.keyValue}}</td>
+                    <td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>
+                    <td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>
+                    <td class="mat-cell">
+                      <button mat-mini-fab (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i>
+                      </button>
+                      <button mat-mini-fab (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+
+              <div *ngIf="showTriggerForm" class="footer" style="margin-bottom:1%">
+                <div class="row">
+                  <div class="col-md-12 vcenter">
+                    <form [formGroup]="triggerFrom">
+
+                      <div class="col-md-2 col-xs-12 vcenter">
+                        <mat-form-field class="input-full-width" color="accent">
+                          <input matInput type="text" placeholder="Key value" name="name" formControlName="keyValue">
+                          <mat-error *ngIf="triggerFrom.get('keyValue').hasError('required')">
+                            Enter a valid datapoint key value!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-4 col-xs-12 vcenter">
+                        <mat-form-field class="input-full-width" color="accent">
+                          <input matInput type="text" placeholder="Lower edge" [errorStateMatcher]="matcher"
+                                 name="lowerEdge" formControlName="lowerEdge">
+                          <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
+                            Lower or edge required!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-4 col-xs-12 vcenter">
+                        <mat-form-field class="input-full-width" color="accent">
+                          <input matInput type="text" placeholder="Upper edge" [errorStateMatcher]="matcher"
+                                 name="upperEdge" formControlName="upperEdge">
+                          <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
+                            Lower or upper edge required!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-1 col-xs-4 vcenter">
+                        <button mat-mini-fab class="search-btn" [disabled]="!sensorCreated" (click)="createTrigger()">
+                          <i class="material-icons" style="font-size:20px;">add</i></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="row btn-row">
+                <button class="btn btn-rose" (click)="stepper.previous()">PREVIOUS</button>
+                <button id="submitBtn" [disabled]="!sensorCreated" class="btn btn-success" (click)="onSubmitClick()">SUBMIT</button>
+              </div>
+            </mat-step>
+          </mat-horizontal-stepper>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--<div class="container">-->
+<!--<div class="row wizard-page-title">-->
+<!--<div class="col-md-10 col-md-offset-1">-->
+<!--<div class="wizard-panel card">-->
+<!--<div class="wizard-header">-->
+<!--<h3 class="text-center">Create a sensor</h3>-->
+<!--&lt;!&ndash;<h5 class="text-center" style="margin-top: 5px; padding: 0 20px;">This information will let us know more about you.</h5>&ndash;&gt;-->
+<!--</div>-->
+<!--<div class="wizard-navigation">-->
+<!--<ul class="nav nav-pills">-->
+<!--<li class="text-uppercase text-center">About</li>-->
+<!--<li class="text-uppercase text-center">Security</li>-->
+<!--<li class="text-uppercase text-center">Triggers</li>-->
+<!--</ul>-->
+<!--<div class="move-tab text-center text-uppercase">About</div>-->
+<!--</div>-->
+<!--<div class="wizard-body">-->
+<!--<div class="wizard-tab ">-->
+<!--<div class="row">-->
+<!--<div class="col-md-8 col-md-offset-2" style="text-align: center; padding-top:5%;padding-bottom: 5%">-->
+<!--<p>-->
+<!--Create a new sensor by entering the details below.-->
+<!--</p>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--<div class="wizard-tab">-->
+<!--<div class="row" style="padding-bottom: 5%">-->
+<!--<div class="col-md-8 col-md-offset-2" style="text-align: center; padding-top:5%;padding-bottom: 5%">-->
+<!--<p>Sensors communicate securely with the platform using a secret. This secret can either be generated-->
+<!--by Sensate IoT, or you can provide one.-->
+<!--</p>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</div>-->
+<!--<div class="wizard-tab">-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

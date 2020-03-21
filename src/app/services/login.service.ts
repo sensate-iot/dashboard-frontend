@@ -52,7 +52,7 @@ export class LoginService {
     const data = this.cookies.get(LoginService.AuthCookie);
 
     if(data === null || data.length <= 0) {
-      return;
+      return null;
     }
 
     const json = atob(data);
@@ -62,20 +62,6 @@ export class LoginService {
     localStorage.setItem('syskey', jwt.systemApiKey);
 
     return jwt;
-  }
-
-  public login(user: string, password: string) {
-    const body = {
-      "Email": user,
-      "Password": password
-    };
-
-    localStorage.removeItem('userId');
-    LockService.createLock(user, password);
-    return this.http.post<Jwt>(environment.authApiHost + '/tokens/request', body, {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'no-cache')
-    });
   }
 
   public isLoggedIn() : boolean {
@@ -218,10 +204,6 @@ export class LoginService {
     return localStorage.getItem('syskey');
   }
 
-  public static handleError(error : any) {
-    LockService.destroyLock();
-  }
-
   public setSession(data : Jwt) {
     const expire = moment().add(data.expiresInMinutes, 'minutes');
     const jwtExpire = moment().add(data.jwtExpiresInMinutes, 'minutes');
@@ -233,6 +215,6 @@ export class LoginService {
     localStorage.setItem('syskey', data.systemApiKey);
 
     const cookie = btoa(JSON.stringify(data));
-    this.cookies.set(LoginService.AuthCookie, cookie, expire.toDate(), null, this.host);
+    this.cookies.set(LoginService.AuthCookie, cookie, expire.toDate(), '/', this.host);
   }
 }

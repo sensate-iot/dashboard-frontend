@@ -6,28 +6,24 @@
  */
 
 import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './login/login.component';
-import {LockComponent} from './lock/lock.component';
-import {RegisterComponent} from './register/register.component';
-import {RootComponent} from './shared/root/root.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
+import {LockComponent} from './pages/lock/lock.component';
+import {RootComponent} from './components/root/root.component';
+import {DashboardComponent} from './pages/dashboard/dashboard/dashboard.component';
 import {AuthGuard} from './guards/auth.guard';
-import {ProfileComponent} from './dashboard/profile/profile/profile.component';
+import {ProfileComponent} from './pages/profile/profile/profile.component';
 import {LockGuard} from './guards/lock.guard';
-import {ConfirmUpdateEmailComponent} from './dashboard/profile/confirm-update-email/confirm-update-email.component';
-import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.component';
-import {ConfirmPhoneNumberComponent} from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
-import {AdminDashboardComponent} from './admin/admin-dashboard/admin-dashboard.component';
-import {UserManagerComponent} from './admin/user-manager/user-manager.component';
+import {ConfirmUpdateEmailComponent} from './pages/profile/confirm-update-email/confirm-update-email.component';
+import {ConfirmPhoneNumberComponent} from './pages/profile/confirm-phone-number/confirm-phone-number.component';
+import {AdminDashboardComponent} from './pages/admin/admin-dashboard/admin-dashboard.component';
+import {UserManagerComponent} from './pages/admin/user-manager/user-manager.component';
 import {AdminGuard} from './guards/admin.guard';
-import {ApikeysComponent} from './dashboard/apikeys/apikeys.component';
-import {ConfirmEmailComponent} from './register/confirm-email/confirm-email.component';
-import {SensorWizardComponent} from './sensors/sensor-wizard/sensor-wizard.component';
-import {SensorsListComponent} from './sensors/sensors-list/sensors-list.component';
-import {SensorDetailComponent} from './sensors/sensor-detail/sensor-detail.component';
-import {QueryToolComponent} from './sensors/query-tool/query-tool.component';
-import {MapToolComponent} from './sensors/map-tool/map-tool.component';
-import {AuditlogComponent} from './admin/auditlog/auditlog.component';
+import {ApikeysComponent} from './pages/dashboard/apikeys/apikeys.component';
+import {SensorWizardComponent} from './pages/sensors/sensor-wizard/sensor-wizard.component';
+import {SensorsListComponent} from './pages/sensors/sensors-list/sensors-list.component';
+import {SensorDetailComponent} from './pages/sensors/sensor-detail/sensor-detail.component';
+import {QueryToolComponent} from './pages/sensors/query-tool/query-tool.component';
+import {MapToolComponent} from './pages/sensors/map-tool/map-tool.component';
+import {AuditlogComponent} from './pages/admin/auditlog/auditlog.component';
 
 const routes: Routes = [
   {
@@ -48,12 +44,7 @@ const routes: Routes = [
       {path: ':id', component: SensorDetailComponent, canActivate: [AuthGuard, LockGuard]}
     ]
   },
-  {path: 'confirm/:id/:token', component: ConfirmEmailComponent},
   {path: 'index', redirectTo: '/dashboard'},
-  {path: 'login', component: LoginComponent},
-  {path: 'reset-password/:email', component: ForgotPasswordComponent},
-  {path: 'reset-password', component: ForgotPasswordComponent},
-  {path: 'register', component: RegisterComponent},
   {path: 'lock', component: LockComponent, canActivate: [AuthGuard]},
   {
     path: 'admin', component: RootComponent, children: [

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -17,89 +16,80 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routing} from './app.routes';
-import { HeaderComponent } from './shared/header/header.component';
+import { HeaderComponent } from './components/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LockComponent } from './lock/lock.component';
-import { RegisterComponent } from './register/register.component';
+import { LockComponent } from './pages/lock/lock.component';
 import {LoginService} from './services/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RefreshTokenInterceptorService} from './services/refreshtokeninterceptor.service';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import {RootComponent} from './shared/root/root.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import {MsgIconBtnComponent} from './shared/msgiconbtn/msgiconbtn.component';
-import {ImagecardComponent} from './shared/imagecard/imagecard.component';
-import {FooterComponent} from './shared/footer/footer.component';
-import {FigurecardComponent} from './shared/figurecard/figurecard.component';
+import { DashboardComponent } from './pages/dashboard/dashboard/dashboard.component';
+import {RootComponent} from './components/root/root.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import {ImagecardComponent} from './components/imagecard/imagecard.component';
+import {FigurecardComponent} from './components/figurecard/figurecard.component';
 import {SettingsService} from './services/settings.service';
 import {AuthGuard} from './guards/auth.guard';
-import { ProfileComponent } from './dashboard/profile/profile/profile.component';
+import { ProfileComponent } from './pages/profile/profile/profile.component';
 import {LockGuard} from './guards/lock.guard';
 import {LockService} from './services/lock.service';
-import { ConfirmUpdateEmailComponent } from './dashboard/profile/confirm-update-email/confirm-update-email.component';
+import { ConfirmUpdateEmailComponent } from './pages/profile/confirm-update-email/confirm-update-email.component';
 import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
-import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
-import { ConfirmPhoneNumberComponent } from './dashboard/profile/confirm-phone-number/confirm-phone-number.component';
-import { UpdatePhoneNumberComponent } from './dashboard/profile/profile/update-phone-number/update-phone-number.component';
-import { UpdateEmailComponent } from './dashboard/profile/profile/update-email/update-email.component';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import {UserManagerComponent} from './admin/user-manager/user-manager.component';
+import { ConfirmPhoneNumberComponent } from './pages/profile/confirm-phone-number/confirm-phone-number.component';
+import { UpdatePhoneNumberComponent } from './pages/profile/profile/update-phone-number/update-phone-number.component';
+import { UpdateEmailComponent } from './pages/profile/profile/update-email/update-email.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
+import {UserManagerComponent} from './pages/admin/user-manager/user-manager.component';
 import {AdminService} from './services/admin.service';
-import { ChartCardComponent } from './shared/chart-card/chart-card.component';
-import { BarChartCardComponent } from './shared/bar-chart-card/bar-chart-card.component';
+import { ChartCardComponent } from './components/chart-card/chart-card.component';
+import { BarChartCardComponent } from './components/bar-chart-card/bar-chart-card.component';
 import {DashBoardService} from './services/dashboard.service';
-import {ApikeysComponent, CreateApiKeyDialog} from './dashboard/apikeys/apikeys.component';
+import {ApikeysComponent, CreateApiKeyDialog} from './pages/dashboard/apikeys/apikeys.component';
 import {ApiKeyService} from './services/apikey.service';
-import { CreateApiKeyComponent } from './dashboard/apikeys/create-api-key/create-api-key.component';
-import { ConfirmEmailComponent } from './register/confirm-email/confirm-email.component';
-import { SensorsListComponent } from './sensors/sensors-list/sensors-list.component';
-import {SensorWizardComponent} from './sensors/sensor-wizard/sensor-wizard.component';
+import { CreateApiKeyComponent } from './pages/dashboard/apikeys/create-api-key/create-api-key.component';
+import { SensorsListComponent } from './pages/sensors/sensors-list/sensors-list.component';
+import {SensorWizardComponent} from './pages/sensors/sensor-wizard/sensor-wizard.component';
 import {TriggerService} from './services/trigger.service';
 import { MatTableModule } from '@angular/material/table';
 import {SensorService} from './services/sensor.service';
-import {CreateActionDialog} from './sensors/create-action.dialog';
-import { SensorDetailComponent } from './sensors/sensor-detail/sensor-detail.component';
-import {ShowActionsDialog} from './sensors/sensor-detail/show-actions.dialog';
-import { LargeChartCardComponent } from './shared/large-chart-card/large-chart-card.component';
+import {CreateActionDialog} from './pages/sensors/create-action.dialog';
+import { SensorDetailComponent } from './pages/sensors/sensor-detail/sensor-detail.component';
+import {ShowActionsDialog} from './pages/sensors/sensor-detail/show-actions.dialog';
+import { LargeChartCardComponent } from './components/large-chart-card/large-chart-card.component';
 import {DataService} from './services/data.service';
 import {JsonDateInterceptorService} from './services/json-date-interceptor.service';
-import { QueryToolComponent } from './sensors/query-tool/query-tool.component';
-import { QueryBuilderDialog } from './sensors/query-builder-dialog/query-builder.dialog';
+import { QueryToolComponent } from './pages/sensors/query-tool/query-tool.component';
+import { QueryBuilderDialog } from './pages/sensors/query-builder-dialog/query-builder.dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
-import { MapToolComponent } from './sensors/map-tool/map-tool.component';
+import { MapToolComponent } from './pages/sensors/map-tool/map-tool.component';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {GraphService} from './services/graph.service';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {WebSocketService} from './services/websocket.service';
 import {RealTimeDataService} from './services/realtimedata.service';
-import { SensorSelectComponent } from './sensors/sensor-select/sensor-select.component';
-import { AddSensorLinkDialog } from './sensors/sensors-list/add-sensor-link-dialog/add-sensor-link-dialog.component';
-import { AuditlogComponent } from './admin/auditlog/auditlog.component';
+import { SensorSelectComponent } from './pages/sensors/sensor-select/sensor-select.component';
+import { AddSensorLinkDialog } from './pages/sensors/sensors-list/add-sensor-link-dialog/add-sensor-link-dialog.component';
+import { AuditlogComponent } from './pages/admin/auditlog/auditlog.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {AuditlogService} from './services/auditlog.service';
 import {CookieService} from 'ngx-cookie-service';
 import {AppsService} from './services/apps.service';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     HeaderComponent,
     LockComponent,
-    RegisterComponent,
     RootComponent,
-    MsgIconBtnComponent,
     ImagecardComponent,
-    FooterComponent,
     FigurecardComponent,
     DashboardComponent,
     SidebarComponent,
     ProfileComponent,
     ConfirmUpdateEmailComponent,
-    ForgotPasswordComponent,
     ConfirmPhoneNumberComponent,
     UpdatePhoneNumberComponent,
     UpdateEmailComponent,
@@ -113,7 +103,6 @@ import {AppsService} from './services/apps.service';
     CreateActionDialog,
     QueryBuilderDialog,
     ShowActionsDialog,
-    ConfirmEmailComponent,
     SensorsListComponent,
     SensorWizardComponent,
     SensorDetailComponent,
@@ -142,6 +131,7 @@ import {AppsService} from './services/apps.service';
     BrowserAnimationsModule,
     MatPaginatorModule,
     MatSidenavModule,
+    MatStepperModule,
     MatListModule,
     MatIconModule,
     MatNativeDateModule,

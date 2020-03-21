@@ -44,9 +44,8 @@ export class RealTimeDataService {
     };
 
 
-    const stream = sha('sha256');
-    stream.end(JSON.stringify(request));
-    request.sensorSecret = stream.read().toString('hex');
+    const hash = sha('sha256').update(JSON.stringify(request));
+    request.sensorSecret = hash.digest('hex');
 
     const subscribeRequest: IWebSocketRequest<ISensorAuth> = {
       request: "subscribe",
