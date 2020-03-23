@@ -62,10 +62,7 @@ export class AccountService {
       "NewEmail" : newMail
     };
 
-    return this.http.post(environment.authApiHost + '/accounts/update-email', data, {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    });
+    return this.http.post(environment.authApiHost + '/accounts/update-email', data );
   }
 
   public confirmUpdateEmail(token : string) {
@@ -158,7 +155,6 @@ export class AccountService {
           return res.message;
         })).subscribe(res => {
           localStorage.setItem('phone-confirmed', res.toString());
-          console.log(res);
           resolve(res.toString() === 'true');
         }, () => { resolve(true); });
       }

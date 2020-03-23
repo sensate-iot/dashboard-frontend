@@ -14,6 +14,12 @@ import {LoginService} from './login.service';
 import {SensorLink} from '../models/sensorlink.model';
 import {PaginationResult} from '../models/paginationresult.model';
 
+export interface SensorUpdate {
+  name: string;
+  description: string;
+  secret: string;
+}
+
 @Injectable()
 export class SensorService {
   private readonly options: any;
@@ -101,5 +107,17 @@ export class SensorService {
   public find(name: string, skip = 0, limit = 0) {
     const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}&name=${name}&skip=${skip}&limit=${limit}`;
     return this.http.get<PaginationResult<Sensor>>(url);
+  }
+
+  public update(id: string, sensor: SensorUpdate, secret: boolean) {
+    let url = environment.networkApiHost;
+
+    if(secret) {
+      url += `/sensors/${id}/secret?key=${this.login.getSysKey()}`
+    } else {
+      url += `/sensors/${id}?key=${this.login.getSysKey()}`
+    }
+
+    return this.http.patch<Sensor>(url, JSON.stringify(sensor));
   }
 }

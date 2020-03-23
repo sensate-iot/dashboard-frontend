@@ -38,6 +38,7 @@ export class AuditlogComponent implements OnInit {
   public pageOptions =  [10,25,100,200];
   public pageSize: number;
   public length: number;
+  private pageIndex: number;
 
   public methodSelectControl: FormControl;
 
@@ -53,6 +54,7 @@ export class AuditlogComponent implements OnInit {
     this.searchFieldValue = "";
     this.methodValue = RequestMethod.Any;
     this.searchQuery = false;
+    this.pageIndex = 0;
   }
 
   private shouldUseSearch() {
@@ -78,20 +80,17 @@ export class AuditlogComponent implements OnInit {
   }
 
   public fetchLogs() {
-    if(!this.searchQuery) {
-      this.logService.countAll(this.methodValue).subscribe((result: any) => {
-        this.length = result.count;
-      }, error => {
-        this.handleFetchError(error);
-      });
+    const skip = this.pageIndex * this.pageSize;
 
-      this.logService.getLogs(this.methodValue, this.pageSize, 0).subscribe(logs => {
-        this.logs = logs;
+    if(!this.searchQuery) {
+      this.logService.getLogs(this.methodValue, this.pageSize, skip).subscribe(logs => {
+        this.logs = logs.values;
+        this.length = logs.count;
       }, error => {
         this.handleFetchError(error);
       });
     } else {
-      this.logService.findLogs(this.methodValue, this.emailFieldValue, this.searchFieldValue).subscribe(logs => {
+      this.logService.findLogs(this.methodValue, this.emailFieldValue, this.searchFieldValue, skip, this.pageSize).subscribe(logs => {
         this.allLogs = logs.values;
         this.length = logs.count;
         this.logs = logs.values.splice(0, this.pageSize);
@@ -109,20 +108,13 @@ export class AuditlogComponent implements OnInit {
   public paginate(event: any) {
     const skip = event.pageIndex * event.pageSize;
 
-    this.pageSize = event.pageSize;
-
-    if(this.searchQuery) {
-      this.logs = this.allLogs.splice(skip, this.pageSize);
-      return;
+    if(this.pageSize !== event.pageSize && this.paginator !== undefined) {
+      this.paginator.firstPage();
     }
 
-    this.logService.getLogs(this.methodValue, this.pageSize, skip).subscribe(logs => {
-      this.logs = logs;
-    }, error => {
-      console.debug("Unable to fetch logs:");
-      console.debug(error);
-      this.notifs.showWarninngNotification("Unable to load audit logs!")
-    });
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.fetchLogs();
   }
 
   public onSearchClicked() {

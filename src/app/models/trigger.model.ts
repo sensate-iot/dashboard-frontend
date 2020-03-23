@@ -20,6 +20,11 @@ export enum TriggerActionChannel {
   ControlMessage
 }
 
+export enum TriggerType {
+  Number,
+  Regex
+}
+
 export class TriggerInvocation {
   public id: number;
   public triggerId: number;
@@ -30,8 +35,10 @@ export class Trigger {
   public id: Number;
   public lowerEdge: Number;
   public upperEdge: Number;
+  public formalLanguage: string;
   public keyValue: string;
   public sensorId: string;
+  public type: TriggerType;
 
   public actions: TriggerAction[];
   public invocations: TriggerInvocation[];

@@ -193,7 +193,7 @@ export class LoginService {
     localStorage.removeItem('phone-confirmed');
     localStorage.removeItem('syskey');
     console.debug(`Removing cookie!`);
-    this.cookies.delete(LoginService.AuthCookie, null, this.host);
+    this.cookies.delete(LoginService.AuthCookie, '/', this.host);
   }
 
   public getSysKey() {
@@ -215,6 +215,6 @@ export class LoginService {
     localStorage.setItem('syskey', data.systemApiKey);
 
     const cookie = btoa(JSON.stringify(data));
-    this.cookies.set(LoginService.AuthCookie, cookie, expire.toDate(), '/', this.host);
+    this.cookies.set(LoginService.AuthCookie, cookie, null, '/', this.host);
   }
 }

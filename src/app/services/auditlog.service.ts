@@ -13,28 +13,22 @@ import {PaginationResult} from '../models/paginationresult.model';
 
 @Injectable()
 export class AuditlogService {
-  public constructor(private readonly http: HttpClient) {
-  }
+  public constructor(private readonly http: HttpClient) { }
 
   public getLogs(method: RequestMethod, limit: number, skip: number) {
     const url = `${environment.authApiHost}/auditlogs?method=${method}&limit=${limit}&skip=${skip}`;
-    return this.http.get<AuditLog[]>(url);
+    return this.http.get<PaginationResult<AuditLog>>(url);
   }
 
-  public countAll(method: RequestMethod) {
-    const url = `${environment.authApiHost}/auditlogs?method=${method}&count=true`;
-    return this.http.get(url);
-  }
-
-  public findLogs(method: RequestMethod, mail: string, query: string) {
+  public findLogs(method: RequestMethod, mail: string, query: string, skip = 0, limit = 0) {
     let url: string;
 
     if(mail === '') {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&skip=${skip}&limit=${limit}`;
     } else if(query === '') {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&email=${mail}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&email=${mail}&skip=${skip}&limit=${limit}`;
     } else {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&email=${mail}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&email=${mail}&skip=${skip}&limit=${limit}`;
     }
 
     return this.http.get<PaginationResult<AuditLog>>(url);

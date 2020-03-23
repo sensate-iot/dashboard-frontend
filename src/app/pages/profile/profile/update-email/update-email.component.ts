@@ -4,6 +4,7 @@ import {FormErrorStateMatcher} from '../profile.component';
 import {Router} from '@angular/router';
 import {AccountService} from '../../../../services/account.service';
 import {AlertService} from '../../../../services/alert.service';
+import {Status} from '../../../../models/status.model';
 
 @Component({
   selector: 'app-update-email',
@@ -41,8 +42,11 @@ export class UpdateEmailComponent implements OnInit {
     this.accounts.updateEmail(this.emailControl.value).subscribe(() => {
       this.notifs.showNotification('A verification code has been sent to your email address!', 'top-center', 'success');
       this.router.navigate(['/confirm-update-email']);
-    },() => {
-      this.notifs.showNotification('Unable to update email!', 'top-center', 'warning');
+    },(error) => {
+      const e = error.error;
+      if(e !== null && e !== undefined) {
+        this.notifs.showNotification(`Unable to update email: ${e.message}`, 'top-center', 'warning');
+      }
       this.emailControl.setErrors({
         "unable": true
       });

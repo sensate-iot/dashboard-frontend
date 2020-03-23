@@ -7,7 +7,7 @@ import {TriggerService} from '../../../services/trigger.service';
 import {Router} from '@angular/router';
 import {Sensor} from '../../../models/sensor.model';
 import {SensorService} from '../../../services/sensor.service';
-import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
+import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';

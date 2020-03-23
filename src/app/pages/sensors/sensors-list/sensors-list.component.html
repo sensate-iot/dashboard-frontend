@@ -50,6 +50,9 @@
                     <button mat-mini-fab class="search-btn" routerLink="/sensors/{{sensor.internalId}}"><i class="material-icons" style="font-size:20px;">details</i></button>
                     <button mat-mini-fab class="search-btn"
                             *ngIf="!isLinkedSensor(sensor)"
+                            (click)="onUpdateClicked(sensor)"><i class="material-icons" style="font-size:20px;">edit</i></button>
+                    <button mat-mini-fab class="search-btn"
+                            *ngIf="!isLinkedSensor(sensor)"
                             (click)="onLinkSensorClicked(sensor)"><i class="material-icons" style="font-size:20px;">link</i></button>
                     <button mat-mini-fab class="search-btn"
                             *ngIf="!isLinkedSensor(sensor)"

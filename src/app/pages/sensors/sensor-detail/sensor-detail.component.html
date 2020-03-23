@@ -13,7 +13,26 @@
       <div class="row">
       </div>
       <div class="row">
-        <div class="table-responsive" style="height:200px;overflow:auto;padding-left:15px;padding-right:15px">
+        <div *ngIf="showLanguageTriggers" class="table-responsive" style="height:200px;overflow:auto;padding-left:15px;padding-right:15px">
+          <table class="mat-table table">
+            <tr class="mat-header-row">
+              <th class="mat-header-cell">Language</th>
+              <th class="mat-header-cell">Invocations</th>
+              <th class="mat-header-cell">Actions</th>
+            </tr>
+            <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
+              <td class="mat-cell">{{trigger.formalLanguage !== null ? trigger.formalLanguage : ""}}</td>
+              <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
+              <td class="mat-cell">
+                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
+                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
+                <button mat-mini-fab class="icon-button" (click)="showActions(i)"><i class="material-icons" style="font-size:20px;">pageview</i></button>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+        <div *ngIf="!showLanguageTriggers" class="table-responsive" style="height:200px;overflow:auto;padding-left:15px;padding-right:15px">
           <table class="mat-table table">
             <tr class="mat-header-row">
               <th class="mat-header-cell">Key value</th>
@@ -40,7 +59,7 @@
       <div class="row">
           <form [formGroup]="triggerFrom">
 
-            <div class="col-md-2 col-xs-12 vcenter">
+            <div class="col-md-2 col-xs-12 vcenter" *ngIf="!showLanguageTriggers">
               <mat-form-field class="input-full-width" color="accent" >
                 <input matInput type="text" placeholder="Key value"
                        name="name" formControlName="keyValue">
@@ -49,7 +68,15 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3 col-xs-12 vcenter">
+            <div class="col-md-8 col-xs-12 vcenter-2" *ngIf="showLanguageTriggers">
+              <mat-form-field class="input-full-width" color="accent" >
+                <input matInput type="text" placeholder="Formal language" name="languageControl" formControlName="languageControl">
+                <mat-error *ngIf="triggerFrom.get('languageControl').hasError('required')">
+                  Formal language required!
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 col-xs-12 vcenter" *ngIf="!showLanguageTriggers">
               <mat-form-field class="input-full-width" color="accent" >
                 <input matInput type="text" placeholder="Lower edge"
                        [errorStateMatcher]="matcher" name="lowerEdge" formControlName="lowerEdge">
@@ -58,7 +85,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3 col-xs-12 vcenter">
+            <div class="col-md-3 col-xs-12 vcenter" *ngIf="!showLanguageTriggers">
               <mat-form-field class="input-full-width" color="accent">
                 <input matInput type="text" placeholder="Upper edge"
                        [errorStateMatcher]="matcher" name="upperEdge" formControlName="upperEdge">
@@ -68,7 +95,7 @@
               </mat-form-field>
             </div>
             <div class="col-md-3 col-xs-4 vcenter-nomargin">
-              <mat-slide-toggle>Text trigger</mat-slide-toggle>
+              <mat-slide-toggle (change)="onLanguageToggleClick()" formControlName="languageSelectControl">Text trigger</mat-slide-toggle>
               <button mat-mini-fab style="margin-left:5%"
                       [disabled]="isLinkedSensor(sensor)"
                       class="search-btn" (click)="createTrigger()">

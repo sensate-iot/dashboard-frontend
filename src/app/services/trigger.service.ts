@@ -7,7 +7,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Trigger, TriggerAction} from '../models/trigger.model';
+import {Trigger, TriggerAction, TriggerType} from '../models/trigger.model';
 import {LoginService} from './login.service';
 import {environment} from '../../environments/environment';
 
@@ -61,9 +61,9 @@ export class TriggerService {
     return this.http.delete(url, this.options);
   }
 
-  public getAllFor(sensorId: string) {
+  public getAllForByType(sensorId: string, type: TriggerType) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers?key=${key}&sensorId=${sensorId}`;
+    const url = `${environment.networkApiHost}/triggers?key=${key}&sensorId=${sensorId}&type=${type}`;
 
     return this.http.get<Trigger[]>(url, this.options);
   }

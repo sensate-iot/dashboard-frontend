@@ -52,7 +52,7 @@ import {SensorWizardComponent} from './pages/sensors/sensor-wizard/sensor-wizard
 import {TriggerService} from './services/trigger.service';
 import { MatTableModule } from '@angular/material/table';
 import {SensorService} from './services/sensor.service';
-import {CreateActionDialog} from './pages/sensors/create-action.dialog';
+import {CreateActionDialog} from './dialogs/create-action/create-action.dialog';
 import { SensorDetailComponent } from './pages/sensors/sensor-detail/sensor-detail.component';
 import {ShowActionsDialog} from './pages/sensors/sensor-detail/show-actions.dialog';
 import { LargeChartCardComponent } from './components/large-chart-card/large-chart-card.component';
@@ -77,6 +77,8 @@ import {AuditlogService} from './services/auditlog.service';
 import {CookieService} from 'ngx-cookie-service';
 import {AppsService} from './services/apps.service';
 import {MatStepperModule} from '@angular/material/stepper';
+import { UpdateSensorDialog } from './dialogs/update-sensor/update-sensor.dialog';
+import { TriggerTableComponent } from './shared/trigger-table/trigger-table.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +102,7 @@ import {MatStepperModule} from '@angular/material/stepper';
     ApikeysComponent,
     CreateApiKeyComponent,
     CreateApiKeyDialog,
+    UpdateSensorDialog,
     CreateActionDialog,
     QueryBuilderDialog,
     ShowActionsDialog,
@@ -111,9 +114,11 @@ import {MatStepperModule} from '@angular/material/stepper';
     MapToolComponent,
     SensorSelectComponent,
     AddSensorLinkDialog,
-    AuditlogComponent
+    AuditlogComponent,
+    TriggerTableComponent
   ],
   entryComponents: [
+    UpdateSensorDialog,
     CreateApiKeyDialog,
     CreateActionDialog,
     ShowActionsDialog,

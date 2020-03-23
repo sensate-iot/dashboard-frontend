@@ -5,9 +5,9 @@
 
 export const environment = {
   production: false,
-  authApiHost: 'http://localhost:5000',
-  dashboardApiHost: 'http://localhost:5001',
-  networkApiHost: 'http://localhost:5003',
-  dataApiHost: 'http://localhost:5002',
+  authApiHost: 'http://localhost:5000/auth/v1',
+  dashboardApiHost: 'http://localhost:5001/stats/v1',
+  networkApiHost: 'http://localhost:5003/network/v1',
+  dataApiHost: 'http://localhost:5002/data/v1',
   liveDataHost: 'ws://localhost:4750/measurements/live'
 };

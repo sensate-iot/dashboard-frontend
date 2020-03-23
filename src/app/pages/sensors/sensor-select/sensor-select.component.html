@@ -4,7 +4,7 @@
       <mat-label>Sensors</mat-label>
       <mat-select [formControl]="form" (selectionChange)="onSelectionChanged()" multiple>
         <mat-select-trigger>
-          {{form.value ? form.value[0].name : ''}}
+          {{getTopValue()}}
           <span *ngIf="form.value?.length > 1" class="example-additional-selection">
           (+{{form.value.length - 1}} {{form.value?.length === 2 ? 'other' : 'others'}})
         </span>

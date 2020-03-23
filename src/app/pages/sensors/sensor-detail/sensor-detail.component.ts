@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatDialog} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {Trigger, TriggerAction} from '../../../models/trigger.model';
+import {Trigger, TriggerAction, TriggerType} from '../../../models/trigger.model';
 import {TriggerService} from '../../../services/trigger.service';
 import {ActivatedRoute} from '@angular/router';
 import {SensorService} from '../../../services/sensor.service';
 import {flatMap} from 'rxjs/operators';
 import {Sensor} from '../../../models/sensor.model';
 import {AlertService} from '../../../services/alert.service';
-import {CreateActionDialog, ICreateAction} from '../create-action.dialog';
+import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {IShowActions, ShowActionsDialog} from './show-actions.dialog';
 import {DataService} from '../../../services/data.service';
 import {Measurement} from '../../../models/measurement.model';
@@ -43,8 +43,13 @@ export class SensorDetailComponent implements OnInit {
   public triggers: Trigger[];
   public sensor: Sensor;
   public links: SensorLink[];
+  public formalTriggers: boolean;
 
   public resetView: boolean;
+
+  public get showLanguageTriggers() {
+    return this.triggerFrom.get('languageSelectControl').value;
+  }
 
   public constructor(
     private fb: FormBuilder, private triggerService: TriggerService,
@@ -57,6 +62,7 @@ export class SensorDetailComponent implements OnInit {
     this.sensor = new Sensor();
     this.sensor.name = "";
     this.resetView = true;
+    this.formalTriggers = false;
   }
 
   public ngOnInit() {
@@ -71,6 +77,7 @@ export class SensorDetailComponent implements OnInit {
         this.triggerFrom.get('keyValue').enable();
         this.triggerFrom.get('upperEdge').enable();
         this.triggerFrom.get('lowerEdge').enable();
+        this.triggerFrom.get('languageControl').enable();
       }
 
       this.sensorService.getSensorLinks(sensor).subscribe(links => {
@@ -79,7 +86,8 @@ export class SensorDetailComponent implements OnInit {
         this.alertService.showWarninngNotification("Unable to fetch sensor links!");
       });
 
-      return this.triggerService.getAllFor(sensor.internalId);
+      const type = this.formalTriggers ? TriggerType.Regex : TriggerType.Number;
+      return this.triggerService.getAllForByType(sensor.internalId, type);
     })).subscribe(triggers => {
       this.triggers = triggers;
       const now = new Date();
@@ -144,9 +152,25 @@ export class SensorDetailComponent implements OnInit {
       return null;
     }
 
-    const upper = form.get('upperEdge').value.toString();
-    const lower = form.get('lowerEdge').value.toString();
-    const condition = upper.length === 0 && lower.length === 0;
+    let upper = form.get('upperEdge').value;
+    let lower = form.get('lowerEdge').value;
+    let condition = true;
+
+    if(upper !== null) {
+      upper = upper.toString();
+    } else {
+      condition = false;
+    }
+
+    if(lower !== null) {
+      lower = lower.toString();
+    } else {
+      condition = false;
+    }
+
+    if(condition) {
+      condition = upper.length === 0 && lower.length === 0;
+    }
 
     return condition ? { 'edgeRequired': true } : null;
   }
@@ -158,6 +182,9 @@ export class SensorDetailComponent implements OnInit {
         Validators.required,
         Validators.minLength(1)
       ]),
+
+      languageSelectControl: new FormControl(false),
+      languageControl: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}, Validators.required),
 
       upperEdge: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}),
       lowerEdge: new FormControl({value: '', disabled: this.isLinkedSensor(this.sensor)}),
@@ -194,6 +221,10 @@ export class SensorDetailComponent implements OnInit {
     });
 
     const sub = dialog.afterClosed().subscribe((result: ICreateAction) => {
+      if(result === null || result === undefined) {
+        return;
+      }
+
       if(i >= this.triggers.length) {
         this.alertService.showWarninngNotification("Unable to create action!");
         return;
@@ -210,7 +241,6 @@ export class SensorDetailComponent implements OnInit {
       action.message = result.message;
 
       this.triggerService.addAction(trigger, action).subscribe((t) => {
-        console.debug(`Created action: ${JSON.stringify(t)}`);
         if(trigger.actions === null) {
           trigger.actions = [];
         }
@@ -225,23 +255,30 @@ export class SensorDetailComponent implements OnInit {
   }
 
   public createTrigger() {
-    let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
-    let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
-    const keyValue = this.triggerFrom.get('keyValue').value.toString();
+    const textTrigger = this.triggerFrom.get('languageSelectControl').value as boolean;
 
     const trigger = new Trigger();
 
-    trigger.keyValue = keyValue;
+    trigger.type = textTrigger ? TriggerType.Regex : TriggerType.Number;
     trigger.sensorId = this.sensor.internalId;
 
-    if(upperRaw.length !== 0) {
-      upperRaw = upperRaw.replace(',', '.');
-      trigger.upperEdge = +upperRaw;
-    }
+    if(textTrigger) {
+      trigger.formalLanguage = this.triggerFrom.get('languageControl').value.toString();
+    } else {
+      let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
+      let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
 
-    if(lowerRaw.length !== 0) {
-      lowerRaw = lowerRaw.replace(',', '.');
-      trigger.lowerEdge = +lowerRaw;
+      trigger.keyValue = this.triggerFrom.get('keyValue').value.toString();
+
+      if(upperRaw.length !== 0) {
+        upperRaw = upperRaw.replace(',', '.');
+        trigger.upperEdge = +upperRaw;
+      }
+
+      if(lowerRaw.length !== 0) {
+        lowerRaw = lowerRaw.replace(',', '.');
+        trigger.lowerEdge = +lowerRaw;
+      }
     }
 
     this.triggerService.createTrigger(trigger).subscribe((t) => {
@@ -249,6 +286,10 @@ export class SensorDetailComponent implements OnInit {
       this.triggers.push(t);
 
       this.triggerFrom.reset();
+
+      if(textTrigger) {
+        this.triggerFrom.get('languageSelectControl').setValue(true);
+      }
     }, (error) => {
       console.debug(`Unable to store trigger: ${error.toString()}`);
       this.alertService.showWarninngNotification("Unable to store trigger!");
@@ -282,5 +323,12 @@ export class SensorDetailComponent implements OnInit {
     }, error => {
       this.alertService.showWarninngNotification("Unable to remove link!");
     })
+  }
+
+  public onLanguageToggleClick() {
+    const type = this.showLanguageTriggers ? TriggerType.Regex : TriggerType.Number;
+    this.triggerService.getAllForByType(this.sensor.internalId, type).subscribe((triggers) => {
+      this.triggers = triggers;
+    });
   }
 }

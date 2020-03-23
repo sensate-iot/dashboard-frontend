@@ -4,11 +4,12 @@ import {ApiKeyService} from '../../../services/apikey.service';
 import {AlertService} from '../../../services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import {Sensor} from '../../../models/sensor.model';
-import {SensorService} from '../../../services/sensor.service';
+import {SensorService, SensorUpdate} from '../../../services/sensor.service';
 import {AddSensorLinkDialog} from './add-sensor-link-dialog/add-sensor-link-dialog.component';
 import {SensorLink} from '../../../models/sensorlink.model';
 import {LoginService} from '../../../services/login.service';
 import {MatPaginator} from '@angular/material/paginator';
+import {IUpdateSensorData, UpdateSensorDialog} from '../../../dialogs/update-sensor/update-sensor.dialog';
 
 @Component({
   selector: 'app-sensors-list',
@@ -80,6 +81,57 @@ export class SensorsListComponent implements OnInit {
   public isLinkedSensor(sensor: Sensor) {
     return this.sensorService.isLinkedSensor(sensor);
   }
+
+  public onUpdateClicked(sensor: Sensor) {
+    const update: IUpdateSensorData = {
+      description: sensor.description,
+      name: sensor.name,
+      secret: sensor.secret,
+      updateSecret: false
+    };
+
+    const dialog = this.dialog.open(UpdateSensorDialog, {
+      width: '400px',
+      height: '350px',
+      data:  update
+    });
+
+    dialog.afterClosed().subscribe((result) => {
+      if(result === null || result === undefined) {
+        return;
+      }
+
+      console.debug(result);
+      const raw = result as IUpdateSensorData;
+      const update: SensorUpdate = {
+        secret: raw.secret,
+        name: raw.name,
+        description: raw.description
+      };
+
+      if(raw.updateSecret) {
+        this.sensorService.update(sensor.internalId, update, true).subscribe(
+          (updated) => {
+            this.alerts.showSuccessNotification("Sensor updated!");
+            sensor.name = update.name;
+            sensor.description = update.description;
+            sensor.secret = updated.secret;
+          },
+          error => {
+            this.alerts.showWarninngNotification("Unable to update sensor!");
+          });
+      } else {
+        this.sensorService.update(sensor.internalId, update, false).subscribe(() => {
+          sensor.name = update.name;
+          sensor.description = update.description;
+          this.alerts.showSuccessNotification("Sensor updated!");
+        }, () => {
+          this.alerts.showWarninngNotification("Unable to update sensor!");
+        });
+      }
+    });
+  }
+
 
   public onLinkSensorClicked(sensor: Sensor) {
     const link: SensorLink = {

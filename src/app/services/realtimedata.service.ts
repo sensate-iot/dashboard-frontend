@@ -62,8 +62,8 @@ export class RealTimeDataService {
       timestamp: new Date().toISOString()
     };
 
-    const hash = sha(JSON.stringify(request));
-    request.sensorSecret = hash.toString();
+    const hash = sha('sha256').update(JSON.stringify(request));
+    request.sensorSecret = hash.digest('hex');
 
     const subscribeRequest: IWebSocketRequest<ISensorAuth> = {
       request: "unsubscribe",

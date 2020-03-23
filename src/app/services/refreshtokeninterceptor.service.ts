@@ -16,13 +16,17 @@ import {Router} from '@angular/router';
 import {TokenReply} from '../models/tokenreply.model';
 import {catchError, filter, finalize, flatMap, switchMap, take} from 'rxjs/operators';
 import {AppsService} from './apps.service';
+import {AlertService} from './alert.service';
 
 @Injectable()
 export class RefreshTokenInterceptorService implements HttpInterceptor {
   private isRefreshingToken : boolean;
   private tokenSubject : BehaviorSubject<string>;
 
-  constructor(private auth : LoginService, private router : Router, private apps: AppsService) {
+  constructor(private auth : LoginService,
+              private alerts: AlertService,
+              private router : Router,
+              private apps: AppsService) {
     this.isRefreshingToken = false;
     this.tokenSubject = new BehaviorSubject<string>(null);
   }
@@ -37,6 +41,8 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     });
   }
 
+
+
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     return next.handle(RefreshTokenInterceptorService.addToken(req, this.auth.getJwtToken())).pipe(catchError(error  => {
       if (error instanceof HttpErrorResponse) {
@@ -46,10 +52,14 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
             return this.handleUnauthorized(req, next);
 
           case 403:
-            this.logout();
-            console.debug('Logged out..!');
-            this.apps.forward('login');
-            return EMPTY;
+            if(this.isRefreshingToken) {
+              this.logout();
+              console.debug('Logged out..!');
+              this.apps.forward('login');
+              return EMPTY;
+            }
+
+            return throwError(error);
 
           default:
             console.debug('JWT interception error!');
@@ -70,7 +80,10 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
         return next.handle(RefreshTokenInterceptorService.addToken(req, res.jwtToken));
       }), catchError(error => {
         console.warn('Unable to refresh authentication token:');
-        console.warn(error.toString());
+        console.warn(error);
+        this.alerts.showErrorNotification("Unknown authentication error. Login again.");
+        this.logout();
+        this.apps.forward('login');
 
         this.isRefreshingToken =  false;
         return next.handle(req);

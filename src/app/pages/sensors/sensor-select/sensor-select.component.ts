@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ControlValueAccessor, FormControl} from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {Sensor} from '../../../models/sensor.model';
 import {Observable} from 'rxjs/internal/Observable';
 import {map, startWith} from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class SensorSelectComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+
     this.filteredSensors = this.form.valueChanges.pipe(
       startWith(''),
       map((value: string | Sensor) => {
@@ -39,6 +40,22 @@ export class SensorSelectComponent implements OnInit {
         return this.sensors.filter(sensor => sensor.name.toLowerCase().includes(filter));
       })
     );
+  }
+
+  public getTopValue() {
+    const values = this.form.value as Sensor[];
+
+    if(values === null || values === undefined || values.length <= 0) {
+      return '';
+    }
+
+    const top = values[0];
+
+    if(top === null || top === undefined) {
+      return '';
+    }
+
+    return top.name;
   }
 
   public onSelectAllClicked() {

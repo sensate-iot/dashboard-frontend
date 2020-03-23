@@ -104,6 +104,13 @@
   float: none;
 }
 
+.vcenter-2 {
+  margin-right: 6%;
+  display: inline-block;
+  vertical-align: bottom;
+  float: none;
+}
+
 .vcenter-nomargin {
   display: inline-block;
   vertical-align: bottom;
