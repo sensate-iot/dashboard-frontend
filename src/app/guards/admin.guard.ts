@@ -23,7 +23,7 @@ export class AdminGuard implements CanActivate {
     }
 
     return new Promise<boolean>(resolve => {
-      this.accounts.getRoles().subscribe(value => {
+      this.accounts.getRoles().then(value => {
         if (value.roles.indexOf('Administrators') >= 0) {
           resolve(true);
         } else {

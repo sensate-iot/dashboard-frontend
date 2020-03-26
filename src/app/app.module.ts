@@ -78,7 +78,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {AppsService} from './services/apps.service';
 import {MatStepperModule} from '@angular/material/stepper';
 import { UpdateSensorDialog } from './dialogs/update-sensor/update-sensor.dialog';
-import { TriggerTableComponent } from './shared/trigger-table/trigger-table.component';
+import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
 
 @NgModule({
   declarations: [
@@ -115,7 +115,7 @@ import { TriggerTableComponent } from './shared/trigger-table/trigger-table.comp
     SensorSelectComponent,
     AddSensorLinkDialog,
     AuditlogComponent,
-    TriggerTableComponent
+    ShowSensorSecretsDialog
   ],
   entryComponents: [
     UpdateSensorDialog,
@@ -123,7 +123,8 @@ import { TriggerTableComponent } from './shared/trigger-table/trigger-table.comp
     CreateActionDialog,
     ShowActionsDialog,
     QueryBuilderDialog,
-    AddSensorLinkDialog
+    AddSensorLinkDialog,
+    ShowSensorSecretsDialog
   ],
   imports: [
     LeafletModule.forRoot(),

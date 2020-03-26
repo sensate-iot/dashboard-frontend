@@ -31,6 +31,7 @@
     "core-js": "^3.6.4",
     "fibers": "^4.0.2",
     "guid-typescript": "^1.0.9",
+    "jwt-decode": "^2.2.0",
     "leaflet": "^1.6.0",
     "leaflet.heat": "^0.2.0",
     "moment": "^2.21.0",

@@ -7,39 +7,55 @@
         </div>
         <div class="card-content">
           <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <h4 class="card-title">API key management</h4>
             </div>
-            <div class="col-sm-9 search">
+            <div class="col-sm-10 search">
               <div class="right-part">
-              <table class="hdr-table">
-                <tr>
-                  <td class="hdr-table-td">
-                    <mat-form-field>
-                      <mat-select placeholder="Action" [(ngModel)]="action">
-                        <mat-option value="all">Show all keys</mat-option>
-                        <mat-option value="no-sys">Hide system keys</mat-option>
-                        <mat-option value="no-user">Hide user keys</mat-option>
-                        <mat-option value="rev">Show revoked keys</mat-option>
-                        <mat-option value="no-rev">Hide revoked keys</mat-option>
-                        <mat-option value="no-sensors">Hide sensor keys</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                    &nbsp;
-                    <button (click)="onSubmitClicked()" mat-raised-button>SUBMIT</button>
-                  </td>
-
-                  <td class="hdr-table-td ">
-                    <form>
-                      <mat-form-field color="#ff0000">
-                        <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
+                <table class="hdr-table">
+                  <tr>
+                    <td class="hdr-table-td">
+                        <mat-slide-toggle (click)="onIncludeRevokeClicked()" style="margin-right: 15px">Include revoked keys</mat-slide-toggle>
+                      <mat-form-field>
+                        <mat-label>Key types</mat-label>
+                        <mat-select [formControl]="typeControl" multiple>
+                          <mat-select-trigger>
+                            {{getTopValue()}}
+                            <span *ngIf="typeControl.value?.length > 1" class="additional-selection">
+                              (+{{typeControl.value.length - 1}}) </span>
+                          </mat-select-trigger>
+                          <mat-option *ngFor="let type of keyTypes" [value]="type">{{getKeyTypeString(type)}}</mat-option>
+                        </mat-select>
                       </mat-form-field>
-                      <button mat-mini-fab type="submit" class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
-                      <button mat-mini-fab class="add-btn" (click)="createNewKeyClicked()"><i class="material-icons" style="font-size:18px;">add</i></button>
-                    </form>
-                  </td>
-                </tr>
-              </table>
+                      <!--<mat-form-field>-->
+                        <!--<mat-select placeholder="Action" [(ngModel)]="action">-->
+                          <!--<mat-option value="all">Show all keys</mat-option>-->
+                          <!--<mat-option value="no-sys">Hide system keys</mat-option>-->
+                          <!--<mat-option value="no-user">Hide user keys</mat-option>-->
+                          <!--<mat-option value="rev">Show revoked keys</mat-option>-->
+                          <!--<mat-option value="no-rev">Hide revoked keys</mat-option>-->
+                          <!--<mat-option value="no-sensors">Hide sensor keys</mat-option>-->
+                        <!--</mat-select>-->
+                      <!--</mat-form-field>-->
+                      &nbsp;
+                      <button (click)="onSubmitClicked()" mat-raised-button>SUBMIT</button>
+                    </td>
+
+                    <td class="hdr-table-td ">
+                      <form>
+                        <mat-form-field color="#ff0000">
+                          <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search"
+                                 placeholder="Search">
+                        </mat-form-field>
+                        <button mat-mini-fab type="submit" class="search-btn" (click)="onSearchClicked()"><i
+                          class="material-icons" style="font-size:18px;">search</i></button>
+                        <button mat-mini-fab class="add-btn" (click)="createNewKeyClicked()"><i class="material-icons"
+                                                                                                style="font-size:18px;">add</i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                </table>
               </div>
             </div>
 
@@ -58,15 +74,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let key of shownKeys; let i = index">
-                  <td>{{i+1}}</td>
+                <tr *ngFor="let key of allKeys; let i = index">
+                  <td>{{i + 1}}</td>
                   <td>{{key.name}}</td>
                   <td>{{key.readOnly ? "Read-only" : "Read/Write"}}</td>
                   <td>{{key.revoked ? "Yes" : "No"}}</td>
                   <td>{{key.createdOn.toLocaleDateString()}}</td>
                   <td>
-                    <button mat-mini-fab class="search-btn" (click)="onShowClicked(i)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
-                    <button mat-mini-fab class="search-btn" (click)="onRevokeClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                    <button mat-mini-fab class="search-btn" (click)="onShowClicked(i)"><i class="material-icons"
+                                                                                          style="font-size:20px;">visibility</i>
+                    </button>
+                    <button mat-mini-fab class="search-btn" (click)="onRevokeClicked(i)"><i class="material-icons"
+                                                                                            style="font-size:20px;">delete</i>
+                    </button>
                   </td>
                 </tr>
 
@@ -76,7 +96,7 @@
 
           </div>
           <div class="row">
-            <mat-paginator [length]="apiKeys.length"
+            <mat-paginator [length]="length"
                            [pageSize]="pageSize"
                            [pageSizeOptions]="pageOptions"
                            (page)="onPaginate($event)">

@@ -19,7 +19,7 @@ export class AuditlogComponent implements OnInit {
   public logs: AuditLog[];
   public allLogs: AuditLog[];
 
-  public displayCols = ['method', 'route', 'address', 'email'];
+  public displayCols = ['method', 'route', 'address', 'email', 'timestamp'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -118,8 +118,13 @@ export class AuditlogComponent implements OnInit {
   }
 
   public onSearchClicked() {
+    this.paginator.firstPage();
     this.shouldUseSearch();
     this.fetchLogs();
+  }
+
+  public getDateText(log: AuditLog) {
+    return log.timestamp.toUTCString();
   }
 
   public getUserText(log: AuditLog) {

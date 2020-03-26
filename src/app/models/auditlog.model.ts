@@ -26,5 +26,5 @@ export interface AuditLog {
   method: RequestMethod,
   address: string,
   email: string,
-  timestamp: string
+  timestamp: Date
 }

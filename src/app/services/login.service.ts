@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Jwt} from '../models/jwt.model';
+import * as jwt from 'jwt-decode';
 import * as moment from 'moment';
 import {Observable} from 'rxjs';
 import {LockService} from './lock.service';
@@ -45,7 +46,9 @@ export class LoginService {
   }
 
   public getUserId() {
-    return localStorage.getItem("userId");
+    const json = atob(this.getJwtToken().split('.')[1]);
+    const obj = JSON.parse(json);
+    return obj.sub;
   }
 
   public readAuthCookie() {

@@ -7,9 +7,18 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
-import {ApiKey} from '../models/apikey.model';
+import {ApiKey, ApiKeyType} from '../models/apikey.model';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
+import {PaginationResult} from '../models/paginationresult.model';
+
+export interface ApiKeyFilter {
+  skip: number;
+  limit: number;
+  query: string;
+  types: ApiKeyType[];
+  includeRevoked: boolean;
+}
 
 @Injectable()
 export class ApiKeyService {
@@ -57,6 +66,10 @@ export class ApiKeyService {
         return value;
       })
     );
+  }
+
+  public filter(filter: ApiKeyFilter) {
+    return this.client.post<PaginationResult<ApiKey>>(`${environment.authApiHost}/apikeys`, JSON.stringify(filter));
   }
 
   public getAllKeys() {

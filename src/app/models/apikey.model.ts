@@ -10,7 +10,7 @@ export class ApiKey {
   public userId : string;
   public apiKey : string;
   public revoked : boolean;
-  public createdOn : string | Date;
+  public createdOn : Date;
   public type : number | ApiKeyType;
   public name : string;
   public readOnly : boolean;

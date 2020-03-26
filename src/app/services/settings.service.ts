@@ -16,11 +16,11 @@ export class SettingsService {
   public sidebarColor = '#D80B0B';
   public sidebarColorUpdate: EventEmitter<string> = new EventEmitter();
 
-  constructor() {
+  public constructor() {
     this.sidebarImageIndex = Math.floor(Math.random() * 4) + 1;
   }
 
-  getSidebarImageIndex(): number {
+  public getSidebarImageIndex(): number {
     return this.sidebarImageIndex;
   }
 

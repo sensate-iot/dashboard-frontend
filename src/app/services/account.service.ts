@@ -110,8 +110,15 @@ export class AccountService {
     return confirmed == 'true';
   }
 
-  public getRoles() {
-    return this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles');
+  public async getRoles() {
+    const roles = localStorage.getItem('roles');
+
+    if(roles !== null) {
+      return JSON.parse(roles);
+    }
+
+    await this.checkAndStoreRoles();
+    return this.getRoles();
   }
 
   public checkAndStoreRoles() {
@@ -133,8 +140,9 @@ export class AccountService {
   public static isAdmin() : boolean {
     const value = localStorage.getItem('admin');
 
-    if(!value)
+    if(!value) {
       return false;
+    }
 
     return value === 'true';
   }
@@ -144,6 +152,10 @@ export class AccountService {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
+  }
+
+  public checkEmailConfirmed() {
+    return false;
   }
 
   public checkPhoneConfirmed() {

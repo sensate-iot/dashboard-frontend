@@ -33,13 +33,8 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.readAuthCookie();
     this.id = this.settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
-    this.accounts.checkPhoneConfirmed().then(result => {
-      if(!result) {
-        this.router.navigate(['/confirm-phone-number']);
-      }
-    });
-    await this.accounts.checkAndStoreRoles();
     this.auth.setUserId();
+    await this.accounts.checkAndStoreRoles()
   }
 
   ngOnDestroy() {
@@ -69,6 +64,7 @@ export class RootComponent implements OnInit, OnDestroy {
       this.apps.forward('login');
     }).catch(() => {
       this.alerts.showNotification('Unable to revoke all authentication tokens!', 'top-center', 'warning');
+      this.apps.forward('login');
     })
   }
 }

@@ -23,6 +23,9 @@ export class AuditlogService {
   public findLogs(method: RequestMethod, mail: string, query: string, skip = 0, limit = 0) {
     let url: string;
 
+    mail = encodeURIComponent(mail);
+    query = encodeURIComponent(query);
+
     if(mail === '') {
       url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&skip=${skip}&limit=${limit}`;
     } else if(query === '') {

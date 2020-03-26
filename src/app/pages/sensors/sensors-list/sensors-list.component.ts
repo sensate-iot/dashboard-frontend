@@ -10,6 +10,9 @@ import {SensorLink} from '../../../models/sensorlink.model';
 import {LoginService} from '../../../services/login.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {IUpdateSensorData, UpdateSensorDialog} from '../../../dialogs/update-sensor/update-sensor.dialog';
+import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
+import {NoopScrollStrategy} from '@angular/cdk/overlay';
+import {IShowSensorData, ShowSensorSecretsDialog} from '../../../dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
 
 @Component({
   selector: 'app-sensors-list',
@@ -53,6 +56,22 @@ export class SensorsListComponent implements OnInit {
         this.alerts.showWarninngNotification("Unable to fetch sensors!");
       });
     }
+  }
+
+  public onViewClick(sensor: Sensor) {
+    const data: IShowSensorData = {
+      id: sensor.internalId,
+      secret: sensor.secret
+    };
+
+    const dialog = this.dialog.open(ShowSensorSecretsDialog, {
+      width: '450px',
+      height: '300px',
+      scrollStrategy: new NoopScrollStrategy(),
+      data: data
+    });
+
+    dialog.afterClosed().subscribe((result: IShowSensorData) => { });
   }
 
   public onPaginate(event: any) {
@@ -164,20 +183,6 @@ export class SensorsListComponent implements OnInit {
     });
   }
 
-  private copyMessage(val: string){
-    let selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = val;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-  }
-
   public onDeleteClicked(idx : number) {
     const sensor = this.sensors[idx];
     const ary = new Array<Sensor>();
@@ -210,12 +215,5 @@ export class SensorsListComponent implements OnInit {
       console.debug("Unable to unlink sensor: ");
       console.debug(error);
     });
-  }
-
-  public onShowClicked(num : number) {
-    const sensor = this.sensors[num];
-
-    this.copyMessage(sensor.secret);
-    this.alerts.showNotification('Sensor secret copied to clipboard!', 'top-center', 'success');
   }
 }
