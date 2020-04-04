@@ -36,8 +36,8 @@ import { ConfirmUpdateEmailComponent } from './pages/profile/confirm-update-emai
 import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
 import { ConfirmPhoneNumberComponent } from './pages/profile/confirm-phone-number/confirm-phone-number.component';
-import { UpdatePhoneNumberComponent } from './pages/profile/profile/update-phone-number/update-phone-number.component';
-import { UpdateEmailComponent } from './pages/profile/profile/update-email/update-email.component';
+import { UpdatePhoneNumberComponent } from './components/update-phone-number/update-phone-number.component';
+import { UpdateEmailComponent } from './components/update-email/update-email.component';
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 import {UserManagerComponent} from './pages/admin/user-manager/user-manager.component';
 import {AdminService} from './services/admin.service';
@@ -79,6 +79,7 @@ import {AppsService} from './services/apps.service';
 import {MatStepperModule} from '@angular/material/stepper';
 import { UpdateSensorDialog } from './dialogs/update-sensor/update-sensor.dialog';
 import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
+import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sens
     SensorSelectComponent,
     AddSensorLinkDialog,
     AuditlogComponent,
-    ShowSensorSecretsDialog
+    ShowSensorSecretsDialog,
+    DeleteUserComponent
   ],
   entryComponents: [
     UpdateSensorDialog,

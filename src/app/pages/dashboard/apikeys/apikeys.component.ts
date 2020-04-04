@@ -63,9 +63,6 @@ export class ApikeysComponent implements OnInit {
 
     const top = values[0];
 
-    console.log(values);
-    console.log(top);
-
     if(top === null || top === undefined) {
       return '';
     }
@@ -109,7 +106,6 @@ export class ApikeysComponent implements OnInit {
     this.keys.filter(filter).subscribe(result => {
       this.length = result.count;
       this.allKeys = result.values;
-      console.log(this.allKeys);
     }, error => {
       this.alerts.showWarninngNotification("Unable to fetch API keys!");
     });

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AlertService} from '../../../../services/alert.service';
-import {AccountService} from '../../../../services/account.service';
+import {AlertService} from '../../services/alert.service';
+import {AccountService} from '../../services/account.service';
 import {Router} from '@angular/router';
-import {Status} from '../../../../models/status.model';
+import {Status} from '../../models/status.model';
 
 @Component({
   selector: 'app-update-phone-number',

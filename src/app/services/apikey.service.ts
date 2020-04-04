@@ -6,10 +6,9 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ApiKey, ApiKeyType} from '../models/apikey.model';
 import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
 import {PaginationResult} from '../models/paginationresult.model';
 
 export interface ApiKeyFilter {
@@ -37,13 +36,7 @@ export class ApiKeyService {
       "readOnly": readonly
     };
 
-    return this.client.post<ApiKey>(environment.authApiHost + '/apikeys/create', create, this.options).pipe(
-      map((resp : HttpResponse<ApiKey>) => {
-        const key = resp.body;
-        const date = key.createdOn;
-        key.createdOn = new Date(Date.parse(date as string));
-        return key;
-    }));
+    return this.client.post<ApiKey>(environment.authApiHost + '/apikeys/create', create);
   }
 
   public revoke(id : string) {
@@ -59,13 +52,7 @@ export class ApiKeyService {
   }
 
   public refresh(id : string) {
-    return this.client.patch<ApiKey>(environment.authApiHost + '/apikeys/' + id, null, this.options).pipe(
-      map((value : ApiKey) => {
-        const date = value.createdOn;
-        value.createdOn = new Date(Date.parse(date as string));
-        return value;
-      })
-    );
+    return this.client.patch<ApiKey>(environment.authApiHost + '/apikeys/' + id, null, this.options);
   }
 
   public filter(filter: ApiKeyFilter) {
@@ -73,13 +60,6 @@ export class ApiKeyService {
   }
 
   public getAllKeys() {
-    return this.client.get<ApiKey[]>(environment.authApiHost + '/apikeys').pipe(map(value => {
-      value.forEach(entry => {
-        const raw = entry.createdOn as any;
-        entry.createdOn = new Date(Date.parse(raw));
-      });
-
-      return value;
-    }));
+    return this.client.get<ApiKey[]>(environment.authApiHost + '/apikeys');
   }
 }

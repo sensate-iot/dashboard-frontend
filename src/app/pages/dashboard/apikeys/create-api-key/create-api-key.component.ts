@@ -7,7 +7,7 @@ import {LoginService} from '../../../../services/login.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  public isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const submitted = form && form.submitted;
 
     return !!(control && control.invalid && (control.dirty || control.touched || submitted));
@@ -24,11 +24,11 @@ export class CreateApiKeyComponent implements OnInit {
   codeForm : FormGroup;
   matcher : FormErrorStateMatcher;
 
-  constructor(private accounts : AccountService,
+  public constructor(private accounts : AccountService,
               @Inject(DOCUMENT) private document : Window,
               private router : Router, private auth : LoginService) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.matcher = new FormErrorStateMatcher();
 
     this.codeField = new FormControl('', [
@@ -39,11 +39,9 @@ export class CreateApiKeyComponent implements OnInit {
     this.codeForm = new FormGroup({
       codeField: this.codeField
     });
-
-    console.log(encodeURI(this.document.location.origin + '/login'));
   }
 
-  onConfirm() {
+  public onConfirm() {
     this.accounts.confirmUpdateEmail(this.codeField.value).subscribe(res => {
       this.auth.resetLogin();
       this.router.navigate(['/login']);
@@ -54,11 +52,9 @@ export class CreateApiKeyComponent implements OnInit {
     });
   }
 
-  isValid() {
+  public isValid() {
     return this.codeForm.valid;
   }
 
-  onResize() {
-
-  }
+  public onResize() { }
 }

@@ -10,7 +10,6 @@ import {SensorLink} from '../../../models/sensorlink.model';
 import {LoginService} from '../../../services/login.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {IUpdateSensorData, UpdateSensorDialog} from '../../../dialogs/update-sensor/update-sensor.dialog';
-import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {IShowSensorData, ShowSensorSecretsDialog} from '../../../dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
 
@@ -198,7 +197,8 @@ export class SensorsListComponent implements OnInit {
 
       this.sensors = ary;
     }, (error) => {
-      console.log(`Unable to delete sensors: ${JSON.stringify(error)}`);
+      console.debug("Unable to delete sensors:");
+      console.debug(error);
       this.alerts.showWarninngNotification("Unable to delete sensor!");
     });
   }

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {FormErrorStateMatcher} from '../profile.component';
+import {FormErrorStateMatcher} from '../../pages/profile/profile/profile.component';
 import {Router} from '@angular/router';
-import {AccountService} from '../../../../services/account.service';
-import {AlertService} from '../../../../services/alert.service';
-import {Status} from '../../../../models/status.model';
+import {AccountService} from '../../services/account.service';
+import {AlertService} from '../../services/alert.service';
 
 @Component({
   selector: 'app-update-email',

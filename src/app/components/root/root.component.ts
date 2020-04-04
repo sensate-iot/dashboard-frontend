@@ -33,8 +33,11 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.readAuthCookie();
     this.id = this.settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
-    this.auth.setUserId();
     await this.accounts.checkAndStoreRoles()
+  }
+
+  public navigate(dest: string) {
+    this.apps.forward(dest);
   }
 
   ngOnDestroy() {

@@ -154,8 +154,8 @@ export class AccountService {
     });
   }
 
-  public checkEmailConfirmed() {
-    return false;
+  public deleteUser() {
+    return this.http.delete(`${environment.authApiHost}/accounts`)
   }
 
   public checkPhoneConfirmed() {

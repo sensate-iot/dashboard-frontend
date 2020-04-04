@@ -16,6 +16,7 @@ export class AppsService {
 
     this.map.set('dashboard', 'http://dashboard.dev.sensateiot.com:4200');
     this.map.set('login', 'http://login.dev.sensateiot.com');
+    this.map.set('datawhere', 'http://datawhere.dev.sensateiot.com');
   }
 
   public forward(app: string, path = '') {

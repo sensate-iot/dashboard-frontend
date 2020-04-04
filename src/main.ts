@@ -8,7 +8,7 @@ async function main() {
   if(window.location.pathname === '/') {
     window.location.pathname = '/dashboard';
   }
-  console.log(`Path name : ${window.location.pathname}`);
+  console.debug(`Path name : ${window.location.pathname}`);
 
   if(environment.production) {
     enableProdMode();

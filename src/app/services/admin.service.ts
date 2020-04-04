@@ -19,14 +19,8 @@ export class AdminService {
     entry.Xcoord = new Date(Date.parse(date as string));
   }
 
-  public getRecentUsers() {
-    return this.http.get<User[]>(environment.authApiHost + '/admin/users').pipe(map(value => {
-      value.forEach(entry => {
-        const raw = entry.registeredAt as any;
-        entry.registeredAt = new Date(Date.parse(raw));
-      });
-      return value;
-    }));
+  public getRecentUsers(skip = 0, limit = 0) {
+    return this.http.get<PaginationResult<User>>(`${environment.authApiHost}/admin/users?skip=${skip}&limit=${limit}`);
   }
 
   public findUsers(email : string, skip = 0, limit = 0) {

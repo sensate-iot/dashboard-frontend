@@ -156,8 +156,6 @@ export class SensorWizardComponent implements OnInit {
       trigger.lowerEdge = +lowerRaw;
     }
 
-    console.log(JSON.stringify(trigger));
-
     this.triggerService.createTrigger(trigger).subscribe((t) => {
       this.alerts.showSuccessNotification("Trigger created!");
       this.triggers.push(t);

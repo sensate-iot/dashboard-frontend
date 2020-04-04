@@ -35,16 +35,6 @@ export class LoginService {
     this.host = window.location.hostname.replace(/^[^.]+\./g, "");
   }
 
-  public setUserId() {
-    if(!this.isLoggedIn() || localStorage.getItem('userId') !== null) {
-      return;
-    }
-
-    this.accounts.getUser().subscribe(user => {
-      localStorage.setItem("userId", user.id);
-    });
-  }
-
   public getUserId() {
     const json = atob(this.getJwtToken().split('.')[1]);
     const obj = JSON.parse(json);
@@ -142,8 +132,6 @@ export class LoginService {
       "RefreshToken": jwt.refreshToken
     };
 
-    console.log('Attempting to get new token..');
-
     return this.http.post<TokenReply>(environment.authApiHost + '/tokens/refresh', data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json').set('Cache-Control', 'none')
     });
@@ -208,16 +196,13 @@ export class LoginService {
   }
 
   public setSession(data : Jwt) {
-    const expire = moment().add(data.expiresInMinutes, 'minutes');
-    const jwtExpire = moment().add(data.jwtExpiresInMinutes, 'minutes');
-
-    data.jwtExpiresInMinutes = jwtExpire.unix();
-    data.expiresInMinutes = expire.unix();
+    const now = moment().add(data.expiresInMinutes, 'minutes').toDate();
 
     localStorage.setItem('jwt', JSON.stringify(data));
     localStorage.setItem('syskey', data.systemApiKey);
 
     const cookie = btoa(JSON.stringify(data));
-    this.cookies.set(LoginService.AuthCookie, cookie, null, '/', this.host);
+    console.debug(`Setting cookie for: ${this.host}`);
+    this.cookies.set(LoginService.AuthCookie, cookie, now, '/', this.host);
   }
 }

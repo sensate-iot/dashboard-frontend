@@ -4,7 +4,6 @@ import {AdminService} from '../../../services/admin.service';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../../services/account.service';
 import {AlertService} from '../../../services/alert.service';
-import {Subject} from 'rxjs/internal/Subject';
 import {MatPaginator} from '@angular/material/paginator';
 
 interface RoleIconMap {
@@ -45,6 +44,7 @@ export class UserManagerComponent implements OnInit {
 
   public pageOptions =  [10,25,100,200];
   public pageSize: number;
+  public pageIndex:  number;
   public length: number;
 
   private readonly roleIcons : RoleIconMap;
@@ -56,6 +56,7 @@ export class UserManagerComponent implements OnInit {
     this.roleIcons['Users'] = 'person_outline';
     this.roleIcons['Administrators'] = 'grade';
     this.roleIcons['Banned'] = 'lock';
+    this.searchFieldValue = '';
   }
 
   public ngOnInit() : void {
@@ -64,10 +65,11 @@ export class UserManagerComponent implements OnInit {
     this.users = [];
     this.length = 0;
     this.pageSize = 10;
+    this.pageIndex = 0;
 
     this.admin.getRecentUsers().subscribe(value => {
-      this.length = value.length;
-      this.setUserData(value);
+      this.length = value.count;
+      this.setUserData(value.values);
     });
 
     this.actionControl = new FormControl('', [
@@ -86,14 +88,16 @@ export class UserManagerComponent implements OnInit {
 
   public onPaginate(event: any) {
     this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
     this.onSearchClicked();
   }
 
   public onSearchClicked() {
     if(this.searchFieldValue === undefined || this.searchFieldValue.length <= 0) {
-      this.admin.getRecentUsers().subscribe(value => {
+      this.admin.getRecentUsers(this.pageIndex * this.pageSize, this.pageSize).subscribe(value => {
         this.form.removeControl('users');
-        this.setUserData(value);
+        this.length = value.count;
+        this.setUserData(value.values);
       });
 
       return;
@@ -144,12 +148,11 @@ export class UserManagerComponent implements OnInit {
 
       const control : FormArray = <FormArray> this.form.controls['users'];
       control.controls.forEach(v => v.setValue(false));
+      this.selectAll = false;
     }, error => {
       this.alerts.showNotification('Unable to update user roles!', 'top-center', 'warning');
       console.debug(error);
     });
-
-    console.log(JSON.stringify(objs));
   }
 
   public selectAllChanged() {

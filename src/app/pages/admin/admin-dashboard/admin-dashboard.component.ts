@@ -25,7 +25,6 @@ export class AdminDashboardComponent implements OnInit {
   public ngOnInit() : void {
     this.admin.getAdminDashboard().subscribe((value) => {
       this.dashboard = value;
-      console.log(value);
       const verified = this.dashboard.numberOfUsers - this.dashboard.numberOfGhosts;
       this.verifiedUsers = 100.0 * verified / this.dashboard.numberOfUsers;
 
