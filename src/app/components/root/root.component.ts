@@ -8,7 +8,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SettingsService} from '../../services/settings.service';
 import {Router} from '@angular/router';
-import {LockService} from '../../services/lock.service';
 import {LoginService} from '../../services/login.service';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
@@ -24,7 +23,7 @@ export class RootComponent implements OnInit, OnDestroy {
   public id : number;
   public backgroundColor : string;
 
-  constructor(private lock : LockService, private auth : LoginService, private accounts : AccountService,
+  constructor(private auth : LoginService, private accounts : AccountService,
               private apps: AppsService,
               private settings : SettingsService, private alerts : AlertService, private router : Router) {
   }
@@ -55,11 +54,6 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.logout().then(() => {
       this.apps.forward('login');
     });
-  }
-
-  public lockClicked() {
-    this.lock.lock();
-    this.router.navigate(['lock']);
   }
 
   public revokeAllTokens() {

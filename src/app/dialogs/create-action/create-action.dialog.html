@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Create trigger action</h1>
 <div>
   <mat-form-field class="input-full-width">
-    <mat-label>Select an option</mat-label>
+    <mat-label>Select action type</mat-label>
     <mat-select (ngModelChange)="selectChannel()" [(ngModel)]="data.selected" [(value)]="data.selected">
       <mat-option value="0">Email</mat-option>
       <mat-option value="1">SMS</mat-option>
@@ -20,7 +20,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="selectedNumber === 5" class="input-full-width">
-    <mat-label>Select an option</mat-label>
+    <mat-label>Select an actuator</mat-label>
     <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
       <mat-option *ngFor="let sensor of sensors" [value]="sensor.internalId">{{sensor.name}}</mat-option>
     </mat-select>

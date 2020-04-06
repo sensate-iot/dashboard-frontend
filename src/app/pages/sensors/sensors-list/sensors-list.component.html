@@ -7,10 +7,10 @@
         </div>
         <div class="card-content">
           <div class="row">
-            <div class="col-xs-11 col-lg-6">
+            <div class="col-xs-12 col-lg-6">
               <h4 class="card-title">Sensor Management</h4>
             </div>
-            <div class="col-xs-12 col-lg-6 search">
+            <div class="col-xs-12 col-lg-6 search padding-if">
                 <mat-form-field color="#ff0000" class="input-full-width">
                   <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
                 </mat-form-field>
@@ -36,22 +36,15 @@
                   <td>{{descText(sensor.description)}}</td>
                   <td>{{sensor.createdAt.toLocaleDateString()}}</td>
                   <td>
-                    <button mat-mini-fab
-                            [disabled]="isLinkedSensor(sensor)"
-                            class="search-btn" (click)="onViewClick(sensor)"><i class="material-icons" style="font-size:20px;">visibility</i></button>
-                    <button mat-mini-fab class="search-btn" routerLink="/sensors/{{sensor.internalId}}"><i class="material-icons" style="font-size:20px;">details</i></button>
-                    <button mat-mini-fab class="search-btn"
-                            *ngIf="!isLinkedSensor(sensor)"
-                            (click)="onUpdateClicked(sensor)"><i class="material-icons" style="font-size:20px;">edit</i></button>
-                    <button mat-mini-fab class="search-btn"
-                            *ngIf="!isLinkedSensor(sensor)"
-                            (click)="onLinkSensorClicked(sensor)"><i class="material-icons" style="font-size:20px;">link</i></button>
-                    <button mat-mini-fab class="search-btn"
-                            *ngIf="!isLinkedSensor(sensor)"
-                            (click)="onDeleteClicked(i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
-                    <button mat-mini-fab class="search-btn"
-                            *ngIf="isLinkedSensor(sensor)"
-                            (click)="unUnlinkClicked(sensor, i)"><i class="material-icons" style="font-size:20px;">delete</i></button>
+                    <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
+                    <mat-menu #more="matMenu">
+                      <button mat-menu-item [disabled]="isLinkedSensor(sensor)" (click)="onViewClick(sensor)">Show secrets</button>
+                      <button mat-menu-item routerLink="/sensors/{{sensor.internalId}}"> Details </button>
+                      <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onUpdateClicked(sensor)"> Update </button>
+                      <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onLinkSensorClicked(sensor)">Link </button>
+                      <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onDeleteClicked(i)">Remove </button>
+                      <button mat-menu-item *ngIf="isLinkedSensor(sensor)" (click)="unUnlinkClicked(sensor, i)">Unlink</button>
+                    </mat-menu>
                   </td>
                 </tr>
                 </tbody>

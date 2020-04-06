@@ -9,5 +9,12 @@ export const environment = {
   dashboardApiHost: 'http://localhost:5001/stats/v1',
   networkApiHost: 'http://localhost:5003/network/v1',
   dataApiHost: 'http://localhost:5002/data/v1',
-  liveDataHost: 'ws://localhost:4750/live/v1/measurements'
+  liveDataHost: 'ws://localhost:4750/live/v1/measurements',
+
+  appsMap: {
+    login: 'http://login.dev.sensateiot.com',
+    dashboard: 'http://dashboard.dev.sensateiot.com:4200',
+    datawhere: 'http://datawhere.dev.sensateiot.com',
+    home: 'https://staging.sensateiot.com'
+  }
 };

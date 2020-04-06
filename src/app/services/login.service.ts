@@ -12,7 +12,6 @@ import {Jwt} from '../models/jwt.model';
 import * as jwt from 'jwt-decode';
 import * as moment from 'moment';
 import {Observable} from 'rxjs';
-import {LockService} from './lock.service';
 import {TokenReply} from '../models/tokenreply.model';
 import {ApiKeyService} from './apikey.service';
 import {AccountService} from './account.service';
@@ -176,7 +175,6 @@ export class LoginService {
   }
 
   public resetLogin() {
-    LockService.destroyLock();
     localStorage.removeItem('jwt');
     localStorage.removeItem('roles');
     localStorage.removeItem('admin');

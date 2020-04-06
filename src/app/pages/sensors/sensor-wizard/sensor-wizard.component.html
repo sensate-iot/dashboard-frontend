@@ -89,10 +89,11 @@
                     <td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>
                     <td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>
                     <td class="mat-cell">
-                      <button mat-mini-fab (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i>
-                      </button>
-                      <button mat-mini-fab (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i>
-                      </button>
+                      <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
+                      <mat-menu #more="matMenu">
+                        <button  mat-menu-item  (click)="createAction(i)">Add action</button>
+                        <button  mat-menu-item (click)="removeTrigger(i)">Remove trigger</button>
+                      </mat-menu>
                     </td>
                   </tr>
                 </table>
@@ -150,49 +151,3 @@
     </div>
   </div>
 </div>
-
-
-<!--<div class="container">-->
-<!--<div class="row wizard-page-title">-->
-<!--<div class="col-md-10 col-md-offset-1">-->
-<!--<div class="wizard-panel card">-->
-<!--<div class="wizard-header">-->
-<!--<h3 class="text-center">Create a sensor</h3>-->
-<!--&lt;!&ndash;<h5 class="text-center" style="margin-top: 5px; padding: 0 20px;">This information will let us know more about you.</h5>&ndash;&gt;-->
-<!--</div>-->
-<!--<div class="wizard-navigation">-->
-<!--<ul class="nav nav-pills">-->
-<!--<li class="text-uppercase text-center">About</li>-->
-<!--<li class="text-uppercase text-center">Security</li>-->
-<!--<li class="text-uppercase text-center">Triggers</li>-->
-<!--</ul>-->
-<!--<div class="move-tab text-center text-uppercase">About</div>-->
-<!--</div>-->
-<!--<div class="wizard-body">-->
-<!--<div class="wizard-tab ">-->
-<!--<div class="row">-->
-<!--<div class="col-md-8 col-md-offset-2" style="text-align: center; padding-top:5%;padding-bottom: 5%">-->
-<!--<p>-->
-<!--Create a new sensor by entering the details below.-->
-<!--</p>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->
-<!--<div class="wizard-tab">-->
-<!--<div class="row" style="padding-bottom: 5%">-->
-<!--<div class="col-md-8 col-md-offset-2" style="text-align: center; padding-top:5%;padding-bottom: 5%">-->
-<!--<p>Sensors communicate securely with the platform using a secret. This secret can either be generated-->
-<!--by Sensate IoT, or you can provide one.-->
-<!--</p>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->
-<!--<div class="wizard-tab">-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->

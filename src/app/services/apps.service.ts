@@ -6,24 +6,20 @@
  */
 
 import { Injectable } from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AppsService {
-  private map: Map<string, string>;
-
   public constructor() {
-    this.map = new Map<string, string>();
-
-    this.map.set('dashboard', 'http://dashboard.dev.sensateiot.com:4200');
-    this.map.set('login', 'http://login.dev.sensateiot.com');
-    this.map.set('datawhere', 'http://datawhere.dev.sensateiot.com');
   }
 
   public forward(app: string, path = '') {
-    if(!this.map.has(app)) {
+    const base = environment.appsMap[app];
+
+    if(base === null || base === undefined) {
       return;
     }
 
-    window.location.href = `${this.map.get(app)}${path}`;
+    window.location.href = `${base}${path}`;
   }
 }

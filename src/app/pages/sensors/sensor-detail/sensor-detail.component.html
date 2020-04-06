@@ -24,9 +24,12 @@
               <td class="mat-cell">{{trigger.formalLanguage !== null ? trigger.formalLanguage : ""}}</td>
               <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
               <td class="mat-cell">
-                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
-                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
-                <button mat-mini-fab class="icon-button" (click)="showActions(i)"><i class="material-icons" style="font-size:20px;">pageview</i></button>
+                <button mat-icon-button [matMenuTriggerFor]="text_more"><i class="material-icons icon-btn">more_vert</i></button>
+                <mat-menu #text_more="matMenu">
+                  <button *ngIf="!isLinkedSensor(sensor)" mat-menu-item  (click)="createAction(i)">Add action</button>
+                  <button mat-menu-item (click)="showActions(i)">Show actions</button>
+                  <button *ngIf="!isLinkedSensor(sensor)" mat-menu-item (click)="removeTrigger(i)">Remove trigger</button>
+                </mat-menu>
               </td>
             </tr>
           </table>
@@ -47,9 +50,12 @@
               <td class="mat-cell">{{trigger.upperEdge !== null ? trigger.upperEdge : ""}}</td>
               <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
               <td class="mat-cell">
-                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="createAction(i)"><i class="material-icons" style="font-size:20px;">add</i></button>
-                <button [disabled]="isLinkedSensor(sensor)" mat-mini-fab class="icon-button" (click)="removeTrigger(i)"><i class="material-icons" style="font-size:20px;">clear</i></button>
-                <button mat-mini-fab class="icon-button" (click)="showActions(i)"><i class="material-icons" style="font-size:20px;">pageview</i></button>
+                <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
+                <mat-menu #more="matMenu">
+                  <button *ngIf="!isLinkedSensor(sensor)" mat-menu-item  (click)="createAction(i)">Add action</button>
+                  <button mat-menu-item (click)="showActions(i)">Show actions</button>
+                  <button *ngIf="!isLinkedSensor(sensor)" mat-menu-item (click)="removeTrigger(i)">Remove trigger</button>
+                </mat-menu>
               </td>
             </tr>
           </table>
@@ -94,7 +100,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-3 col-xs-4 vcenter-nomargin">
+            <div class="col-md-3 col-xs-12 vcenter-nomargin">
               <mat-slide-toggle (change)="onLanguageToggleClick()" formControlName="languageSelectControl">Text trigger</mat-slide-toggle>
               <button mat-mini-fab style="margin-left:5%"
                       [disabled]="isLinkedSensor(sensor)"

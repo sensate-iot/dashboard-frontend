@@ -42,7 +42,7 @@ export class ConfirmPhoneNumberComponent implements OnInit {
   public onConfirm() {
     this.accounts.confirmPhoneNumber(this.codeField.value.toString()).then(() => {
       this.notifications.showNotification('Phone number updated!', 'top-center', 'success');
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/overview']);
     }, error => {
       console.debug(error.error.errorCode);
       if(error.error.errorCode === 401) {

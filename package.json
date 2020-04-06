@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --aot=false --disableHostCheck=true",
     "build-staging": "ng build --aot --configuration=staging",
+    "build-dev": "ng build --aot",
     "build": "ng build --prod"
   },
   "browser": {
@@ -40,7 +41,6 @@
     "node-sass": "^4.13.1",
     "object-assign": "^4.1.1",
     "rxjs": "^6.5.4",
-    "scrypt-js": "^3.0.0",
     "sha.js": "^2.4.11",
     "socket.io-client": "^2.3.0",
     "ts-md5": "^1.2.7",

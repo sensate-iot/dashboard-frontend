@@ -18,7 +18,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routing} from './app.routes';
 import { HeaderComponent } from './components/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { LockComponent } from './pages/lock/lock.component';
 import {LoginService} from './services/login.service';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RefreshTokenInterceptorService} from './services/refreshtokeninterceptor.service';
@@ -30,8 +29,6 @@ import {FigurecardComponent} from './components/figurecard/figurecard.component'
 import {SettingsService} from './services/settings.service';
 import {AuthGuard} from './guards/auth.guard';
 import { ProfileComponent } from './pages/profile/profile/profile.component';
-import {LockGuard} from './guards/lock.guard';
-import {LockService} from './services/lock.service';
 import { ConfirmUpdateEmailComponent } from './pages/profile/confirm-update-email/confirm-update-email.component';
 import {AccountService} from './services/account.service';
 import {AlertService} from './services/alert.service';
@@ -44,9 +41,8 @@ import {AdminService} from './services/admin.service';
 import { ChartCardComponent } from './components/chart-card/chart-card.component';
 import { BarChartCardComponent } from './components/bar-chart-card/bar-chart-card.component';
 import {DashBoardService} from './services/dashboard.service';
-import {ApikeysComponent, CreateApiKeyDialog} from './pages/dashboard/apikeys/apikeys.component';
+import {ApiKeysComponent, CreateApiKeyDialog} from './pages/dashboard/apikeys/api-keys.component';
 import {ApiKeyService} from './services/apikey.service';
-import { CreateApiKeyComponent } from './pages/dashboard/apikeys/create-api-key/create-api-key.component';
 import { SensorsListComponent } from './pages/sensors/sensors-list/sensors-list.component';
 import {SensorWizardComponent} from './pages/sensors/sensor-wizard/sensor-wizard.component';
 import {TriggerService} from './services/trigger.service';
@@ -85,7 +81,6 @@ import { DeleteUserComponent } from './components/delete-user/delete-user.compon
   declarations: [
     AppComponent,
     HeaderComponent,
-    LockComponent,
     RootComponent,
     ImagecardComponent,
     FigurecardComponent,
@@ -100,8 +95,7 @@ import { DeleteUserComponent } from './components/delete-user/delete-user.compon
     AdminDashboardComponent,
     ChartCardComponent,
     BarChartCardComponent,
-    ApikeysComponent,
-    CreateApiKeyComponent,
+    ApiKeysComponent,
     CreateApiKeyDialog,
     UpdateSensorDialog,
     CreateActionDialog,
@@ -165,7 +159,6 @@ import { DeleteUserComponent } from './components/delete-user/delete-user.compon
     AuditlogService,
     TriggerService,
     SensorService,
-    LockService,
     AccountService,
     ApiKeyService,
     RealTimeDataService,
@@ -175,7 +168,6 @@ import { DeleteUserComponent } from './components/delete-user/delete-user.compon
     DataService,
     GraphService,
     AuthGuard,
-    LockGuard,
     AlertService,
     SettingsService,
     {

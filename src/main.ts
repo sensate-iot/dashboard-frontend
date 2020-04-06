@@ -6,7 +6,7 @@ import { environment } from './environments/environment';
 
 async function main() {
   if(window.location.pathname === '/') {
-    window.location.pathname = '/dashboard';
+    window.location.pathname = '/overview';
   }
   console.debug(`Path name : ${window.location.pathname}`);
 

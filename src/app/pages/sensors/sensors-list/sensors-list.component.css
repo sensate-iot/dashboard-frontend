@@ -19,6 +19,12 @@
   width: 80%;
 }
 
+@media (max-width: 1200px) {
+  .padding-if {
+    padding-top: 20px;
+  }
+}
+
 .card-header {
   position: absolute;
   text-align: center;

@@ -115,6 +115,7 @@ export class SensorWizardComponent implements OnInit {
       this.alerts.showSuccessNotification("Sensor created!");
       this.sensorCreated = true;
       this.stepper.next();
+      this.showTriggerForm = true;
     }, error => {
       console.debug(`Unable to store sensor:}`);
       console.debug(error);

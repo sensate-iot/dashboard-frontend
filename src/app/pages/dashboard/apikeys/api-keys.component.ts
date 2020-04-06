@@ -16,14 +16,14 @@ import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-apikeys',
-  templateUrl: './apikeys.component.html',
-  styleUrls: ['./apikeys.component.css']
+  templateUrl: './api-keys.component.html',
+  styleUrls: ['./api-keys.component.css']
 })
-export class ApikeysComponent implements OnInit {
+export class ApiKeysComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public searchFieldValue : string;
-  private allKeys : ApiKey[];
+  public allKeys : ApiKey[];
 
   public form : FormGroup;
 
