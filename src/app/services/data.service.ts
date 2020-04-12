@@ -26,6 +26,13 @@ interface Filter {
   longitude: number;
   latitude: number;
   radius: number;
+  orderDirection: OrderDirection;
+}
+
+export enum OrderDirection {
+  ascending = "asc",
+  descending = "desc",
+  none = ""
 }
 
 @Injectable()
@@ -49,9 +56,11 @@ export class DataService {
   ) {
   }
 
-  public getFromMany(sensorId: string[], start: Date, end: Date, limit: number = 0, skip: number = 0) {
+  public getFromMany(sensorId: string[], start: Date, end: Date,
+                     limit: number = 0, skip: number = 0, order: OrderDirection = OrderDirection.none) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}`;
+
     const filter : Filter = {
       end: end.toISOString(),
       start: start.toISOString(),
@@ -60,7 +69,8 @@ export class DataService {
       radius: null,
       limit: limit,
       skip: skip,
-      sensorIds: sensorId
+      sensorIds: sensorId,
+      orderDirection: order
     };
 
     return this.http.post<Measurement[]>(url, JSON.stringify(filter), this.options);
@@ -73,7 +83,8 @@ export class DataService {
     location: ILocation,
     radius: number,
     limit: number = 0,
-    skip: number = 0
+    skip: number = 0,
+    order: OrderDirection = OrderDirection.none
   ) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}`;
@@ -85,13 +96,14 @@ export class DataService {
       radius: radius,
       limit: limit,
       skip: skip,
-      sensorIds: sensorIds
+      sensorIds: sensorIds,
+      orderDirection: order
     };
 
     return this.http.post<Measurement[]>(url, JSON.stringify(filter), this.options);
   }
 
-  public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0) {
+  public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0, order: OrderDirection = OrderDirection.none) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}&sensorId=${sensorId}&start=${start.toISOString()}&end=${end.toISOString()}`;
 
@@ -103,10 +115,16 @@ export class DataService {
       url += `&skip=${skip}`;
     }
 
+    if(order !== OrderDirection.none) {
+      url += `&order=${order}`;
+    }
+
     return this.http.get<Measurement[]>(url, this.options);
   }
 
-  public getNear(sensorId: string, start: Date, end: Date, location: ILocation, radius: number, limit: number = 0, skip: number = 0) {
+  public getNear(sensorId: string, start: Date, end: Date, location: ILocation,
+                 radius: number, limit: number = 0, skip: number = 0,
+                 order: OrderDirection = OrderDirection.none) {
     const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?key=${key}&sensorId=${sensorId}`+
       `&start=${start.toISOString()}&end=${end.toISOString()}` +
@@ -118,6 +136,10 @@ export class DataService {
 
     if(skip > 0) {
       url += `&skip=${skip}`;
+    }
+
+    if(order !== OrderDirection.none) {
+      url += `&order=${order}`;
     }
 
     return this.http.get<Measurement[]>(url, this.options);

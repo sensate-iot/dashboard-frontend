@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot=false --disableHostCheck=true",
-    "build-staging": "ng build --aot --configuration=staging",
-    "build-dev": "ng build --aot",
+    "start": "ng serve --aot=false --disableHostCheck=true --base-href /apps/dashboard/",
+    "build-staging": "ng build --aot --configuration=staging --base-href /apps/dashboard/",
+    "build-dev": "ng build --aot --base-href /apps/dashboard/",
     "build": "ng build --prod"
   },
   "browser": {

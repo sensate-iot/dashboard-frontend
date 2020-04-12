@@ -5,8 +5,7 @@ import {Sensor} from '../../../models/sensor.model';
 import {SensorService} from '../../../services/sensor.service';
 import {FormControl, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import {Observable} from 'rxjs/internal/Observable';
-import {map, startWith} from 'rxjs/operators';
+import {OrderDirection} from '../../../services/data.service';
 
 @Component({
   selector: 'app-query-builder-dialog',
@@ -15,9 +14,9 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class QueryBuilderDialog implements OnInit {
   public sensors : Sensor[];
-  public filteredSensors: Observable<Sensor[]>;
 
   public sensorControl: FormControl;
+  public orderControl: FormControl;
 
   public startTime: FormControl;
   public endTime: FormControl;
@@ -45,6 +44,7 @@ export class QueryBuilderDialog implements OnInit {
   ) {
     this.sensors = this.data.sensors;
 
+    this.orderControl = new FormControl();
     this.startControl = new FormControl(this.data.start);
     this.endControl = new FormControl(this.data.end);
 
@@ -139,6 +139,8 @@ export class QueryBuilderDialog implements OnInit {
     this.data.latitude = +this.latitudeControl.value;
     this.data.longitude = +this.longitudeControl.value;
     this.data.max = +this.maxRangeControl.value;
+
+    this.data.order = this.orderControl.value || OrderDirection.none;
 
     if(this.data.skip === null) {
       this.data.skip = 0;

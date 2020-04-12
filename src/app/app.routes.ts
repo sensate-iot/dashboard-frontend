@@ -43,7 +43,6 @@ const routes: Routes = [
       {path: ':id', component: SensorDetailComponent, canActivate: [AuthGuard, ConfirmGuard]}
     ]
   },
-  {path: 'index', redirectTo: '/overview'},
   {
     path: 'admin', component: RootComponent, children: [
       {path: 'overview', component: AdminDashboardComponent, canActivate: [AuthGuard, AdminGuard, ConfirmGuard]},
@@ -51,7 +50,7 @@ const routes: Routes = [
       {path: 'audit-logs', component: AuditlogComponent, canActivate: [AuthGuard, AdminGuard, ConfirmGuard]}
     ]
   },
-  {path: '*', redirectTo: '/overview', canActivate: [AuthGuard, ConfirmGuard]}
+  {path: '*', redirectTo: '/', canActivate: [AuthGuard, ConfirmGuard]}
 ];
 
 export const Routing = RouterModule.forRoot(routes);

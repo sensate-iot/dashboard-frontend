@@ -57,13 +57,14 @@ export class WebSocketService {
     });
   }
 
-  public send(data: any) {
+  public send(data: any): boolean {
     if(this.ws.readyState !== WebSocket.OPEN) {
       console.debug("Unable to send data to websocket!");
-      return;
+      return false;
     }
 
     const json = JSON.stringify(data);
     this.ws.send(json);
+    return true;
   }
 }

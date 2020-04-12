@@ -5,7 +5,7 @@ import {SensorService} from '../../../services/sensor.service';
 import {Sensor} from '../../../models/sensor.model';
 import {QueryBuilderDialog} from '../query-builder-dialog/query-builder.dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
-import {DataService, ILocation} from '../../../services/data.service';
+import {DataService, ILocation, OrderDirection} from '../../../services/data.service';
 import {AlertService} from '../../../services/alert.service';
 import {ChartistLegendDataArray, GraphService} from '../../../services/graph.service';
 import {environment} from '../../../../environments/environment';
@@ -48,6 +48,7 @@ export class QueryToolComponent implements OnInit, OnDestroy {
     this.liveDataEnabled = false;
     this.liveDataElementDisabled = true;
     this.resetChart = true;
+    this.liveDataService.setRemote(environment.liveDataHost);
   }
 
   public ngOnDestroy(): void {
@@ -88,8 +89,7 @@ export class QueryToolComponent implements OnInit, OnDestroy {
 
   public connnectToLiveData() {
     this.disconnectLiveDataService(); /* Disconnect any active connections to prevent leaks */
-    this.liveDataService.connect(environment.liveDataHost);
-
+    this.liveDataService.connect();
     this.rxSubscription = this.liveDataService.onMessage().subscribe(value => {
       const data = JSON.parse(value) as IRealTimeData;
 
@@ -100,8 +100,14 @@ export class QueryToolComponent implements OnInit, OnDestroy {
 
   public liveDataToggled(event: any) {
     if(!this.liveDataEnabled) {
-      this.liveDataService.subscribe(this.selectedSensor);
-      this.resetChart = false;
+      if(!this.liveDataService.isConnected()) {
+        this.connnectToLiveData();
+      }
+
+      setTimeout(() => {
+        this.liveDataService.subscribe(this.selectedSensor);
+        this.resetChart = false;
+      }, 500);
     } else {
       this.liveDataService.unsubscribe(this.selectedSensor);
       this.resetChart = true;
@@ -120,7 +126,8 @@ export class QueryToolComponent implements OnInit, OnDestroy {
       max:null,
       result: null,
       skip: null,
-      multi: false
+      multi: false,
+      order: OrderDirection.none
     };
 
     const dialog = this.dialog.open(QueryBuilderDialog, {
@@ -159,8 +166,13 @@ export class QueryToolComponent implements OnInit, OnDestroy {
 
         this.resetChart = true;
 
-        this.dataService.getNear(result.result[0].internalId, result.start, result.end, location, result.max, result.limit, result.skip)
+        this.dataService.getNear(result.result[0].internalId, result.start, result.end, location,
+          result.max, result.limit, result.skip, result.order)
           .subscribe((result) => {
+            result = result.sort((a: Measurement, b: Measurement) => {
+              return a.timestamp.getTime() - b.timestamp.getTime();
+            });
+
             this.measurements = result;
             this.measurementData = this.graphService.createGraphData(result);
             this.sensorName = this.selectedSensor.name;
@@ -171,7 +183,11 @@ export class QueryToolComponent implements OnInit, OnDestroy {
         });
 
       } else {
-        this.dataService.get(result.result[0].internalId, result.start, result.end, result.limit, result.skip).subscribe((result) => {
+        this.dataService.get(result.result[0].internalId, result.start, result.end, result.limit, result.skip, result.order).subscribe((result) => {
+          result = result.sort((a: Measurement, b: Measurement) => {
+            return a.timestamp.getTime() - b.timestamp.getTime();
+          });
+
           this.measurements = result;
           this.measurementData = this.graphService.createGraphData(result);
           this.sensorName = this.selectedSensor.name;

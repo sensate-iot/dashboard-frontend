@@ -96,6 +96,14 @@
       </mat-form-field>
     </div>
   </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <mat-radio-group [formControl]="orderControl">
+        <mat-radio-button value="asc">Order ascending</mat-radio-button>&nbsp;
+        <mat-radio-button value="desc">Order descending</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
 </div>
 <br/>
 <div mat-dialog-actions class="button-footer">

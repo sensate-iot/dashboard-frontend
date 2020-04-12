@@ -24,7 +24,7 @@ export class AccountService {
   }
 
   public getUser() {
-    return this.http.get<User>(environment.authApiHost + '/accounts/show').pipe(map(value => {
+    return this.http.get<User>(environment.authApiHost + '/accounts').pipe(map(value => {
       const raw = value.registeredAt as any;
       value.registeredAt = new Date(Date.parse(raw as string));
       return value;

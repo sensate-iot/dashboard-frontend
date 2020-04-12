@@ -29,7 +29,7 @@ export class AuditlogComponent implements OnInit {
     { method: RequestMethod.HttpPost, value: "POST"},
     { method: RequestMethod.HttpPut, value: "PUT"},
     { method: RequestMethod.HttpPatch, value: "PATCH"},
-    { method: RequestMethod.HttpDelete, value: "DELTE"},
+    { method: RequestMethod.HttpDelete, value: "DELETE"},
     { method: RequestMethod.MqttTcp, value: "MQTT (TCP)"},
     { method: RequestMethod.MqttWebSocket, value: "MQTT (web socket)"},
     { method: RequestMethod.WebSocket, value: "Web sockets"},

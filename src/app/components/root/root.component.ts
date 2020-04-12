@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 import {LoginService} from '../../services/login.service';
 import {AccountService} from '../../services/account.service';
 import {AlertService} from '../../services/alert.service';
-import {AppsService} from '../../services/apps.service';
+import {AppsService, MenuEntry} from '../../services/apps.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +23,8 @@ export class RootComponent implements OnInit, OnDestroy {
   public id : number;
   public backgroundColor : string;
 
+  public applications: MenuEntry[];
+
   constructor(private auth : LoginService, private accounts : AccountService,
               private apps: AppsService,
               private settings : SettingsService, private alerts : AlertService, private router : Router) {
@@ -32,7 +34,11 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.readAuthCookie();
     this.id = this.settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
-    await this.accounts.checkAndStoreRoles()
+    await this.accounts.checkAndStoreRoles();
+
+    this.apps.all().subscribe(apps => {
+      this.applications = apps;
+    });
   }
 
   public navigate(dest: string) {

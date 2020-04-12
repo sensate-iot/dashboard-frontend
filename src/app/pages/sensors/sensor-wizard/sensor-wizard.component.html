@@ -22,8 +22,8 @@
                   <div class="col-md-8 col-md-offset-2">
                     <mat-form-field class="input-full-width" color="accent">
                       <input matInput type="text" placeholder="Sensor name" name="name" formControlName="name">
-                      <mat-error *ngIf="false">
-                        Enter a valid confirmation code!
+                      <mat-error *ngIf="name.hasError('required')">
+                        Sensor name is <strong>required</strong>!
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -34,8 +34,8 @@
                     <mat-form-field class="input-full-width" color="accent">
                     <textarea cdkTextareaAutosize cdkAutosizeMaxRows="10" cdkAutosizeMinRows="5" formControlName="desc"
                               matInput placeholder="Description" name="desc"></textarea>
-                      <mat-error *ngIf="false">
-                        Enter a valid confirmation code!
+                      <mat-error *ngIf="desc.hasError('required')">
+                        Sensor description is <strong>required</strong>!
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -62,8 +62,8 @@
                     <mat-form-field class="input-full-width">
                       <input formControlName="secret" matInput placeholder="Sensor Secret"
                              name="sensor">
-                      <mat-error *ngIf="true">
-                        Enter a valid confirmation code!
+                      <mat-error *ngIf="secret.hasError('required')">
+                        A secret is <strong>required</strong>!
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -71,77 +71,104 @@
               </form>
               <div class="row btn-row">
                 <button class="btn btn-rose" (click)="stepper.previous()">PREVIOUS</button>
-                <button class="btn btn-rose" (click)="createSensor()">NEXT</button>
+                <button class="btn btn-rose" (click)="createSensor()">CREATE</button>
               </div>
             </mat-step>
             <mat-step>
-              <ng-template matStepLabel>Triggers</ng-template>
-              <div class="table-responsive" style="height:200px;overflow:auto">
-                <table class="mat-table table">
-                  <tr class="mat-header-row">
-                    <th class="mat-header-cell">Key value</th>
-                    <th class="mat-header-cell">Lower edge</th>
-                    <th class="mat-header-cell">Upper edge</th>
-                    <th class="mat-header-cell">Actions</th>
-                  </tr>
-                  <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
-                    <td class="mat-cell">{{trigger.keyValue}}</td>
-                    <td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>
-                    <td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>
-                    <td class="mat-cell">
-                      <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
-                      <mat-menu #more="matMenu">
-                        <button  mat-menu-item  (click)="createAction(i)">Add action</button>
-                        <button  mat-menu-item (click)="removeTrigger(i)">Remove trigger</button>
-                      </mat-menu>
-                    </td>
-                  </tr>
-                </table>
+              <ng-template matStepLabel>Review</ng-template>
 
-              </div>
-
-              <div *ngIf="showTriggerForm" class="footer" style="margin-bottom:1%">
-                <div class="row">
-                  <div class="col-md-12 vcenter">
-                    <form [formGroup]="triggerFrom">
-
-                      <div class="col-md-2 col-xs-12 vcenter">
-                        <mat-form-field class="input-full-width" color="accent">
-                          <input matInput type="text" placeholder="Key value" name="name" formControlName="keyValue">
-                          <mat-error *ngIf="triggerFrom.get('keyValue').hasError('required')">
-                            Enter a valid datapoint key value!
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-4 col-xs-12 vcenter">
-                        <mat-form-field class="input-full-width" color="accent">
-                          <input matInput type="text" placeholder="Lower edge" [errorStateMatcher]="matcher"
-                                 name="lowerEdge" formControlName="lowerEdge">
-                          <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
-                            Lower or edge required!
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-4 col-xs-12 vcenter">
-                        <mat-form-field class="input-full-width" color="accent">
-                          <input matInput type="text" placeholder="Upper edge" [errorStateMatcher]="matcher"
-                                 name="upperEdge" formControlName="upperEdge">
-                          <mat-error *ngIf="triggerFrom.hasError('edgeRequired')">
-                            Lower or upper edge required!
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-md-1 col-xs-4 vcenter">
-                        <button mat-mini-fab class="search-btn" [disabled]="!sensorCreated" (click)="createTrigger()">
-                          <i class="material-icons" style="font-size:20px;">add</i></button>
-                      </div>
-                    </form>
-                  </div>
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-9">
+                  <mat-form-field class="input-full-width">
+                    <input [disabled]="true" [(ngModel)]="sensorId" matInput placeholder="Sensor ID" name="sensor">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2 col-xs-3">
+                  <button mat-mini-fab class="search-btn" (click)="onCopyClicked('Sensor ID', sensorId)">
+                    <i class="material-icons" style="font-size:20px;">visibility</i>
+                  </button>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-9">
+                  <mat-form-field class="input-full-width">
+                    <input [disabled]="true" [(ngModel)]="sensorSecret" matInput placeholder="Sensor Secret" name="sensor">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2 col-xs-3">
+                  <button mat-mini-fab class="search-btn" (click)="onCopyClicked('Sensor secret', sensorSecret)">
+                    <i class="material-icons" style="font-size:20px;">visibility</i>
+                  </button>
+                </div>
+              </div>
+
+              <!--<div class="table-responsive" style="height:200px;overflow:auto">-->
+                <!--<table class="mat-table table">-->
+                  <!--<tr class="mat-header-row">-->
+                    <!--<th class="mat-header-cell">Key value</th>-->
+                    <!--<th class="mat-header-cell">Lower edge</th>-->
+                    <!--<th class="mat-header-cell">Upper edge</th>-->
+                    <!--<th class="mat-header-cell">Actions</th>-->
+                  <!--</tr>-->
+                  <!--<tr class="mat-row" *ngFor="let trigger of triggers; let i = index">-->
+                    <!--<td class="mat-cell">{{trigger.keyValue}}</td>-->
+                    <!--<td class="mat-cell">{{trigger.lowerEdge ? trigger.lowerEdge : ""}}</td>-->
+                    <!--<td class="mat-cell">{{trigger.upperEdge ? trigger.upperEdge : ""}}</td>-->
+                    <!--<td class="mat-cell">-->
+                      <!--<button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>-->
+                      <!--<mat-menu #more="matMenu">-->
+                        <!--<button  mat-menu-item  (click)="createAction(i)">Add action</button>-->
+                        <!--<button  mat-menu-item (click)="removeTrigger(i)">Remove trigger</button>-->
+                      <!--</mat-menu>-->
+                    <!--</td>-->
+                  <!--</tr>-->
+                <!--</table>-->
+
+              <!--</div>-->
+
+              <!--<div *ngIf="showTriggerForm" class="footer" style="margin-bottom:1%">-->
+                <!--<div class="row">-->
+                  <!--<div class="col-md-12 vcenter">-->
+                    <!--<form [formGroup]="triggerFrom">-->
+
+                      <!--<div class="col-md-2 col-xs-12 vcenter">-->
+                        <!--<mat-form-field class="input-full-width" color="accent">-->
+                          <!--<input matInput type="text" placeholder="Key value" name="name" formControlName="keyValue">-->
+                          <!--<mat-error *ngIf="triggerFrom.get('keyValue').hasError('required')">-->
+                            <!--Enter a valid datapoint key value!-->
+                          <!--</mat-error>-->
+                        <!--</mat-form-field>-->
+                      <!--</div>-->
+                      <!--<div class="col-md-4 col-xs-12 vcenter">-->
+                        <!--<mat-form-field class="input-full-width" color="accent">-->
+                          <!--<input matInput type="text" placeholder="Lower edge" [errorStateMatcher]="matcher"-->
+                                 <!--name="lowerEdge" formControlName="lowerEdge">-->
+                          <!--<mat-error *ngIf="triggerFrom.hasError('edgeRequired')">-->
+                            <!--Lower or edge required!-->
+                          <!--</mat-error>-->
+                        <!--</mat-form-field>-->
+                      <!--</div>-->
+                      <!--<div class="col-md-4 col-xs-12 vcenter">-->
+                        <!--<mat-form-field class="input-full-width" color="accent">-->
+                          <!--<input matInput type="text" placeholder="Upper edge" [errorStateMatcher]="matcher"-->
+                                 <!--name="upperEdge" formControlName="upperEdge">-->
+                          <!--<mat-error *ngIf="triggerFrom.hasError('edgeRequired')">-->
+                            <!--Lower or upper edge required!-->
+                          <!--</mat-error>-->
+                        <!--</mat-form-field>-->
+                      <!--</div>-->
+
+                      <!--<div class="col-md-1 col-xs-4 vcenter">-->
+                        <!--<button mat-mini-fab class="search-btn" [disabled]="!sensorCreated" (click)="createTrigger()">-->
+                          <!--<i class="material-icons" style="font-size:20px;">add</i></button>-->
+                      <!--</div>-->
+                    <!--</form>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
               <div class="row btn-row">
-                <button class="btn btn-rose" (click)="stepper.previous()">PREVIOUS</button>
+                <button class="btn btn-rose" [disabled]="true" (click)="stepper.previous()">PREVIOUS</button>
                 <button id="submitBtn" [disabled]="!sensorCreated" class="btn btn-success" (click)="onSubmitClick()">SUBMIT</button>
               </div>
             </mat-step>

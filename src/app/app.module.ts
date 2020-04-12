@@ -76,6 +76,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { UpdateSensorDialog } from './dialogs/update-sensor/update-sensor.dialog';
 import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
+import {APP_BASE_HREF} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -179,7 +180,8 @@ import { DeleteUserComponent } from './components/delete-user/delete-user.compon
       provide: HTTP_INTERCEPTORS,
       useClass: JsonDateInterceptorService,
       multi: true
-    }
+    },
+    {provide: APP_BASE_HREF, useValue: '/apps/dashboard'}
   ],
   bootstrap: [AppComponent]
 })

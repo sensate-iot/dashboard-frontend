@@ -48,11 +48,17 @@ export class SensorWizardComponent implements OnInit {
 
   public triggers: Trigger[];
 
+  public sensorId: string;
+  public sensorSecret: string;
+
   constructor(private fb: FormBuilder, private alerts: AlertService, private triggerService: TriggerService,
               private sensorService: SensorService, private router: Router, private dialog: MatDialog) {
     this.triggers = new Array<Trigger>();
     this.sensor = null;
     this.sensorCreated = false;
+
+    this.sensorId = '';
+    this.sensorSecret = '';
   }
 
   private atLeastOneRequired(form: FormGroup) : {[s:string]: boolean} {
@@ -109,9 +115,28 @@ export class SensorWizardComponent implements OnInit {
     this.createTriggerForm();
   }
 
+  public onCopyClicked(key: string, val: string) {
+    let selBox = document.createElement('textarea');
+
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    this.alerts.showNotification(`${key} copied to clipboard!`, 'top-center', 'success');
+  }
+
   public createSensor() {
     this.rawCreateSensor().subscribe((sensor) => {
       this.sensor = sensor;
+      this.sensorId = sensor.internalId;
+      this.sensorSecret = sensor.secret;
       this.alerts.showSuccessNotification("Sensor created!");
       this.sensorCreated = true;
       this.stepper.next();

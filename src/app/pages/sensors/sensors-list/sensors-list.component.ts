@@ -111,6 +111,7 @@ export class SensorsListComponent implements OnInit {
     const dialog = this.dialog.open(UpdateSensorDialog, {
       width: '400px',
       height: '350px',
+      scrollStrategy: new NoopScrollStrategy(),
       data:  update
     });
 
@@ -160,6 +161,7 @@ export class SensorsListComponent implements OnInit {
     const dialog = this.dialog.open(AddSensorLinkDialog, {
       width: '400px',
       height: '225px',
+      scrollStrategy: new NoopScrollStrategy(),
       data: link
     });
 
@@ -196,6 +198,7 @@ export class SensorsListComponent implements OnInit {
       });
 
       this.sensors = ary;
+      this.count -= 1;
     }, (error) => {
       console.debug("Unable to delete sensors:");
       console.debug(error);

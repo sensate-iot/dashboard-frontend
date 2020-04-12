@@ -7,19 +7,43 @@
 
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+
+export interface Application {
+  id: number;
+  name: string;
+  hostname: string;
+  path: string;
+  protocol: string;
+}
+
+export interface MenuEntry {
+  ranking: number;
+  displayName: string;
+  app: Application;
+}
 
 @Injectable()
 export class AppsService {
-  public constructor() {
+  public constructor(private readonly http: HttpClient) {
   }
 
-  public forward(app: string, path = '') {
-    const base = environment.appsMap[app];
+  public all() {
+    return this.http.get<MenuEntry[]>(`${environment.appsApiHost}/menus`);
+  }
 
-    if(base === null || base === undefined) {
-      return;
-    }
+  public forward(app: string, customPath = '') {
+    this.http.get<Application>(`${environment.appsApiHost}/applications?name=${app}`).subscribe((app) => {
+      let path = `${app.protocol}://${app.hostname}`;
 
-    window.location.href = `${base}${path}`;
+      if(customPath !== '') {
+        path = `${path}${customPath}`;
+      } else {
+        path = `${path}${app.path}`
+      }
+
+      console.log(path);
+      window.location.href = path;
+    });
   }
 }

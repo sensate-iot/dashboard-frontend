@@ -11,10 +11,12 @@
               <h4 class="card-title">Sensor Management</h4>
             </div>
             <div class="col-xs-12 col-lg-6 search padding-if">
+              <form>
                 <mat-form-field color="#ff0000" class="input-full-width">
                   <input [(ngModel)]="searchFieldValue" name="searchField" matInput type="search" placeholder="Search">
                 </mat-form-field>
-              <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+                <button mat-mini-fab class="search-btn" (click)="onSearchClicked()"><i class="material-icons" style="font-size:18px;">search</i></button>
+              </form>
             </div>
           </div>
           <div class="table-responsive">
@@ -31,14 +33,14 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let sensor of sensors; let i = index">
-                  <td>{{i+1}}</td>
+                  <td>{{i+1}} <i *ngIf="isLinkedSensor(sensor)" class="material-icons" style="vertical-align: middle">link</i></td>
                   <td>{{sensor.name}}</td>
                   <td>{{descText(sensor.description)}}</td>
                   <td>{{sensor.createdAt.toLocaleDateString()}}</td>
                   <td>
                     <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
                     <mat-menu #more="matMenu">
-                      <button mat-menu-item [disabled]="isLinkedSensor(sensor)" (click)="onViewClick(sensor)">Show secrets</button>
+                      <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onViewClick(sensor)">Show secrets</button>
                       <button mat-menu-item routerLink="/sensors/{{sensor.internalId}}"> Details </button>
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onUpdateClicked(sensor)"> Update </button>
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onLinkSensorClicked(sensor)">Link </button>

@@ -6,6 +6,7 @@
  */
 
 import {Sensor} from '../../../models/sensor.model';
+import {OrderDirection} from '../../../services/data.service';
 
 export interface IQueryBuilderInterface {
   sensors: Sensor[];
@@ -19,4 +20,5 @@ export interface IQueryBuilderInterface {
   skip: number;
   limit: number;
   multi: boolean;
+  order: OrderDirection;
 }

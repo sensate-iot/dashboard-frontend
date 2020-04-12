@@ -26,9 +26,9 @@ export class AuditlogService {
     mail = encodeURIComponent(mail);
     query = encodeURIComponent(query);
 
-    if(mail === '') {
+    if(mail === null || mail === undefined || mail === '' || mail === 'undefined') {
       url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&skip=${skip}&limit=${limit}`;
-    } else if(query === '') {
+    } else if(query === null || query === undefined || query === '' || query === 'undefined') {
       url = `${environment.authApiHost}/auditlogs/find?method=${method}&email=${mail}&skip=${skip}&limit=${limit}`;
     } else {
       url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&email=${mail}&skip=${skip}&limit=${limit}`;

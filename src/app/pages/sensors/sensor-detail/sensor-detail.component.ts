@@ -11,7 +11,7 @@ import {Sensor} from '../../../models/sensor.model';
 import {AlertService} from '../../../services/alert.service';
 import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {IShowActions, ShowActionsDialog} from './show-actions.dialog';
-import {DataService} from '../../../services/data.service';
+import {DataService, OrderDirection} from '../../../services/data.service';
 import {Measurement} from '../../../models/measurement.model';
 import * as moment from 'moment';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
@@ -95,7 +95,10 @@ export class SensorDetailComponent implements OnInit {
 
       yesterday.setDate(now.getDate() - 1);
 
-      this.dataService.get(this.sensor.internalId, yesterday, now, 100).subscribe((data) => {
+      this.dataService.get(this.sensor.internalId, yesterday, now, 100, 0, OrderDirection.descending).subscribe((data) => {
+        data.sort((a: Measurement, b: Measurement) => {
+          return a.timestamp.getTime() - b.timestamp.getTime();
+        });
         this.measurementDataToday = this.createGraphData(data);
       });
     }, (error) => {

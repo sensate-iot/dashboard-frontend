@@ -31,10 +31,16 @@ export class LoginService {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     };
-    this.host = window.location.hostname.replace(/^[^.]+\./g, "");
+    this.host = window.location.hostname;
   }
 
   public getUserId() {
+    const jwt = this.getJwtToken();
+
+    if(jwt === null) {
+      return null;
+    }
+
     const json = atob(this.getJwtToken().split('.')[1]);
     const obj = JSON.parse(json);
     return obj.sub;

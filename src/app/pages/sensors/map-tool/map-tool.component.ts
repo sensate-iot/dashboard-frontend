@@ -1,12 +1,11 @@
-
-import * as L from "leaflet";
+import * as L from 'leaflet';
 import 'leaflet.heat/dist/leaflet-heat.js';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IQueryBuilderInterface} from '../query-builder-dialog/query-builder.interface';
 import {QueryBuilderDialog} from '../query-builder-dialog/query-builder.dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {Sensor} from '../../../models/sensor.model';
-import {DataService, ILocation} from '../../../services/data.service';
+import {DataService, ILocation, OrderDirection} from '../../../services/data.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SensorService} from '../../../services/sensor.service';
 import {AlertService} from '../../../services/alert.service';
@@ -77,6 +76,8 @@ export class MapToolComponent implements OnInit, OnDestroy {
       center: L.latLng(51.59396, 4.4181)
     };
 
+    this.liveDataService.setRemote(environment.liveDataHost);
+
     this.query = null;
 
     this.searchKeys = [];
@@ -125,15 +126,14 @@ export class MapToolComponent implements OnInit, OnDestroy {
 
   public connnectToLiveData() {
     this.disconnectLiveDataService(); /* Disconnect any active connections to prevent leaks */
-    this.liveDataService.connect(environment.liveDataHost);
-
+    this.liveDataService.connect();
     this.rxSubscription = this.liveDataService.onMessage().subscribe(value => {
       const data = JSON.parse(value) as IRealTimeData;
       this.onLiveData(data);
     });
   }
 
-  private disconnectLiveDataService() {
+private disconnectLiveDataService() {
     if(this.rxSubscription !== null) {
       this.rxSubscription.unsubscribe();
       this.rxSubscription = null;
@@ -203,7 +203,8 @@ export class MapToolComponent implements OnInit, OnDestroy {
       max: geoQuery ? 300 : null,
       result: null,
       skip: null,
-      multi: true
+      multi: true,
+      order: OrderDirection.none
     };
 
     const dialog = this.dialog.open(QueryBuilderDialog, {
@@ -242,7 +243,8 @@ export class MapToolComponent implements OnInit, OnDestroy {
           latitude: result.latitude
         };
 
-        this.dataService.getNearFromMany(sensors, result.start, result.end, location, result.max, result.limit, result.skip)
+        this.dataService.getNearFromMany(sensors, result.start, result.end,
+          location, result.max, result.limit, result.skip, result.order)
           .subscribe((result) => {
             this.measurementData = this.graphService.createMapData(result);
 
@@ -365,7 +367,15 @@ export class MapToolComponent implements OnInit, OnDestroy {
 
   public liveDataToggled(event: any) {
     if(!this.liveDataEnabled) {
-      this.liveDataService.subcribeMany(this.selectedSensors);
+      if(!this.liveDataEnabled) {
+        if (!this.liveDataService.isConnected()) {
+          this.connnectToLiveData();
+        }
+
+        setTimeout(() => {
+          this.liveDataService.subcribeMany(this.selectedSensors);
+        }, 500);
+      }
     } else {
       this.liveDataService.unsubscribeMany(this.selectedSensors);
     }

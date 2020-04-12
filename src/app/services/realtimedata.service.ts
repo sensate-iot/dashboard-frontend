@@ -14,11 +14,18 @@ import * as sha from 'sha.js';
 
 @Injectable()
 export class RealTimeDataService {
-  public constructor(private readonly socket: WebSocketService, private loginService: LoginService) {
+  private url: string;
+
+  public constructor(private readonly socket: WebSocketService,
+                     private loginService: LoginService) {
   }
 
-  public connect(url: string) {
-    this.socket.connect(url).then(() => {
+  public setRemote(url: string) {
+    this.url = url;
+  }
+
+  public connect() {
+    this.socket.connect(this.url).then(() => {
       const authRequest: IWebSocketRequest<string> = {
         data: this.loginService.getJwtToken(),
         request: "auth"
@@ -72,6 +79,8 @@ export class RealTimeDataService {
 
     this.socket.send(subscribeRequest);
   }
+
+
 
   public onMessage() {
     return this.socket.onMessage();

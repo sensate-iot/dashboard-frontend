@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="sidebar-panel" id="sidebar" [style.background-color]="backgroundColor">
 
-    <div class="sidebar-background" [style.background-image]="'url(../assets/img/sidebar-' + id + '.jpg)'"></div>
+    <div class="sidebar-background" [style.background-image]="'url(assets/img/sidebar-' + id + '.jpg)'"></div>
     <app-sidebar></app-sidebar>
   </div>
   <div class="main-panel" id="main-panel">
@@ -22,9 +22,9 @@
             </mat-menu>
             <button mat-icon-button [matMenuTriggerFor]="apps"><i class="material-icons icon-btn">apps</i></button>
             <mat-menu #apps="matMenu">
-              <button mat-menu-item (click)="navigate('home')">Homepage</button>
-              <button mat-menu-item (click)="navigate('dashboard')">Dashboard</button>
-              <button mat-menu-item (click)="navigate('datawhere')">DataWhere</button>
+              <button *ngFor="let entry of applications" mat-menu-item (click)="navigate(entry.app.name)">
+                {{entry.displayName}}
+              </button>
             </mat-menu>
             <button mat-icon-button [matMenuTriggerFor]="menu"><i class="material-icons icon-btn">person</i></button>
             <mat-menu #menu="matMenu">
@@ -46,7 +46,7 @@
         <mat-nav-list>
           <a mat-list-item routerLink="/overview">Dashboard</a>
           <a mat-list-item routerLink="/profile">Profile</a>
-          <a mat-list-item (click)="navigate('datawhere')" routerLink="#">DataWhere</a>
+          <a mat-list-item (click)="navigate('datawhere')">DataWhere</a>
           <a mat-list-item routerLink="/sensors/manager">Sensors</a>
           <a mat-list-item routerLink="/sensors/create">Create sensor</a>
           <a mat-list-item (click)="revokeAllTokens()">Logout everywhere</a>

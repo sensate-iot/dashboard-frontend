@@ -5,9 +5,12 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 async function main() {
-  if(window.location.pathname === '/') {
-    window.location.pathname = '/overview';
+  const appPath = `/apps/${environment.appId}`;
+
+  if(window.location.pathname === `${appPath}/` || window.location.pathname === `${appPath}`) {
+    window.location.pathname = `/apps/${environment.appId}/overview`;
   }
+
   console.debug(`Path name : ${window.location.pathname}`);
 
   if(environment.production) {
