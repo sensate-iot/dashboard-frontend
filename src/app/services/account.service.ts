@@ -16,7 +16,7 @@ import {map} from 'rxjs/operators';
 export class AccountService {
   private readonly options : any;
 
-  constructor(private http : HttpClient) {
+  public constructor(private http : HttpClient) {
     this.options = {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
@@ -43,7 +43,7 @@ export class AccountService {
       "CurrentPassword" : user.currentPassword
     };
 
-    return this.http.patch(environment.authApiHost + '/accounts/update', profile, {
+    return this.http.patch(environment.authApiHost + '/accounts', profile, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -54,7 +54,7 @@ export class AccountService {
       return;
 
     const data = JSON.stringify(updates);
-    return this.http.post(environment.authApiHost + '/accounts/update-roles', data, this.options);
+    return this.http.patch(environment.authApiHost + '/accounts/roles', data, this.options);
   }
 
   public updateEmail(newMail : string) {

@@ -4,11 +4,11 @@ import {Trigger, TriggerAction, TriggerActionChannel} from '../../../models/trig
 import {TriggerService} from '../../../services/trigger.service';
 import {AlertService} from '../../../services/alert.service';
 import {Sensor} from '../../../models/sensor.model';
+import {SensorService} from '../../../services/sensor.service';
 
 export interface IShowActions {
   disableActions: boolean;
   trigger: Trigger;
-  sensors: Sensor[];
 }
 
 @Component({
@@ -18,11 +18,15 @@ export interface IShowActions {
 })
 export class ShowActionsDialog {
   public actionMap : Map<TriggerActionChannel, string>;
+  public targetNames : Map<string, string>;
 
-  constructor(public ref: MatDialogRef<ShowActionsDialog>, @Inject(MAT_DIALOG_DATA) public data: IShowActions,
+  public constructor(public ref: MatDialogRef<ShowActionsDialog>,
+                     @Inject(MAT_DIALOG_DATA) public data: IShowActions,
+              private readonly sensorService: SensorService,
               private alertService: AlertService,
               private triggerService: TriggerService) {
     this.actionMap = new Map<TriggerActionChannel, string>();
+    this.targetNames = new Map<string, string>();
 
     this.actionMap.set(TriggerActionChannel.Email, "Email");
     this.actionMap.set(TriggerActionChannel.SMS, "SMS");
@@ -30,20 +34,29 @@ export class ShowActionsDialog {
     this.actionMap.set(TriggerActionChannel.HttpPost, "HTTP POST");
     this.actionMap.set(TriggerActionChannel.HttpGet, "HTTP GET");
     this.actionMap.set(TriggerActionChannel.ControlMessage, "Actuator");
+
+    data.trigger.actions.forEach(action => {
+      if(action.target != null) {
+        if(action.channel === TriggerActionChannel.ControlMessage) {
+          this.sensorService.get(action.target).subscribe(sensor => {
+            this.targetNames.set(action.target, sensor.name);
+            return;
+          })
+        }
+
+        this.targetNames.set(action.target, action.target);
+      }
+    })
   }
 
-  public getTargetName(action: TriggerAction): string {
-    if(action.channel !== TriggerActionChannel.ControlMessage) {
-      return action.target;
+  public getTargetName(action: TriggerAction) {
+    const result = this.targetNames.get(action.target);
+
+    if(result == null) {
+      return '';
     }
 
-    for(let idx = 0; idx < this.data.sensors.length; idx++) {
-      if(this.data.sensors[idx].internalId === action.target) {
-        return this.data.sensors[idx].name;
-      }
-    }
-
-    return null;
+    return result;
   }
 
 

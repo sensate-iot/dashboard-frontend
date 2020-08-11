@@ -23,14 +23,15 @@ export class AdminGuard implements CanActivate {
     }
 
     return new Promise<boolean>(resolve => {
-      this.accounts.getRoles().then(value => {
+      resolve(AccountService.isAdmin());
+      /*this.accounts.getRoles().then(value => {
         if (value.roles.indexOf('Administrators') >= 0) {
           resolve(true);
         } else {
           this.msgs.showNotification('Administrative rights required!', 'top-center', 'warning');
           resolve(false);
         }
-      });
+      });*/
     });
   }
 }

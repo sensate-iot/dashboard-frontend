@@ -39,7 +39,6 @@ export class SensorDetailComponent implements OnInit {
   public triggerFrom: FormGroup;
   public matcher: TriggerEdgeMatcher;
 
-  public sensors: Sensor[];
   public triggers: Trigger[];
   public sensor: Sensor;
   public links: SensorLink[];
@@ -103,12 +102,6 @@ export class SensorDetailComponent implements OnInit {
       });
     }, (error) => {
       this.alertService.showWarninngNotification("Unable to load sensor data!");
-    });
-
-    this.sensorService.all(true).subscribe((sensors) => {
-      this.sensors = sensors.values;
-    }, (error) => {
-      console.debug("Unable to fetch sensor data: " + JSON.stringify(error));
     });
   }
 
@@ -197,7 +190,6 @@ export class SensorDetailComponent implements OnInit {
   public showActions(idx: number) {
     const data: IShowActions = {
       trigger: this.triggers[idx],
-      sensors: this.sensors,
       disableActions: this.isLinkedSensor(this.sensor)
     };
 
