@@ -193,7 +193,7 @@ export class SensorDetailComponent implements OnInit {
       disableActions: this.isLinkedSensor(this.sensor)
     };
 
-    const dialog = this.dialog.open(ShowActionsDialog, {
+    this.dialog.open(ShowActionsDialog, {
       width: '700px',
       height: '425px',
       scrollStrategy: new NoopScrollStrategy(),
@@ -209,13 +209,13 @@ export class SensorDetailComponent implements OnInit {
     };
 
     const dialog = this.dialog.open(CreateActionDialog, {
-      width: '450px',
+      width: '520px',
       height: '400px',
       scrollStrategy: new NoopScrollStrategy(),
       data: data
     });
 
-    const sub = dialog.afterClosed().subscribe((result: ICreateAction) => {
+    dialog.afterClosed().subscribe((result: ICreateAction) => {
       if(result === null || result === undefined) {
         return;
       }

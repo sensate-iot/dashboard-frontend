@@ -11,6 +11,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "sha.js",
+              "chartist-plugin-legend",
+              "chartist"
+            ],
             "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",

@@ -19,19 +19,26 @@
               matInput placeholder="Message" name="msg"></textarea>
   </mat-form-field>
 
-  <mat-form-field *ngIf="selectedNumber === 5" class="input-full-width">
-    <mat-label>Select an actuator</mat-label>
-    <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
-      <mat-option *ngFor="let sensor of sensors" [value]="sensor.internalId">{{sensor.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <ng-container [ngSwitch]="selectedNumber">
+    <mat-form-field *ngSwitchCase="5" class="input-full-width">
+      <mat-label>Select an actuator</mat-label>
+      <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
+        <mat-option *ngFor="let sensor of sensors" [value]="sensor.internalId">{{sensor.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field   *ngIf="selectedNumber !== 5" class="input-full-width">
-    <input (ngModelChange)="selectTarget()" matInput placeholder="Target" [disabled]="noTarget" [(ngModel)]="data.target">
-  </mat-form-field>
+    <mat-form-field *ngSwitchDefault  class="input-full-width">
+      <input (ngModelChange)="selectTarget()" matInput placeholder="Target" [disabled]="noTarget" [(ngModel)]="data.target">
+    </mat-form-field>
+
+    <app-phone-number *ngSwitchCase="isSmsSelected()" (countryCodeChanged)="countryCode = $event"
+                      (phoneNumberChanged)="phoneNumber = $event"></app-phone-number>
+  </ng-container>
+
+
 </div>
 <br/>
 <div mat-dialog-actions class="button-footer">
   <button mat-button (click)="onCancelClick()">Cancel</button>
-  <button mat-button [disabled]="!valid || !hasMessage" [mat-dialog-close]="data">OK</button>
+  <button mat-button [disabled]="!valid || !hasMessage" (click)="onOkClicked()" >OK</button>
 </div>

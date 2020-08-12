@@ -77,6 +77,7 @@ import { UpdateSensorDialog } from './dialogs/update-sensor/update-sensor.dialog
 import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sensor-secrets.dialog';
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 import {APP_BASE_HREF} from '@angular/common';
+import { PhoneNumberComponent } from './components/phone-number/phone-number.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,8 @@ import {APP_BASE_HREF} from '@angular/common';
     AddSensorLinkDialog,
     AuditlogComponent,
     ShowSensorSecretsDialog,
-    DeleteUserComponent
+    DeleteUserComponent,
+    PhoneNumberComponent
   ],
   entryComponents: [
     UpdateSensorDialog,

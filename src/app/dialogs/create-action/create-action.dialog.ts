@@ -23,6 +23,9 @@ export class CreateActionDialog {
   public selectedNumber : number;
   public sensors: Sensor[];
 
+  public countryCode: string;
+  public phoneNumber: string;
+
   private static SmsChannel  = 1;
   private static MqttChannel = 2;
 
@@ -36,6 +39,8 @@ export class CreateActionDialog {
 
     this.valid = false;
     this.noTarget = false;
+    this.countryCode = '';
+    this.phoneNumber = '';
   }
 
   public onCancelClick() {
@@ -64,7 +69,19 @@ export class CreateActionDialog {
     this.valid = true;
   }
 
+  public isSmsSelected() {
+    return +this.data.selected === CreateActionDialog.SmsChannel;
+  }
+
   public onMessageChanged() {
     this.hasMessage = this.data.message.length > 0;
+  }
+
+  public onOkClicked() {
+    if(this.isSmsSelected()) {
+      this.data.target = `${this.countryCode}${this.phoneNumber}`;
+    }
+
+    this.ref.close(this.data);
   }
 }
