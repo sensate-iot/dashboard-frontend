@@ -10,34 +10,13 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {LoginService} from './login.service';
 import {Measurement} from '../models/measurement.model';
-import {longStackSupport} from 'q';
-
-export interface ILocation {
-  longitude: number;
-  latitude: number;
-}
-
-interface Filter {
-  sensorIds: string[];
-  start: string;
-  end: string;
-  skip: number;
-  limit: number;
-  longitude: number;
-  latitude: number;
-  radius: number;
-  orderDirection: OrderDirection;
-}
-
-export enum OrderDirection {
-  ascending = "asc",
-  descending = "desc",
-  none = ""
-}
+import {Filter} from '../dto/filter';
+import {ILocation} from '../dto/location';
+import {OrderDirection} from '../dto/orderdirection';
 
 @Injectable()
 export class DataService {
-  private  options: {
+  private readonly options: {
     headers?: HttpHeaders | {
       [header: string]: string | string[];
     };
@@ -54,6 +33,7 @@ export class DataService {
     private readonly http: HttpClient,
     private readonly login: LoginService
   ) {
+    this.options = {};
   }
 
   public getFromMany(sensorId: string[], start: Date, end: Date,
@@ -144,4 +124,5 @@ export class DataService {
 
     return this.http.get<Measurement[]>(url, this.options);
   }
+
 }

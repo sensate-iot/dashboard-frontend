@@ -5,7 +5,6 @@ import {IQueryBuilderInterface} from '../query-builder-dialog/query-builder.inte
 import {QueryBuilderDialog} from '../query-builder-dialog/query-builder.dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {Sensor} from '../../../models/sensor.model';
-import {DataService, ILocation, OrderDirection} from '../../../services/data.service';
 import {MatDialog} from '@angular/material/dialog';
 import {SensorService} from '../../../services/sensor.service';
 import {AlertService} from '../../../services/alert.service';
@@ -16,6 +15,9 @@ import {RealTimeDataService} from '../../../services/realtimedata.service';
 import {environment} from '../../../../environments/environment';
 import {IRealTimeData} from '../../../models/realtimedata.model';
 import {Measurement} from '../../../models/measurement.model';
+import {DataService} from '../../../services/data.service';
+import {OrderDirection} from '../../../dto/orderdirection';
+import {ILocation} from '../../../dto/location';
 
 interface ISearchKey {
   keyValue: string;

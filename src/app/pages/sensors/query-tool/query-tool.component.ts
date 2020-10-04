@@ -5,7 +5,6 @@ import {SensorService} from '../../../services/sensor.service';
 import {Sensor} from '../../../models/sensor.model';
 import {QueryBuilderDialog} from '../query-builder-dialog/query-builder.dialog';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
-import {DataService, ILocation, OrderDirection} from '../../../services/data.service';
 import {AlertService} from '../../../services/alert.service';
 import {ChartistLegendDataArray, GraphService} from '../../../services/graph.service';
 import {environment} from '../../../../environments/environment';
@@ -14,6 +13,9 @@ import {IRealTimeData} from '../../../models/realtimedata.model';
 import {Subscription} from 'rxjs';
 import {Measurement} from '../../../models/measurement.model';
 import {RealTimeDataService} from '../../../services/realtimedata.service';
+import {DataService} from '../../../services/data.service';
+import {OrderDirection} from '../../../dto/orderdirection';
+import {ILocation} from '../../../dto/location';
 
 @Component({
   selector: 'app-query-tool',

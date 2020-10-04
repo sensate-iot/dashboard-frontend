@@ -78,6 +78,9 @@ import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sens
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 import {APP_BASE_HREF} from '@angular/common';
 import { PhoneNumberComponent } from './components/phone-number/phone-number.component';
+import { ExportToolComponent } from './pages/sensors/export-tool/export-tool.component';
+import {MatChipsModule} from '@angular/material/chips';
+import {ExportService} from './services/export.service';
 
 @NgModule({
   declarations: [
@@ -114,7 +117,8 @@ import { PhoneNumberComponent } from './components/phone-number/phone-number.com
     AuditlogComponent,
     ShowSensorSecretsDialog,
     DeleteUserComponent,
-    PhoneNumberComponent
+    PhoneNumberComponent,
+    ExportToolComponent
   ],
   entryComponents: [
     UpdateSensorDialog,
@@ -135,6 +139,7 @@ import { PhoneNumberComponent } from './components/phone-number/phone-number.com
     Routing,
     BrowserAnimationsModule,
     MatPaginatorModule,
+    MatChipsModule,
     MatSidenavModule,
     MatStepperModule,
     MatListModule,
@@ -168,6 +173,7 @@ import { PhoneNumberComponent } from './components/phone-number/phone-number.com
     WebSocketService,
     AdminService,
     DashBoardService,
+    ExportService,
     DataService,
     GraphService,
     AuthGuard,

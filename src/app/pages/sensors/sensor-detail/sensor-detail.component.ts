@@ -11,12 +11,13 @@ import {Sensor} from '../../../models/sensor.model';
 import {AlertService} from '../../../services/alert.service';
 import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {IShowActions, ShowActionsDialog} from './show-actions.dialog';
-import {DataService, OrderDirection} from '../../../services/data.service';
+import {DataService} from '../../../services/data.service';
 import {Measurement} from '../../../models/measurement.model';
 import * as moment from 'moment';
 import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {ChartistLegendDataArray} from '../../../services/graph.service';
 import {SensorLink} from '../../../models/sensorlink.model';
+import {OrderDirection} from '../../../dto/orderdirection';
 
 export class TriggerEdgeMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

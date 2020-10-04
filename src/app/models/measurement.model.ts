@@ -23,3 +23,14 @@ export interface Measurement {
   location: GeoJSON;
   data: Map<string, DataPoint>;
 }
+
+export class MeasurementConstants {
+  public static SecondsPerMinute = 60;
+  public static MinutesPerHour = 60;
+
+  public static LatitudeMin = -90;
+  public static LatitudeMax = 90;
+
+  public static LongitudeMin = -180;
+  public static LongitudeMax = 80;
+}

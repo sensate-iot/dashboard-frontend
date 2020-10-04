@@ -14,7 +14,8 @@
             "allowedCommonJsDependencies": [
               "sha.js",
               "chartist-plugin-legend",
-              "chartist"
+              "chartist",
+              "file-saver"
             ],
             "aot": true,
             "outputPath": "dist",
