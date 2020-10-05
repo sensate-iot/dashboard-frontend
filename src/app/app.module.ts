@@ -54,17 +54,12 @@ import {ShowActionsDialog} from './pages/sensors/sensor-detail/show-actions.dial
 import { LargeChartCardComponent } from './components/large-chart-card/large-chart-card.component';
 import {DataService} from './services/data.service';
 import {JsonDateInterceptorService} from './services/json-date-interceptor.service';
-import { QueryToolComponent } from './pages/sensors/query-tool/query-tool.component';
 import { QueryBuilderDialog } from './pages/sensors/query-builder-dialog/query-builder.dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
-import { MapToolComponent } from './pages/sensors/map-tool/map-tool.component';
-import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {GraphService} from './services/graph.service';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {WebSocketService} from './services/websocket.service';
-import {RealTimeDataService} from './services/realtimedata.service';
 import { SensorSelectComponent } from './pages/sensors/sensor-select/sensor-select.component';
 import { AddSensorLinkDialog } from './pages/sensors/sensors-list/add-sensor-link-dialog/add-sensor-link-dialog.component';
 import { AuditlogComponent } from './pages/admin/auditlog/auditlog.component';
@@ -78,9 +73,7 @@ import { ShowSensorSecretsDialog } from './dialogs/show-sensor-secrets/show-sens
 import { DeleteUserComponent } from './components/delete-user/delete-user.component';
 import {APP_BASE_HREF} from '@angular/common';
 import { PhoneNumberComponent } from './components/phone-number/phone-number.component';
-import { ExportToolComponent } from './pages/sensors/export-tool/export-tool.component';
 import {MatChipsModule} from '@angular/material/chips';
-import {ExportService} from './services/export.service';
 
 @NgModule({
   declarations: [
@@ -110,15 +103,12 @@ import {ExportService} from './services/export.service';
     SensorWizardComponent,
     SensorDetailComponent,
     LargeChartCardComponent,
-    QueryToolComponent,
-    MapToolComponent,
     SensorSelectComponent,
     AddSensorLinkDialog,
     AuditlogComponent,
     ShowSensorSecretsDialog,
     DeleteUserComponent,
-    PhoneNumberComponent,
-    ExportToolComponent
+    PhoneNumberComponent
   ],
   entryComponents: [
     UpdateSensorDialog,
@@ -130,7 +120,6 @@ import {ExportService} from './services/export.service';
     ShowSensorSecretsDialog
   ],
   imports: [
-    LeafletModule.forRoot(),
     RouterModule,
     BrowserModule,
     FormsModule,
@@ -169,11 +158,8 @@ import {ExportService} from './services/export.service';
     SensorService,
     AccountService,
     ApiKeyService,
-    RealTimeDataService,
-    WebSocketService,
     AdminService,
     DashBoardService,
-    ExportService,
     DataService,
     GraphService,
     AuthGuard,

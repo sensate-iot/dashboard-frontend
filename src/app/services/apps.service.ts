@@ -42,7 +42,6 @@ export class AppsService {
         path = `${path}${app.path}`
       }
 
-      console.log(path);
       window.location.href = path;
     });
   }
