@@ -47,7 +47,7 @@ export class SensorService {
   }
 
   public create(sensor: Sensor) {
-    const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors`;
     return this.http.post<Sensor>(url, JSON.stringify(sensor), this.options).pipe(
       map((response: HttpResponse<Sensor>) => {
         return SensorService.MapSensorCreationDateResponse(response);
@@ -56,12 +56,12 @@ export class SensorService {
   }
 
   public getSensorLinks(sensor: Sensor) {
-    const url = `${environment.networkApiHost}/sensors/links?sensorId=${sensor.internalId}&key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors/links?sensorId=${sensor.internalId}`;
     return this.http.get<SensorLink[]>(url);
   }
 
   public deleteSensorLink(link: SensorLink) {
-    const url = `${environment.networkApiHost}/sensors/links?key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors/links`;
 
     const options = {
       headers: new HttpHeaders({
@@ -78,12 +78,12 @@ export class SensorService {
   }
 
   public delete(sensor: Sensor) {
-    const url = `${environment.networkApiHost}/sensors/${sensor.internalId}?key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors/${sensor.internalId}`;
     return this.http.delete(url, this.options);
   }
 
   public linkSensor(userId: string, sensorId: string) {
-    const url = `${environment.networkApiHost}/sensors/links?key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors/links`;
     const data = {
       userId: userId,
       sensorId: sensorId
@@ -93,19 +93,19 @@ export class SensorService {
   }
 
   public get(id: string) {
-    const url = `${environment.networkApiHost}/sensors/${id}?key=${this.login.getSysKey()}`;
+    const url = `${environment.networkApiHost}/sensors/${id}`;
     return this.http.get<Sensor>(url).pipe(map((response) => {
       return SensorService.MapSensorCreationDate(response);
     }));
   }
 
   public all(link = true, skip = 0, limit = 0) {
-    const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}&skip=${skip}&limit=${limit}&link=${link}`;
+    const url = `${environment.networkApiHost}/sensors?skip=${skip}&limit=${limit}&link=${link}`;
     return this.http.get<PaginationResult<Sensor>>(url);
   }
 
   public find(name: string, skip = 0, limit = 0) {
-    const url = `${environment.networkApiHost}/sensors?key=${this.login.getSysKey()}&name=${name}&skip=${skip}&limit=${limit}`;
+    const url = `${environment.networkApiHost}/sensors?name=${name}&skip=${skip}&limit=${limit}`;
     return this.http.get<PaginationResult<Sensor>>(url);
   }
 
@@ -113,9 +113,9 @@ export class SensorService {
     let url = environment.networkApiHost;
 
     if(secret) {
-      url += `/sensors/${id}/secret?key=${this.login.getSysKey()}`
+      url += `/sensors/${id}/secret`
     } else {
-      url += `/sensors/${id}?key=${this.login.getSysKey()}`
+      url += `/sensors/${id}`
     }
 
     return this.http.patch<Sensor>(url, JSON.stringify(sensor));

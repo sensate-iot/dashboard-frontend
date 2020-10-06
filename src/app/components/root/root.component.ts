@@ -43,7 +43,6 @@ export class RootComponent implements OnInit, OnDestroy {
 
     this.apps.all().subscribe(apps => {
       this.applications = apps as MenuEntry[];
-      console.log(this.applications);
     });
   }
 

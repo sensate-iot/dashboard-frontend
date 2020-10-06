@@ -35,35 +35,35 @@ export class TriggerService {
 
   public createTrigger(trigger: Trigger) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers?key=${key}`;
+    const url = `${environment.networkApiHost}/triggers`;
 
     return this.http.post<Trigger>(url, JSON.stringify(trigger), this.options);
   }
 
   public deleteTrigger(trigger: Trigger) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers/${trigger.id}?key=${key}`;
+    const url = `${environment.networkApiHost}/triggers/${trigger.id}`;
 
     return this.http.delete(url, this.options);
   }
 
   public addAction(trigger: Trigger, action: TriggerAction) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers/${trigger.id}/add-action?key=${key}`;
+    const url = `${environment.networkApiHost}/triggers/${trigger.id}/add-action`;
 
     return this.http.post<Trigger>(url, JSON.stringify(action), this.options);
   }
 
   public removeAction(trigger: Trigger, action: TriggerAction) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers/${trigger.id}/remove-action?key=${key}&channel=${action.channel}`;
+    const url = `${environment.networkApiHost}/triggers/${trigger.id}/remove-action?channel=${action.channel}`;
 
     return this.http.delete(url, this.options);
   }
 
   public getAllForByType(sensorId: string, type: TriggerType) {
     const key = this.login.getSysKey();
-    const url = `${environment.networkApiHost}/triggers?key=${key}&sensorId=${sensorId}&type=${type}`;
+    const url = `${environment.networkApiHost}/triggers?sensorId=${sensorId}&type=${type}`;
 
     return this.http.get<Trigger[]>(url, this.options);
   }
