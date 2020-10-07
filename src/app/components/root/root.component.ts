@@ -38,7 +38,8 @@ export class RootComponent implements OnInit, OnDestroy {
     try {
       await this.accounts.checkAndStoreRoles();
     } catch(ex) {
-      console.log(ex);
+      console.error("Unable to fetch user roles!");
+      console.error(ex);
     }
 
     this.apps.all().subscribe(apps => {
