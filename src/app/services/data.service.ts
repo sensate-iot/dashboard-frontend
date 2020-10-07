@@ -35,7 +35,6 @@ export class DataService {
   }
 
   public get(sensorId: string, start: Date, end: Date, limit: number = 0, skip: number = 0, order: OrderDirection = OrderDirection.none) {
-    const key = this.login.getSysKey();
     let url = `${environment.dataApiHost}/measurements?sensorId=${sensorId}&start=${start.toISOString()}&end=${end.toISOString()}`;
 
     if(limit > 0) {
