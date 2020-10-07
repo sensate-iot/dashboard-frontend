@@ -7,7 +7,7 @@
     "start": "ng serve --disableHostCheck=true --base-href /apps/dashboard/",
     "build-staging": "ng build --aot --configuration=staging --base-href /apps/dashboard/",
     "build-dev": "ng build --aot --base-href /apps/dashboard/",
-    "build": "ng build --prod",
+    "build": "ng build --prod --aot --base-href /apps/dashboard/",
     "postinstall": "ngcc --tsconfig ./src/tsconfig.app.json"
   },
   "browser": {
