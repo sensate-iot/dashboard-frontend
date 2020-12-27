@@ -23,7 +23,7 @@
     <mat-form-field *ngSwitchCase="5" class="input-full-width">
       <mat-label>Select an actuator</mat-label>
       <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
-        <mat-option *ngFor="let sensor of sensors" [value]="sensor.internalId">{{sensor.name}}</mat-option>
+        <mat-option *ngFor="let sensor of sensors" [value]="sensor.id">{{sensor.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -31,7 +31,7 @@
       <input (ngModelChange)="selectTarget()" matInput placeholder="Target" [disabled]="noTarget" [(ngModel)]="data.target">
     </mat-form-field>
 
-    <app-phone-number *ngSwitchCase="isSmsSelected()" (countryCodeChanged)="countryCode = $event"
+    <app-phone-number *ngSwitchCase="1" (countryCodeChanged)="countryCode = $event"
                       (phoneNumberChanged)="phoneNumber = $event"></app-phone-number>
   </ng-container>
 

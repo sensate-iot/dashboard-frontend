@@ -59,7 +59,7 @@ export class SensorsListComponent implements OnInit {
 
   public onViewClick(sensor: Sensor) {
     const data: IShowSensorData = {
-      id: sensor.internalId,
+      id: sensor.id,
       secret: sensor.secret
     };
 
@@ -129,7 +129,7 @@ export class SensorsListComponent implements OnInit {
       };
 
       if(raw.updateSecret) {
-        this.sensorService.update(sensor.internalId, update, true).subscribe(
+        this.sensorService.update(sensor.id, update, true).subscribe(
           (updated) => {
             this.alerts.showSuccessNotification("Sensor updated!");
             sensor.name = update.name;
@@ -140,7 +140,7 @@ export class SensorsListComponent implements OnInit {
             this.alerts.showWarninngNotification("Unable to update sensor!");
           });
       } else {
-        this.sensorService.update(sensor.internalId, update, false).subscribe(() => {
+        this.sensorService.update(sensor.id, update, false).subscribe(() => {
           sensor.name = update.name;
           sensor.description = update.description;
           this.alerts.showSuccessNotification("Sensor updated!");
@@ -154,7 +154,7 @@ export class SensorsListComponent implements OnInit {
 
   public onLinkSensorClicked(sensor: Sensor) {
     const link: SensorLink = {
-      sensorId: sensor.internalId,
+      sensorId: sensor.id,
       userId: ""
     };
 
@@ -190,7 +190,7 @@ export class SensorsListComponent implements OnInit {
 
     this.sensorService.delete(sensor).subscribe(() => {
       this.sensors.forEach((s) => {
-        if(s.internalId === sensor.internalId) {
+        if(s.id === sensor.id) {
           return;
         }
 
@@ -209,7 +209,7 @@ export class SensorsListComponent implements OnInit {
   public unUnlinkClicked(sensor: Sensor, idx: number) {
     const link: SensorLink = {
       userId: this.login.getJwt().email,
-      sensorId: sensor.internalId
+      sensorId: sensor.id
     };
 
     this.sensorService.deleteSensorLink(link).subscribe(() => {

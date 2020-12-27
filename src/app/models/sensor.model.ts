@@ -3,11 +3,11 @@
  */
 
 export class Sensor {
-  public internalId: string;
+  public id: string;
   public secret: string;
   public name: string;
   public description: string;
-  public createdAt: string | Date;
-  public updatedAt: string | Date;
+  public createdAt: Date;
+  public updatedAt: Date;
   public owner: string;
 }

@@ -41,7 +41,7 @@
                     <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
                     <mat-menu #more="matMenu">
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onViewClick(sensor)">Show secrets</button>
-                      <button mat-menu-item routerLink="/sensors/{{sensor.internalId}}"> Details </button>
+                      <button mat-menu-item routerLink="/sensors/{{sensor.id}}"> Details </button>
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onUpdateClicked(sensor)"> Update </button>
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onLinkSensorClicked(sensor)">Link </button>
                       <button mat-menu-item *ngIf="!isLinkedSensor(sensor)" (click)="onDeleteClicked(i)">Remove </button>

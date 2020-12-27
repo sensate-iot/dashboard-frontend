@@ -70,6 +70,7 @@ export class CreateActionDialog {
   }
 
   public isSmsSelected() {
+    console.log(+this.data.selected === CreateActionDialog.SmsChannel);
     return +this.data.selected === CreateActionDialog.SmsChannel;
   }
 

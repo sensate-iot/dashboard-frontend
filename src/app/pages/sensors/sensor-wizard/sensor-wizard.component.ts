@@ -135,7 +135,7 @@ export class SensorWizardComponent implements OnInit {
   public createSensor() {
     this.rawCreateSensor().subscribe((sensor) => {
       this.sensor = sensor;
-      this.sensorId = sensor.internalId;
+      this.sensorId = sensor.id;
       this.sensorSecret = sensor.secret;
       this.alerts.showSuccessNotification("Sensor created!");
       this.sensorCreated = true;
@@ -170,7 +170,7 @@ export class SensorWizardComponent implements OnInit {
     const trigger = new Trigger();
 
     trigger.keyValue = keyValue;
-    trigger.sensorId = this.sensor.internalId;
+    trigger.sensorId = this.sensor.id;
 
     if(upperRaw.length !== 0) {
       upperRaw = upperRaw.replace(',', '.');
@@ -264,6 +264,6 @@ export class SensorWizardComponent implements OnInit {
   }
 
   public onSubmitClick() {
-    this.router.navigate([`/sensors/${this.sensor.internalId}`]);
+    this.router.navigate([`/sensors/${this.sensor.id}`]);
   }
 }

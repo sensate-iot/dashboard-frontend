@@ -3,7 +3,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Trigger, TriggerAction, TriggerActionChannel} from '../../../models/trigger.model';
 import {TriggerService} from '../../../services/trigger.service';
 import {AlertService} from '../../../services/alert.service';
-import {Sensor} from '../../../models/sensor.model';
 import {SensorService} from '../../../services/sensor.service';
 
 export interface IShowActions {
@@ -20,8 +19,7 @@ export class ShowActionsDialog {
   public actionMap : Map<TriggerActionChannel, string>;
   public targetNames : Map<string, string>;
 
-  public constructor(public ref: MatDialogRef<ShowActionsDialog>,
-                     @Inject(MAT_DIALOG_DATA) public data: IShowActions,
+  public constructor(@Inject(MAT_DIALOG_DATA) public data: IShowActions,
               private readonly sensorService: SensorService,
               private alertService: AlertService,
               private triggerService: TriggerService) {
@@ -35,7 +33,7 @@ export class ShowActionsDialog {
     this.actionMap.set(TriggerActionChannel.HttpGet, "HTTP GET");
     this.actionMap.set(TriggerActionChannel.ControlMessage, "Actuator");
 
-    data.trigger.actions.forEach(action => {
+    data.trigger.triggerActions.forEach(action => {
       if(action.target != null) {
         if(action.channel === TriggerActionChannel.ControlMessage) {
           this.sensorService.get(action.target).subscribe(sensor => {
@@ -61,7 +59,7 @@ export class ShowActionsDialog {
 
 
   public removeAction(index: number) {
-    const action = this.data.trigger.actions[index];
+    const action = this.data.trigger.triggerActions[index];
 
     if(action === null) {
       return null;
@@ -71,7 +69,7 @@ export class ShowActionsDialog {
       this.alertService.showSuccessNotification("Action removed!");
 
       const actions = new Array<TriggerAction>();
-      this.data.trigger.actions.forEach((a) => {
+      this.data.trigger.triggerActions.forEach((a) => {
         if(action.channel === a.channel) {
           return;
         }
@@ -79,7 +77,7 @@ export class ShowActionsDialog {
         actions.push(a);
       });
 
-      this.data.trigger.actions = actions;
+      this.data.trigger.triggerActions = actions;
     }, (error) => {
       this.alertService.showErrorNotification("Unable to remove action!");
     });

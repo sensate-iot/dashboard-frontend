@@ -8,7 +8,7 @@ export const environment = {
   appId : 'dashboard',
   authApiHost: 'http://localhost:5000/auth/v1',
   dashboardApiHost: 'http://localhost:5001/stats/v1',
-  networkApiHost: 'http://localhost:5003/network/v1',
+  networkApiHost: 'http://localhost:6500/network/v1',
   dataApiHost: 'http://localhost:5002/data/v1',
   appsApiHost: 'http://applications.api.dev.sensateiot.com/apps/v1'
 };

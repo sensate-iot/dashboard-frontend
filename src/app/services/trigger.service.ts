@@ -10,6 +10,10 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Trigger, TriggerAction, TriggerType} from '../models/trigger.model';
 import {LoginService} from './login.service';
 import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs/internal/Observable';
+import {Response} from '../dto/response';
+import {map} from 'rxjs/operators';
+import {PaginationResponse} from '../dto/paginationresponse';
 
 @Injectable()
 export class TriggerService {
@@ -33,10 +37,23 @@ export class TriggerService {
     };
   }
 
+  private static transformResponse<TValue>(response: Observable<Response<TValue>>): Observable<TValue> {
+    return response.pipe(map((response, idx) => {
+      return response.data;
+    }));
+  }
+
+  private static transformPaginationResponse<TValue>(response: Observable<PaginationResponse<TValue>>) {
+    return response.pipe(map((r, index) => {
+      return r.data;
+    }));
+  }
+
   public createTrigger(trigger: Trigger) {
     const url = `${environment.networkApiHost}/triggers`;
 
-    return this.http.post<Trigger>(url, JSON.stringify(trigger), this.options);
+    const response = this.http.post<Response<Trigger>>(url, JSON.stringify(trigger), this.options);
+    return TriggerService.transformResponse(response);
   }
 
   public deleteTrigger(trigger: Trigger) {
@@ -46,20 +63,21 @@ export class TriggerService {
   }
 
   public addAction(trigger: Trigger, action: TriggerAction) {
-    const url = `${environment.networkApiHost}/triggers/${trigger.id}/add-action`;
-
-    return this.http.post<Trigger>(url, JSON.stringify(action), this.options);
+    const url = `${environment.networkApiHost}/triggers/${trigger.id}/actions`;
+    const resp = this.http.post<Response<Trigger>>(url, JSON.stringify(action), this.options);
+    return TriggerService.transformResponse(resp);
   }
 
   public removeAction(trigger: Trigger, action: TriggerAction) {
-    const url = `${environment.networkApiHost}/triggers/${trigger.id}/remove-action?channel=${action.channel}`;
+    const url = `${environment.networkApiHost}/triggers/${trigger.id}/actions?channel=${action.channel}`;
 
     return this.http.delete(url, this.options);
   }
 
   public getAllForByType(sensorId: string, type: TriggerType) {
-    const url = `${environment.networkApiHost}/triggers?sensorId=${sensorId}&type=${type}`;
+    const url = `${environment.networkApiHost}/sensors/${sensorId}/triggers?type=${type}`;
+    const resp = this.http.get<PaginationResponse<Trigger>>(url, this.options);
 
-    return this.http.get<Trigger[]>(url, this.options);
+    return TriggerService.transformPaginationResponse(resp);
   }
 }

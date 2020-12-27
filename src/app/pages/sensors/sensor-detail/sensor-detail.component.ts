@@ -6,7 +6,7 @@ import {Trigger, TriggerAction, TriggerType} from '../../../models/trigger.model
 import {TriggerService} from '../../../services/trigger.service';
 import {ActivatedRoute} from '@angular/router';
 import {SensorService} from '../../../services/sensor.service';
-import {flatMap} from 'rxjs/operators';
+import {mergeMap} from 'rxjs/operators';
 import {Sensor} from '../../../models/sensor.model';
 import {AlertService} from '../../../services/alert.service';
 import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
@@ -68,10 +68,10 @@ export class SensorDetailComponent implements OnInit {
   public ngOnInit() {
     this.createTriggerForm();
 
-    this.route.params.pipe(flatMap(params => {
+    this.route.params.pipe(mergeMap(params => {
       const sensorId = params['id'] || '';
       return this.sensorService.get(sensorId);
-    }), flatMap(sensor => {
+    }), mergeMap(sensor => {
       this.sensor = sensor;
       if(!this.isLinkedSensor(sensor)) {
         this.triggerFrom.get('keyValue').enable();
@@ -81,21 +81,21 @@ export class SensorDetailComponent implements OnInit {
       }
 
       this.sensorService.getSensorLinks(sensor).subscribe(links => {
-        this.links = links;
+        this.links = links.values;
       }, error => {
         this.alertService.showWarninngNotification("Unable to fetch sensor links!");
       });
 
       const type = this.formalTriggers ? TriggerType.Regex : TriggerType.Number;
-      return this.triggerService.getAllForByType(sensor.internalId, type);
+      return this.triggerService.getAllForByType(sensor.id, type);
     })).subscribe(triggers => {
-      this.triggers = triggers;
+      this.triggers = triggers.values;
       const now = new Date();
       const yesterday = new Date();
 
       yesterday.setDate(now.getDate() - 1);
 
-      this.dataService.get(this.sensor.internalId, yesterday, now, 100, 0, OrderDirection.descending).subscribe((data) => {
+      this.dataService.get(this.sensor.id, yesterday, now, 100, 0, OrderDirection.descending).subscribe((data) => {
         data.sort((a: Measurement, b: Measurement) => {
           return a.timestamp.getTime() - b.timestamp.getTime();
         });
@@ -237,11 +237,11 @@ export class SensorDetailComponent implements OnInit {
       action.message = result.message;
 
       this.triggerService.addAction(trigger, action).subscribe((t) => {
-        if(trigger.actions === null) {
-          trigger.actions = [];
+        if(trigger.triggerActions === null) {
+          trigger.triggerActions = [];
         }
 
-        trigger.actions.push(action);
+        trigger.triggerActions.push(action);
         this.alertService.showSuccessNotification("Action created!");
       }, (error) => {
         console.debug(`Unable to create action: ${JSON.stringify(error)}`);
@@ -256,10 +256,12 @@ export class SensorDetailComponent implements OnInit {
     const trigger = new Trigger();
 
     trigger.type = textTrigger ? TriggerType.Regex : TriggerType.Number;
-    trigger.sensorId = this.sensor.internalId;
+    trigger.sensorId = this.sensor.id;
 
     if(textTrigger) {
       trigger.formalLanguage = this.triggerFrom.get('languageControl').value.toString();
+      trigger.keyValue = "Data";
+      console.log(trigger);
     } else {
       let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
       let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
@@ -323,8 +325,8 @@ export class SensorDetailComponent implements OnInit {
 
   public onLanguageToggleClick() {
     const type = this.showLanguageTriggers ? TriggerType.Regex : TriggerType.Number;
-    this.triggerService.getAllForByType(this.sensor.internalId, type).subscribe((triggers) => {
-      this.triggers = triggers;
+    this.triggerService.getAllForByType(this.sensor.id, type).subscribe((triggers) => {
+      this.triggers = triggers.values;
     });
   }
 }

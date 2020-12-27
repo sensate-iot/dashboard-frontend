@@ -25,12 +25,6 @@ export enum TriggerType {
   Regex
 }
 
-export class TriggerInvocation {
-  public id: number;
-  public triggerId: number;
-  public timestamp: Date;
-}
-
 export class Trigger {
   public id: Number;
   public lowerEdge: Number;
@@ -40,6 +34,5 @@ export class Trigger {
   public sensorId: string;
   public type: TriggerType;
 
-  public actions: TriggerAction[];
-  public invocations: TriggerInvocation[];
+  public triggerActions: TriggerAction[];
 }
