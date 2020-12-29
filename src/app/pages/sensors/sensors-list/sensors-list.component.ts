@@ -151,7 +151,6 @@ export class SensorsListComponent implements OnInit {
     });
   }
 
-
   public onLinkSensorClicked(sensor: Sensor) {
     const link: SensorLink = {
       sensorId: sensor.id,
