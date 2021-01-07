@@ -16,7 +16,7 @@ export class AuditlogService {
   public constructor(private readonly http: HttpClient) { }
 
   public getLogs(method: RequestMethod, limit: number, skip: number) {
-    const url = `${environment.authApiHost}/auditlogs?method=${method}&limit=${limit}&skip=${skip}`;
+    const url = `${environment.authApiHost}/auditlogs?method=${method}&limit=${limit}&skip=${skip}&order=desc`;
     return this.http.get<PaginationResult<AuditLog>>(url);
   }
 
@@ -27,11 +27,11 @@ export class AuditlogService {
     query = encodeURIComponent(query);
 
     if(mail === null || mail === undefined || mail === '' || mail === 'undefined') {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&skip=${skip}&limit=${limit}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&skip=${skip}&limit=${limit}&order=desc`;
     } else if(query === null || query === undefined || query === '' || query === 'undefined') {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&email=${mail}&skip=${skip}&limit=${limit}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&email=${mail}&skip=${skip}&limit=${limit}&order=desc`;
     } else {
-      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&email=${mail}&skip=${skip}&limit=${limit}`;
+      url = `${environment.authApiHost}/auditlogs/find?method=${method}&query=${query}&email=${mail}&skip=${skip}&limit=${limit}&order=desc`;
     }
 
     return this.http.get<PaginationResult<AuditLog>>(url);

@@ -44,8 +44,9 @@
     <mat-sidenav-container>
       <mat-sidenav #snav [mode]="'over'">
         <mat-nav-list>
-          <a mat-list-item (click)="navigate('home')">DataWhere</a>
+          <a mat-list-item (click)="navigate('home')">Home</a>
           <a mat-list-item routerLink="/overview">Dashboard</a>
+          <a mat-list-item (click)="navigate('query-tool')">Query Tool</a>
           <a mat-list-item routerLink="/profile">Profile</a>
           <a mat-list-item routerLink="/sensors/create">Create sensor</a>
           <a mat-list-item routerLink="/sensors/manager">Sensors</a>
