@@ -1,16 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import {Trigger, TriggerAction} from '../../../models/trigger.model';
 import {AlertService} from '../../../services/alert.service';
 import {TriggerService} from '../../../services/trigger.service';
 import {Router} from '@angular/router';
 import {Sensor} from '../../../models/sensor.model';
 import {SensorService} from '../../../services/sensor.service';
-import {CreateActionDialog, ICreateAction} from '../../../dialogs/create-action/create-action.dialog';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSlideToggleChange} from '@angular/material/slide-toggle';
-import {NoopScrollStrategy} from '@angular/cdk/overlay';
 import {MatStepper} from '@angular/material/stepper';
 declare const $: any;
 
@@ -39,21 +36,14 @@ export class SensorWizardComponent implements OnInit {
   public secretForm : FormGroup;
   public secret : FormControl;
 
-  public triggerFrom: FormGroup;
-  public matcher: TriggerEdgeMatcher;
-  public showTriggerForm: boolean;
-
   public sensor: Sensor;
   public sensorCreated: boolean;
-
-  public triggers: Trigger[];
 
   public sensorId: string;
   public sensorSecret: string;
 
   constructor(private fb: FormBuilder, private alerts: AlertService, private triggerService: TriggerService,
               private sensorService: SensorService, private router: Router, private dialog: MatDialog) {
-    this.triggers = new Array<Trigger>();
     this.sensor = null;
     this.sensorCreated = false;
 
@@ -71,20 +61,6 @@ export class SensorWizardComponent implements OnInit {
     const condition = upper.length === 0 && lower.length === 0;
 
     return condition ? { 'edgeRequired': true } : null;
-  }
-
-  private createTriggerForm() {
-    this.showTriggerForm = false;
-    this.matcher = new TriggerEdgeMatcher();
-    this.triggerFrom = this.fb.group({
-      keyValue: new FormControl('', [
-        Validators.required,
-        Validators.minLength(1)
-      ]),
-
-      upperEdge: new FormControl(''),
-      lowerEdge: new FormControl('')
-    }, { validator: this.atLeastOneRequired })
   }
 
   public ngOnInit() {
@@ -111,8 +87,6 @@ export class SensorWizardComponent implements OnInit {
     this.secretForm = new FormGroup({
       secret: this.secret
     });
-
-    this.createTriggerForm();
   }
 
   public onCopyClicked(key: string, val: string) {
@@ -140,7 +114,6 @@ export class SensorWizardComponent implements OnInit {
       this.alerts.showSuccessNotification("Sensor created!");
       this.sensorCreated = true;
       this.stepper.next();
-      this.showTriggerForm = true;
     }, error => {
       console.debug(`Unable to store sensor:}`);
       console.debug(error);
@@ -153,6 +126,7 @@ export class SensorWizardComponent implements OnInit {
 
     sensor.name = this.name.value.toString();
     sensor.description = this.desc.value.toString();
+    sensor.storageEnabled = true;
 
     if (this.secret.value.toString().length > 0) {
       sensor.secret = this.secret.value.toString();
@@ -162,39 +136,6 @@ export class SensorWizardComponent implements OnInit {
   }
 
 
-  public createTrigger() {
-    let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
-    let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
-    const keyValue = this.triggerFrom.get('keyValue').value.toString();
-
-    const trigger = new Trigger();
-
-    trigger.keyValue = keyValue;
-    trigger.sensorId = this.sensor.id;
-
-    if(upperRaw.length !== 0) {
-      upperRaw = upperRaw.replace(',', '.');
-      trigger.upperEdge = +upperRaw;
-    }
-
-    if(lowerRaw.length !== 0) {
-      lowerRaw = lowerRaw.replace(',', '.');
-      trigger.lowerEdge = +lowerRaw;
-    }
-
-    this.triggerService.createTrigger(trigger).subscribe((t) => {
-      this.alerts.showSuccessNotification("Trigger created!");
-      this.triggers.push(t);
-
-      this.triggerFrom.get('upperEdge').setValue('');
-      this.triggerFrom.get('lowerEdge').setValue('');
-      this.triggerFrom.get('keyValue').setValue('');
-    }, (error) => {
-      console.debug(`Unable to store trigger: ${error.toString()}`);
-      this.alerts.showWarninngNotification("Unable to store trigger!");
-    });
-  }
-
   public onToggleChanged(event: MatSlideToggleChange) {
     if(event.checked) {
       this.secret.disable();
@@ -202,65 +143,6 @@ export class SensorWizardComponent implements OnInit {
     } else {
       this.secret.enable();
     }
-  }
-
-  public createAction(i: number) {
-    const data = {
-      target: "",
-      selected: ""
-    };
-
-    const dialog = this.dialog.open(CreateActionDialog, {
-      width: '450px',
-      height: '400px',
-      scrollStrategy: new NoopScrollStrategy(),
-      data: data
-    });
-
-    const sub = dialog.afterClosed().subscribe((result: ICreateAction) => {
-      if(i >= this.triggers.length) {
-        this.alerts.showWarninngNotification("Unable to create action!");
-        return;
-      }
-
-      const trigger = this.triggers[i];
-      const action = new TriggerAction();
-
-      if(result.target.length >= 0) {
-        action.target = result.target;
-      }
-
-      action.channel = +result.selected;
-      action.message = result.message;
-
-      this.triggerService.addAction(trigger, action).subscribe((t) => {
-        console.debug(`Created action: ${JSON.stringify(t)}`);
-      }, (error) => {
-        console.debug(`Unable to create action: ${JSON.stringify(error)}`);
-        this.alerts.showWarninngNotification('Unable to create action!');
-      });
-    });
-  }
-
-  public removeTrigger(i: number) {
-    const trigger = this.triggers[i];
-
-    this.triggerService.deleteTrigger(trigger).subscribe(() => {
-      this.alerts.showSuccessNotification("Trigger removed!");
-
-      const newArray = new Array<Trigger>();
-      this.triggers.forEach(x => {
-        if(x.id === trigger.id) {
-          return;
-        }
-
-        newArray.push(x);
-      });
-
-      this.triggers = newArray;
-    }, (error) => {
-      console.warn(`Unable to remove trigger: ${error.toString()}`);
-    });
   }
 
   public onSubmitClick() {
