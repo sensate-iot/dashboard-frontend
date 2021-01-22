@@ -27,7 +27,10 @@ export class CreateActionDialog {
   public phoneNumber: string;
 
   private static SmsChannel  = 1;
-  private static MqttChannel = 2;
+  private static MqttChannel = 3;
+
+  public actuatorChannel = 6;
+  public liveDataChannel = 2;
 
   public constructor(public ref: MatDialogRef<CreateActionDialog>,
                      @Inject(MAT_DIALOG_DATA) public data: ICreateAction,

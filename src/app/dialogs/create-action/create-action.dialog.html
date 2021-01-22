@@ -5,10 +5,11 @@
     <mat-select (ngModelChange)="selectChannel()" [(ngModel)]="data.selected" [(value)]="data.selected">
       <mat-option value="0">Email</mat-option>
       <mat-option value="1">SMS</mat-option>
-      <mat-option value="2">MQTT</mat-option>
-      <mat-option value="3">HTTP (POST)</mat-option>
-      <mat-option value="4">HTTP (GET)</mat-option>
-      <mat-option value="5">Actuator</mat-option>
+      <mat-option value="2">Live data</mat-option>
+      <mat-option value="3">MQTT</mat-option>
+      <mat-option value="4">HTTP (POST)</mat-option>
+      <mat-option value="5">HTTP (GET)</mat-option>
+      <mat-option value="6">Actuator</mat-option>
 
     </mat-select>
   </mat-form-field>
@@ -20,8 +21,9 @@
   </mat-form-field>
 
   <ng-container [ngSwitch]="selectedNumber">
-    <mat-form-field *ngSwitchCase="5" class="input-full-width">
-      <mat-label>Select an actuator</mat-label>
+    <mat-form-field *ngSwitchCase="selectedNumber == actuatorChannel || selectedNumber == liveDataChannel"
+                    class="input-full-width">
+      <mat-label>Select a target sensor</mat-label>
       <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
         <mat-option *ngFor="let sensor of sensors" [value]="sensor.id">{{sensor.name}}</mat-option>
       </mat-select>
