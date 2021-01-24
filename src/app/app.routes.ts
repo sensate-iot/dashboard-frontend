@@ -46,7 +46,7 @@ const routes: Routes = [
       {path: 'audit-logs', component: AuditlogComponent, canActivate: [AuthGuard, AdminGuard, ConfirmGuard]}
     ]
   },
-  {path: '*', redirectTo: '/', canActivate: [AuthGuard, ConfirmGuard]}
+  { path: '*', redirectTo: '/' }
 ];
 
-export const Routing = RouterModule.forRoot(routes);
+export const Routing = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });
