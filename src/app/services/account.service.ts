@@ -83,7 +83,7 @@ export class AccountService {
         headers: new HttpHeaders().set('Content-Type', 'application/json')
       }).toPromise().then(() => {
           localStorage.setItem('phone-confirmed', 'true');
-          resolve();
+          resolve('');
       }, msg => {
           reject(msg);
       })
