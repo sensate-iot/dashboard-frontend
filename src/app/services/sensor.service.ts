@@ -20,6 +20,7 @@ export interface SensorUpdate {
   name: string;
   description: string;
   secret: string;
+  storageEnabled: boolean;
 }
 
 @Injectable()

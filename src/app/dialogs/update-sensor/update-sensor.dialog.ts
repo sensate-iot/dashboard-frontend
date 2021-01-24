@@ -6,6 +6,7 @@ export interface IUpdateSensorData {
   name: string;
   description: string;
   secret: string;
+  storageEnabled: boolean;
   updateSecret: boolean;
 }
 
@@ -18,6 +19,7 @@ export class UpdateSensorDialog implements OnInit{
   public nameControl: FormControl;
   public descControl: FormControl;
   public secretControl: FormControl;
+  public storageEnabled: FormControl;
 
   public platformSecret: boolean;
 

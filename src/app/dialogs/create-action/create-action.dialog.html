@@ -21,8 +21,13 @@
   </mat-form-field>
 
   <ng-container [ngSwitch]="selectedNumber">
-    <mat-form-field *ngSwitchCase="selectedNumber == actuatorChannel || selectedNumber == liveDataChannel"
-                    class="input-full-width">
+    <mat-form-field *ngSwitchCase="actuatorChannel" class="input-full-width">
+      <mat-label>Select a target sensor</mat-label>
+      <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
+        <mat-option *ngFor="let sensor of sensors" [value]="sensor.id">{{sensor.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngSwitchCase="liveDataChannel" class="input-full-width">
       <mat-label>Select a target sensor</mat-label>
       <mat-select (ngModelChange)="selectTarget()" [(ngModel)]="data.target" [(value)]="data.target">
         <mat-option *ngFor="let sensor of sensors" [value]="sensor.id">{{sensor.name}}</mat-option>

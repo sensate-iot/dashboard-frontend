@@ -105,7 +105,8 @@ export class SensorsListComponent implements OnInit {
       description: sensor.description,
       name: sensor.name,
       secret: sensor.secret,
-      updateSecret: false
+      updateSecret: false,
+      storageEnabled: sensor.storageEnabled
     };
 
     const dialog = this.dialog.open(UpdateSensorDialog, {
@@ -116,38 +117,29 @@ export class SensorsListComponent implements OnInit {
     });
 
     dialog.afterClosed().subscribe((result) => {
-      if(result === null || result === undefined) {
+      if (result === null || result === undefined) {
         return;
       }
 
-      console.debug(result);
       const raw = result as IUpdateSensorData;
       const update: SensorUpdate = {
         secret: raw.secret,
         name: raw.name,
-        description: raw.description
+        description: raw.description,
+        storageEnabled: raw.storageEnabled
       };
 
-      if(raw.updateSecret) {
-        this.sensorService.update(sensor.id, update, true).subscribe(
-          (updated) => {
-            this.alerts.showSuccessNotification("Sensor updated!");
-            sensor.name = update.name;
-            sensor.description = update.description;
-            sensor.secret = updated.secret;
-          },
-          error => {
-            this.alerts.showWarninngNotification("Unable to update sensor!");
-          });
-      } else {
-        this.sensorService.update(sensor.id, update, false).subscribe(() => {
+      this.sensorService.update(sensor.id, update, raw.updateSecret).subscribe(
+        (updated) => {
+          this.alerts.showSuccessNotification("Sensor updated!");
           sensor.name = update.name;
           sensor.description = update.description;
-          this.alerts.showSuccessNotification("Sensor updated!");
-        }, () => {
+          sensor.secret = updated.secret;
+          sensor.storageEnabled = updated.storageEnabled;
+        },
+        error => {
           this.alerts.showWarninngNotification("Unable to update sensor!");
         });
-      }
     });
   }
 
