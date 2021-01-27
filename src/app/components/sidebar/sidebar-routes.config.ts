@@ -22,7 +22,5 @@ export const ROUTES = [
       {path: '/sensors/manager', title: 'Sensor Manager', icon: ''},
     ]
   },
-  {path: '/sensors/query-tool', title: 'Query Tool', icon: 'code', admin: false, children: null},
-  {path: '/sensors/map-tool', title: 'Map Tool', icon: 'map', admin: false, children: null},
   {path: '/profile', title: 'User Profile', admin: false, icon: 'person', children: null}
 ];

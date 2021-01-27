@@ -5,7 +5,7 @@ import {Sensor} from '../../../models/sensor.model';
 import {SensorService} from '../../../services/sensor.service';
 import {FormControl, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import {OrderDirection} from '../../../services/data.service';
+import {OrderDirection} from '../../../dto/orderdirection';
 
 @Component({
   selector: 'app-query-builder-dialog',

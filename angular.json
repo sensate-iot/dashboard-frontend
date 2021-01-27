@@ -11,6 +11,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/apps/dashboard/",
+            "allowedCommonJsDependencies": [
+              "sha.js",
+              "chartist-plugin-legend",
+              "chartist",
+              "file-saver"
+            ],
             "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
@@ -22,7 +29,6 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/leaflet/dist/leaflet.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -34,13 +40,12 @@
               "budgets": [
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "10kb"
                 }
               ],
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": true,
               "aot": true,
               "extractLicenses": false,
@@ -63,7 +68,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

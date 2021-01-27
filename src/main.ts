@@ -11,14 +11,15 @@ async function main() {
     window.location.pathname = `/apps/${environment.appId}/overview`;
   }
 
-  console.debug(`Path name : ${window.location.pathname}`);
-
   if(environment.production) {
     enableProdMode();
+    console.debug = function () { }
   }
 
+  console.debug(`Path name : ${window.location.pathname}`);
+
   platformBrowserDynamic().bootstrapModule(AppModule)
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 }
 
 main().then(() => {});

@@ -6,7 +6,7 @@
  */
 
 import {Sensor} from '../../../models/sensor.model';
-import {OrderDirection} from '../../../services/data.service';
+import {OrderDirection} from '../../../dto/orderdirection';
 
 export interface IQueryBuilderInterface {
   sensors: Sensor[];

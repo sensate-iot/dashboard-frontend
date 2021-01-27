@@ -16,7 +16,7 @@ import {map} from 'rxjs/operators';
 export class AccountService {
   private readonly options : any;
 
-  constructor(private http : HttpClient) {
+  public constructor(private http : HttpClient) {
     this.options = {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
@@ -43,7 +43,7 @@ export class AccountService {
       "CurrentPassword" : user.currentPassword
     };
 
-    return this.http.patch(environment.authApiHost + '/accounts/update', profile, {
+    return this.http.patch(environment.authApiHost + '/accounts', profile, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
@@ -54,7 +54,7 @@ export class AccountService {
       return;
 
     const data = JSON.stringify(updates);
-    return this.http.post(environment.authApiHost + '/accounts/update-roles', data, this.options);
+    return this.http.patch(environment.authApiHost + '/accounts/roles', data, this.options);
   }
 
   public updateEmail(newMail : string) {
@@ -83,7 +83,7 @@ export class AccountService {
         headers: new HttpHeaders().set('Content-Type', 'application/json')
       }).toPromise().then(() => {
           localStorage.setItem('phone-confirmed', 'true');
-          resolve();
+          resolve('');
       }, msg => {
           reject(msg);
       })
@@ -95,6 +95,7 @@ export class AccountService {
       "PhoneNumber": phonenumber
     };
 
+    localStorage.removeItem('phone-confirmed');
     return this.http.patch(environment.authApiHost + '/accounts/update-phone-number', data, {
       observe: 'response',
       headers: new HttpHeaders().set('Content-Type', 'application/json')
@@ -108,17 +109,6 @@ export class AccountService {
       return false;
 
     return confirmed == 'true';
-  }
-
-  public async getRoles() {
-    const roles = localStorage.getItem('roles');
-
-    if(roles !== null) {
-      return JSON.parse(roles);
-    }
-
-    await this.checkAndStoreRoles();
-    return this.getRoles();
   }
 
   public checkAndStoreRoles() {
@@ -147,19 +137,19 @@ export class AccountService {
     return value === 'true';
   }
 
-  private rawCheckEmailConfirmed() {
-    return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed', {
-      observe: 'response',
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    });
-  }
-
   public deleteUser() {
     return this.http.delete(`${environment.authApiHost}/accounts`)
   }
 
   public checkPhoneConfirmed() {
     return new Promise<boolean>(resolve => {
+        const confirm = localStorage.getItem('phone-confirmed');
+
+        if (confirm != null) {
+          resolve(confirm == 'true');
+          return;
+        }
+
         this.rawCheckPhoneConfirmed().pipe(map(res => {
           if (res.errorCode != 200)
             return 'false';
@@ -168,7 +158,9 @@ export class AccountService {
         })).subscribe(res => {
           localStorage.setItem('phone-confirmed', res.toString());
           resolve(res.toString() === 'true');
-        }, () => { resolve(true); });
+        }, () => {
+          resolve(true);
+        });
       }
     );
   }

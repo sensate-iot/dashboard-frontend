@@ -34,10 +34,16 @@ export class RootComponent implements OnInit, OnDestroy {
     this.auth.readAuthCookie();
     this.id = this.settings.getSidebarImageIndex();
     this.backgroundColor = this.settings.getSidebarColor();
-    await this.accounts.checkAndStoreRoles();
+
+    try {
+      await this.accounts.checkAndStoreRoles();
+    } catch(ex) {
+      console.error("Unable to fetch user roles!");
+      console.error(ex);
+    }
 
     this.apps.all().subscribe(apps => {
-      this.applications = apps;
+      this.applications = apps as MenuEntry[];
     });
   }
 

@@ -19,8 +19,6 @@ import {ApiKeysComponent} from './pages/dashboard/apikeys/api-keys.component';
 import {SensorWizardComponent} from './pages/sensors/sensor-wizard/sensor-wizard.component';
 import {SensorsListComponent} from './pages/sensors/sensors-list/sensors-list.component';
 import {SensorDetailComponent} from './pages/sensors/sensor-detail/sensor-detail.component';
-import {QueryToolComponent} from './pages/sensors/query-tool/query-tool.component';
-import {MapToolComponent} from './pages/sensors/map-tool/map-tool.component';
 import {AuditlogComponent} from './pages/admin/auditlog/auditlog.component';
 import {ConfirmGuard} from './guards/confirm.guard';
 
@@ -38,8 +36,6 @@ const routes: Routes = [
     path: 'sensors', component: RootComponent, canActivate: [AuthGuard, ConfirmGuard], children: [
       {path: 'create', component: SensorWizardComponent, canActivate: [AuthGuard, ConfirmGuard]},
       {path: 'manager', component: SensorsListComponent, canActivate: [AuthGuard, ConfirmGuard]},
-      {path: 'query-tool', component: QueryToolComponent, canActivate: [AuthGuard, ConfirmGuard]},
-      {path: 'map-tool', component: MapToolComponent, canActivate: [AuthGuard, ConfirmGuard]},
       {path: ':id', component: SensorDetailComponent, canActivate: [AuthGuard, ConfirmGuard]}
     ]
   },
@@ -50,7 +46,7 @@ const routes: Routes = [
       {path: 'audit-logs', component: AuditlogComponent, canActivate: [AuthGuard, AdminGuard, ConfirmGuard]}
     ]
   },
-  {path: '*', redirectTo: '/', canActivate: [AuthGuard, ConfirmGuard]}
+  { path: '*', redirectTo: '/' }
 ];
 
-export const Routing = RouterModule.forRoot(routes);
+export const Routing = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });

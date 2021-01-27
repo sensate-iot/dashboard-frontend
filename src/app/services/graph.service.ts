@@ -9,7 +9,7 @@ import {IChartistData} from 'chartist';
 import {Measurement} from '../models/measurement.model';
 import * as moment from 'moment';
 import {Injectable} from '@angular/core';
-import {ILocation} from './data.service';
+import {ILocation} from '../dto/location';
 
 export class ChartistLegendDataArray {
   public name: string;

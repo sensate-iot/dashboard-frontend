@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit {
     db.apiCallsLastWeek.forEach(entry => {
       const date = entry.Xcoord as Date;
 
-      labels.push(moment(date).utc().format('DD-MM-YYYY'));
+      labels.push(moment(date).utc().format('DD-MM'));
       series.push(entry.Ycoord);
     });
 

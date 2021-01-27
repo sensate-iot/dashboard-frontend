@@ -5,7 +5,7 @@
     <app-sidebar></app-sidebar>
   </div>
   <div class="main-panel" id="main-panel">
-    <div class="container">
+    <div class="container title">
       <div class="nav-bar">
         <div class="left-part">
           <button mat-mini-fab id="nav-left-button">
@@ -17,7 +17,7 @@
           <div class="right-part" id="nav-right">
             <button *ngIf="isAdministrator()" mat-icon-button [matMenuTriggerFor]="settings" ><i class="material-icons icon-btn">settings</i></button>
             <mat-menu #settings="matMenu">
-              <button routerLink="/admin" mat-menu-item>Administrative dashboard</button>
+              <button routerLink="/admin/overview" mat-menu-item>Administrative dashboard</button>
               <button routerLink="/admin/user-manager" mat-menu-item>User manager</button>
             </mat-menu>
             <button mat-icon-button [matMenuTriggerFor]="apps"><i class="material-icons icon-btn">apps</i></button>
@@ -44,11 +44,12 @@
     <mat-sidenav-container>
       <mat-sidenav #snav [mode]="'over'">
         <mat-nav-list>
+          <a mat-list-item (click)="navigate('home')">Home</a>
           <a mat-list-item routerLink="/overview">Dashboard</a>
+          <a mat-list-item (click)="navigate('query-tool')">Query Tool</a>
           <a mat-list-item routerLink="/profile">Profile</a>
-          <a mat-list-item (click)="navigate('datawhere')">DataWhere</a>
-          <a mat-list-item routerLink="/sensors/manager">Sensors</a>
           <a mat-list-item routerLink="/sensors/create">Create sensor</a>
+          <a mat-list-item routerLink="/sensors/manager">Sensors</a>
           <a mat-list-item (click)="revokeAllTokens()">Logout everywhere</a>
           <a mat-list-item (click)="logoutClicked()">Logout</a>
         </mat-nav-list>
