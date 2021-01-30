@@ -14,6 +14,7 @@ export class TriggerAction {
 export enum TriggerActionChannel {
   Email,
   SMS,
+  WebSocket,
   MQTT,
   HttpPost,
   HttpGet,

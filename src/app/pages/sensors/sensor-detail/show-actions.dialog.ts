@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Trigger, TriggerAction, TriggerActionChannel} from '../../../models/trigger.model';
 import {TriggerService} from '../../../services/trigger.service';
 import {AlertService} from '../../../services/alert.service';
@@ -28,6 +28,7 @@ export class ShowActionsDialog {
 
     this.actionMap.set(TriggerActionChannel.Email, "Email");
     this.actionMap.set(TriggerActionChannel.SMS, "SMS");
+    this.actionMap.set(TriggerActionChannel.WebSocket, "Live data");
     this.actionMap.set(TriggerActionChannel.MQTT, "MQTT");
     this.actionMap.set(TriggerActionChannel.HttpPost, "HTTP POST");
     this.actionMap.set(TriggerActionChannel.HttpGet, "HTTP GET");
