@@ -25,7 +25,7 @@ export class RootComponent implements OnInit, OnDestroy {
 
   public applications: MenuEntry[];
 
-  constructor(private auth : LoginService, private accounts : AccountService,
+  public constructor(private auth : LoginService, private accounts : AccountService,
               private apps: AppsService,
               private settings : SettingsService, private alerts : AlertService, private router : Router) {
   }
@@ -42,7 +42,7 @@ export class RootComponent implements OnInit, OnDestroy {
       console.error(ex);
     }
 
-    this.apps.all().subscribe(apps => {
+    this.apps.all().then(apps => {
       this.applications = apps as MenuEntry[];
     });
   }

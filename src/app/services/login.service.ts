@@ -186,6 +186,7 @@ export class LoginService {
     localStorage.removeItem('roles');
     localStorage.removeItem('admin');
     localStorage.removeItem('userId');
+    localStorage.removeItem('apps');
     localStorage.removeItem('phone-confirmed');
     localStorage.removeItem('syskey');
     console.debug(`Removing cookie!`);
