@@ -113,6 +113,11 @@ export class AccountService {
 
   public checkAndStoreRoles() {
     return new Promise<void>((resolve, reject) => {
+      if(AccountService.hasLocalRoles()) {
+        resolve();
+        return;
+      }
+
       this.http.get<UserRoles>(environment.authApiHost + '/accounts/roles').subscribe(value => {
         localStorage.setItem('roles', JSON.stringify(value));
 
@@ -125,6 +130,13 @@ export class AccountService {
         resolve();
       });
     });
+  }
+
+  private static hasLocalRoles() {
+    const roles = localStorage.getItem('roles');
+    const admin = localStorage.getItem('admin');
+
+    return roles != null && admin != null;
   }
 
   public static isAdmin() : boolean {
@@ -165,7 +177,7 @@ export class AccountService {
     );
   }
 
-  public rawCheckPhoneConfirmed() {
+  private rawCheckPhoneConfirmed() {
     return this.http.get<Status>(environment.authApiHost + '/accounts/phone-confirmed');
   }
 }
