@@ -140,7 +140,7 @@ export class AccountService {
       return false;
     }
 
-    if(value.roles.indexOf('Administrators') >= 0) {
+    if(roles.indexOf('Administrators') >= 0) {
       localStorage.setItem('admin', 'true');
     }
 
