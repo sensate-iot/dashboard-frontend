@@ -136,7 +136,15 @@ export class AccountService {
     const roles = localStorage.getItem('roles');
     const admin = localStorage.getItem('admin');
 
-    return roles != null && admin != null;
+    if(roles == null) {
+      return false;
+    }
+
+    if(value.roles.indexOf('Administrators') >= 0) {
+      localStorage.setItem('admin', 'true');
+    }
+
+    return true;
   }
 
   public static isAdmin() : boolean {
