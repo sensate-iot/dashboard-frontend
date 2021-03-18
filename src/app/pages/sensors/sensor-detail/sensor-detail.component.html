@@ -17,12 +17,16 @@
           <table class="mat-table table">
             <tr class="mat-header-row">
               <th class="mat-header-cell">Language</th>
-              <th class="mat-header-cell">Invocations</th>
+              <th class="mat-header-cell" *ngIf="showLanguageTriggers">Regex</th>
+              <th class="mat-header-cell" *ngIf="!showLanguageTriggers">Lower edge</th>
+              <th class="mat-header-cell" *ngIf="!showLanguageTriggers">Upper edge</th>
               <th class="mat-header-cell">Actions</th>
             </tr>
             <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
               <td class="mat-cell">{{trigger.formalLanguage !== null ? trigger.formalLanguage : ""}}</td>
-              <td class="mat-cell">{{trigger.invocations ? trigger.invocations.length : 0}}</td>
+              <td class="mat-cell" *ngIf="showLanguageTriggers">{{trigger.formalLanguage}}</td>
+              <td class="mat-cell" *ngIf="!showLanguageTriggers">{{getEdgeValue(trigger, false)}}</td>
+              <td class="mat-cell" *ngIf="!showLanguageTriggers">{{getEdgeValue(trigger, true)}}</td>
               <td class="mat-cell">
                 <button mat-icon-button [matMenuTriggerFor]="text_more"><i class="material-icons icon-btn">more_vert</i></button>
                 <mat-menu #text_more="matMenu">

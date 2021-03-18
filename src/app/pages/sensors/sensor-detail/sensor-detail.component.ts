@@ -329,4 +329,16 @@ export class SensorDetailComponent implements OnInit {
       this.triggers = triggers.values;
     });
   }
+
+  public getEdgeValue(trigger: Trigger, upper: boolean) {
+    let edge = 'NULL';
+
+    if(upper && trigger.upperEdge != undefined) {
+      edge = trigger.upperEdge.toString(10);
+    } else if(!upper && trigger.lowerEdge != undefined) {
+      edge = trigger.lowerEdge.toString(10);
+    }
+
+    return edge;
+  }
 }
