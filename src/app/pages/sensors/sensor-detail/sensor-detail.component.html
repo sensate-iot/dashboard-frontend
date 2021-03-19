@@ -18,13 +18,13 @@
             <tr class="mat-header-row">
               <th class="mat-header-cell">Language</th>
               <th class="mat-header-cell">Regex</th>
-              <th class="mat-header-cell">Actions</th>
               <th class="mat-header-cell">Action count</th>
+              <th class="mat-header-cell">Actions</th>
             </tr>
             <tr class="mat-row" *ngFor="let trigger of triggers; let i = index">
               <td class="mat-cell">{{trigger.formalLanguage !== null ? trigger.formalLanguage : ""}}</td>
               <td class="mat-cell">{{trigger.formalLanguage}}</td>
-              <td class="mat-cell">{{trigger.triggerActions.length}}</td>
+              <td class="mat-cell">{{getTriggerActionCount(trigger)}}</td>
               <td class="mat-cell">
                 <button mat-icon-button [matMenuTriggerFor]="text_more"><i class="material-icons icon-btn">more_vert</i></button>
                 <mat-menu #text_more="matMenu">
@@ -50,7 +50,7 @@
               <td class="mat-cell">{{trigger.keyValue}}</td>
               <td class="mat-cell">{{trigger.lowerEdge !== null ? trigger.lowerEdge : ""}}</td>
               <td class="mat-cell">{{trigger.upperEdge !== null ? trigger.upperEdge : ""}}</td>
-              <td class="mat-cell">{{trigger.triggerActions.length}}</td>
+              <td class="mat-cell">{{getTriggerActionCount(trigger)}}</td>
               <td class="mat-cell">
                 <button mat-icon-button [matMenuTriggerFor]="more"><i class="material-icons icon-btn">more_vert</i></button>
                 <mat-menu #more="matMenu">

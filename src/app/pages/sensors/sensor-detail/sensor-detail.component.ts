@@ -330,15 +330,11 @@ export class SensorDetailComponent implements OnInit {
     });
   }
 
-  public getEdgeValue(trigger: Trigger, upper: boolean) {
-    let edge = 'NULL';
-
-    if(upper && trigger.upperEdge != undefined) {
-      edge = trigger.upperEdge.toString(10);
-    } else if(!upper && trigger.lowerEdge != undefined) {
-      edge = trigger.lowerEdge.toString(10);
+  public getTriggerActionCount(trigger: Trigger) {
+    if(trigger.triggerActions == undefined) {
+      return 0;
     }
 
-    return edge;
+    return trigger.triggerActions.length;
   }
 }
