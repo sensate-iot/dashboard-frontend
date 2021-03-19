@@ -329,4 +329,12 @@ export class SensorDetailComponent implements OnInit {
       this.triggers = triggers.values;
     });
   }
+
+  public getTriggerActionCount(trigger: Trigger) {
+    if(trigger.triggerActions == undefined) {
+      return 0;
+    }
+
+    return trigger.triggerActions.length;
+  }
 }
