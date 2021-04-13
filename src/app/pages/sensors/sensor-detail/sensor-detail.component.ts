@@ -261,7 +261,6 @@ export class SensorDetailComponent implements OnInit {
     if(textTrigger) {
       trigger.formalLanguage = this.triggerFrom.get('languageControl').value.toString();
       trigger.keyValue = "Data";
-      console.log(trigger);
     } else {
       let upperRaw = this.triggerFrom.get('upperEdge').value.toString();
       let lowerRaw = this.triggerFrom.get('lowerEdge').value.toString();
@@ -282,8 +281,7 @@ export class SensorDetailComponent implements OnInit {
     this.triggerService.createTrigger(trigger).subscribe((t) => {
       this.alertService.showSuccessNotification("Trigger created!");
       this.triggers.push(t);
-
-      this.triggerFrom.reset();
+      this.resetTriggerForm();
 
       if(textTrigger) {
         this.triggerFrom.get('languageSelectControl').setValue(true);
@@ -292,6 +290,14 @@ export class SensorDetailComponent implements OnInit {
       console.debug(`Unable to store trigger: ${error.toString()}`);
       this.alertService.showWarninngNotification("Unable to store trigger!");
     });
+  }
+
+  private resetTriggerForm() {
+    this.triggerFrom.reset();
+    this.triggerFrom.get('keyValue').setValue('');
+    this.triggerFrom.get('languageControl').setValue('');
+    this.triggerFrom.get('upperEdge').setValue('');
+    this.triggerFrom.get('lowerEdge').setValue('');
   }
 
   public removeTrigger(i: number) {
