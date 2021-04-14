@@ -294,8 +294,6 @@ export class SensorDetailComponent implements OnInit {
 
   private resetTriggerForm() {
     this.triggerFrom.reset();
-    this.triggerFrom.get('keyValue').setValue('');
-    this.triggerFrom.get('languageControl').setValue('');
     this.triggerFrom.get('upperEdge').setValue('');
     this.triggerFrom.get('lowerEdge').setValue('');
   }
