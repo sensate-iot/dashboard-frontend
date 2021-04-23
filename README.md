@@ -1,4 +1,12 @@
-# SensateDashboard
+# Sensate IoT Dashboard
+
+The Sensate IoT Dashboard provides a management dashboard for the Sensate IoT data platform. Feature
+include:
+
+- Dashboarding;
+- User management;
+- Sensor management;
+- Trigger management.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.0.
 
