@@ -1,13 +1,13 @@
 {
   "name": "sensateiot-dashboard",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --disableHostCheck=true",
     "build-staging": "ng build --aot --configuration=staging",
     "build-dev": "ng build --aot",
-    "build": "ng build --prod --aot",
+    "build": "ng build --configuration production --aot",
     "postinstall": "ngcc --tsconfig ./src/tsconfig.app.json"
   },
   "browser": {
