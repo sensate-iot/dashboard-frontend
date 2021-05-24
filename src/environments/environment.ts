@@ -13,4 +13,4 @@ export const environment = {
   appsApiHost: 'http://applications.api.dev.sensateiot.com/apps/v1'
 };
 
-import 'zone.js/dist/zone-error';
+import 'zone.js/plugins/zone-error';
