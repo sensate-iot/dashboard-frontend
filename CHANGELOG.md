@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Project dependencies
+- Security issues
+
+## [1.4.6] - 04-05-2021
+### Updated
+
+- Project dependencies
 - Angular version (upgrade to Angular 12)
 
 ## [1.4.6] - 04-05-2021
