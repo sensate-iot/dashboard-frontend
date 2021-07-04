@@ -54,7 +54,7 @@ export class AccountService {
       return;
 
     const data = JSON.stringify(updates);
-    return this.http.patch(environment.authApiHost + '/accounts/roles', data, this.options);
+    return this.http.post(environment.authApiHost + '/accounts/update-roles', data, this.options);
   }
 
   public updateEmail(newMail : string) {
