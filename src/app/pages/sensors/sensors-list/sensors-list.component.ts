@@ -31,7 +31,7 @@ export class SensorsListComponent implements OnInit {
   public form : FormGroup;
   public action : string;
 
-  public constructor(private keys : ApiKeyService, private sensorService: SensorService,
+  public constructor(private sensorService: SensorService,
               private readonly login: LoginService,
               private alerts : AlertService, private dialog: MatDialog) {
     this.form = new FormGroup({});
@@ -44,7 +44,7 @@ export class SensorsListComponent implements OnInit {
       this.sensorService.all(true, this.pageIndex * this.pageSize, this.pageSize).subscribe((sensors) => {
         this.sensors = sensors.values;
         this.count = sensors.count;
-      }, error1 => {
+      }, _ => {
         this.alerts.showWarninngNotification("Unable to fetch sensors!");
       });
     } else {
@@ -84,8 +84,8 @@ export class SensorsListComponent implements OnInit {
   }
 
   public descText(text: string): string {
-    if(text.length > 30) {
-      return `${text.substring(0, 30)}...`;
+    if(text.length > 256) {
+      return `${text.substring(0, 256)}...`;
     }
 
     return text;
